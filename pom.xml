@@ -61,6 +61,7 @@
         
         <maven.reports.version>2.8</maven.reports.version>
         <cobertura.version>2.7</cobertura.version>
+        <coveralls.version>3.1.0</coveralls.version>
         <junit.version>4.12</junit.version>
         <xmlunit.version>1.6</xmlunit.version>
     </properties>
@@ -122,6 +123,11 @@
                         <ignoreTrivial>true</ignoreTrivial>
                     </instrumentation>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${coveralls.version}</version>
             </plugin>
         </plugins>
     </build>
