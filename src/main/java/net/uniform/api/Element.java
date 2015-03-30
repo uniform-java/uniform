@@ -17,7 +17,6 @@ package net.uniform.api;
 
 import java.util.List;
 import java.util.Map;
-import javafx.beans.property.SetProperty;
 import net.uniform.api.html.SimpleHTMLTag;
 import net.uniform.html.elements.Hidden;
 import net.uniform.html.elements.Multicheckbox;
@@ -45,7 +44,7 @@ import net.uniform.impl.AbstractElement;
  * </ul>
  * 
  * <p>
- * Unless explicitely changed with {@link SetProperty}, the id and name HTML attributes of an element will correspond with the id of the element.
+ * Unless explicitely changed with {@link #setProperty(java.lang.String, java.lang.String)}, the id and name HTML attributes of an element will correspond with the id of the element.
  * </p>
  * 
  * <p>A set of common elements are included in Uniform in the package {@code net.uniform.html.elements}</p>
