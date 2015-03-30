@@ -2,9 +2,13 @@
 [![Coverage Status](https://coveralls.io/repos/eduramiba/uniform/badge.svg?branch=master)](https://coveralls.io/r/eduramiba/uniform?branch=master)
 
 Uniform is a Java library for dealing with HTML forms in web applications.
-It integrates:
+It integrates in one place:
 * Definition of form structure and available data
+* Form rendering
 * Form data population and extraction
 * Form data validation
-* Form rendering
 * Reusable and extensible components
+
+If you are looking for a library similar to PHP's Zend Form but for Java, this is the perfect fit.
+
+Easy to use with Spring framework + no dependencies!
