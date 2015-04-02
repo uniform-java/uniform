@@ -311,7 +311,7 @@ public interface Form {
     Object getElementValueConvertedToValueType(String elementId);
     
     /**
-     * Sets the multi-string value of an element by id.
+     * Sets the multi-string value of an element <b>by id</b>.
      * @param elementId Element id
      * @param value Value to set
      * @return This form
@@ -319,7 +319,7 @@ public interface Form {
     Form setElementValue(String elementId, List<String> value);
     
     /**
-     * Sets the single-string value of an element by id.
+     * Sets the single-string value of an element <b>by id</b>.
      * @param elementId Element id
      * @param value Value to set
      * @return This form
@@ -327,7 +327,7 @@ public interface Form {
     Form setElementValue(String elementId, String value);
     
     /**
-     * Sets the value of an element by id doing the same as {@link #populateSimple(java.util.Map)}, by converting the object to a list of Strings or a single String.
+     * Sets the value of an element <b>by id</b> doing the same as {@link #populateSimple(java.util.Map)}, by converting the object to a list of Strings or a single String.
      * @param elementId Element id
      * @param value Value to set
      * @return This form
@@ -335,15 +335,17 @@ public interface Form {
     Form setElementValue(String elementId, Object value);
     
     /**
-     * Populates form elements <b>by name</b> calling their {@code populate} method.
-     * Input data must be a list of Strings or null for every element.
+     * Clears data and validation status (like {@link #reset()}) from all elements in the form
+     * and populates them <b>by name</b> calling their {@code populate} method.
+     * Input data must be a list of Strings or null for every element with a value.
      * @param formData Form data indexed by element name
      * @return This form
      */
     Form populate(Map<String, List<String>> formData);
     
     /**
-     * Populates form elements <b>by name</b> calling their {@code populate} method.
+     * Clears data and validation status (like {@link #reset()}) from all elements in the form
+     * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data can be any type for each element, or null.
      * 
      * If the object for an element is an array or collection, it is converted to a list of Strings, otherwise it is converted to a single String.
@@ -422,7 +424,7 @@ public interface Form {
     Form setValidators(List<FormValidator> validators);
     
     /**
-     * Resets the values and validation performed status of the form an all its elements.
+     * Resets the values and validation status of the form an all its elements.
      * @return This form
      */
     Form reset();

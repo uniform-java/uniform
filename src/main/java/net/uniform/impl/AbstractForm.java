@@ -633,7 +633,7 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public Form setElementValue(String elementId, String value) {
-        return setElementValue(elementId, Arrays.asList(value));
+        return setElementValue(elementId, value != null ? Arrays.asList(value) : null);
     }
 
     @Override
@@ -652,6 +652,7 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public Form populate(Map<String, List<String>> formData) {
+        this.reset();
         if (formData == null) {
             return this;
         }
@@ -690,6 +691,7 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public Form populateSimple(Map<String, Object> formData) {
+        this.reset();
         if (formData == null) {
             return this;
         }
@@ -726,8 +728,8 @@ public abstract class AbstractForm implements Form {
      * @return List of string values
      */
     private List<String> convertObjectToListOfStringValues(Object value) {
-        List<String> valueList = new ArrayList<>();
         if (value != null) {
+            List<String> valueList = new ArrayList<>();
             if (value instanceof Collection) {
                 Collection valueCollection = (Collection) value;
                 for (Object val : valueCollection) {
@@ -750,9 +752,11 @@ public abstract class AbstractForm implements Form {
             } else {
                 valueList.add(value.toString());
             }
+            
+            return valueList;
+        }else{
+            return null;
         }
-
-        return valueList;
     }
 
     @Override

@@ -86,10 +86,8 @@ public class UIkitFormTest {
         
         form.addElement(submit);
         
-        //Add validation errors:
-        form.populateSimple(new HashMap<String, Object>(){{
-            put("selectId", "invalid-value");
-        }});
+        //Add some validation errors:
+        form.setElementValue("selectId", "invalid-value");
         
         assertEquals(new HashMap<String, String>(){{
             put("field1", "value1");

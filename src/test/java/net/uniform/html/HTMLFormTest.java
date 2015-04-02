@@ -15,7 +15,6 @@
  */
 package net.uniform.html;
 
-import net.uniform.html.HTMLForm;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,6 +148,7 @@ public class HTMLFormTest {
                 put("inputName", "Testing...");
                 put("selectName", null);
                 put("multi", Arrays.asList("1", "4"));
+                put("chk", Arrays.asList("1"));
             }
         });
     }
@@ -226,11 +226,7 @@ public class HTMLFormTest {
         assertEquals(Arrays.asList(new BigDecimal(1), new BigDecimal(4)), form.getElementValueConvertedToValueType("multi"));
 
         //Test that a null value should be an empty list:
-        form.populateSimple(new HashMap<String, Object>() {
-            {
-                put("multi", null);
-            }
-        });
+        form.setElementValue("multi", (String) null);
 
         form.getFormDataConvertedToElementValueTypes();
 
@@ -386,14 +382,19 @@ public class HTMLFormTest {
 
         //Populate won't affect disabled elements:
         form.populateSimple(values2);
-        assertEquals(values1, form.getFormData());
+        assertEquals(new HashMap<String, Object>(){{
+            put("inputName", null);
+            put("selectName", null);
+            put("multi", null);
+            put("chk", null);
+        }}, form.getFormData());
 
         form.getElement("field1").removeProperty("disabled");
         form.getElement("selectId").removeProperty("disabled");
         form.getElement("multi").removeProperty("disabled");
 
         form.populateSimple(values2);
-        values2.put("multi", Arrays.asList(new String[]{"6", "7"}));
+        values2.put("multi", Arrays.asList(new String[]{"6", "7"}));//Array is converted to list 
         assertEquals(values2, form.getFormData());
     }
 
