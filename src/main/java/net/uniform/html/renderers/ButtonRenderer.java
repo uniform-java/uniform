@@ -35,7 +35,7 @@ public class ButtonRenderer implements Renderer<Button> {
         finalProps.putAll(button.getProperties());
         
         SimpleHTMLTag tag = new SimpleHTMLTag("button", finalProps);
-        tag.setContent(button.getLabel());
+        tag.setContent(button.getLabelTranslated());
         
         boolean escape = button.isEscape();
         tag.setEscapeContent(escape);

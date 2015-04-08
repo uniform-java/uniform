@@ -21,7 +21,7 @@ import net.uniform.api.html.SimpleHTMLTag;
 import net.uniform.html.HTMLForm;
 
 /**
- * <p>A form represents an HTML form which contains elements, being user input controls or any other kind of HTML tag.</p>
+ * <p>A {@code Form} represents an HTML form that contains elements. The elements can be input controls or any other kind of HTML tag.</p>
  * 
  * Any form is able to:
  * <ul>
@@ -361,6 +361,34 @@ public interface Form {
      * @return This form
      */
     Form populateBean(Object bean);
+    
+    /**
+     * Clears data and validation status (like {@link #reset()}) from all elements in the form only if {@code keepOtherValues} is false,
+     * and populates them <b>by name</b> calling their {@code populate} method.
+     * Input data must be a list of Strings or null for every element with a value.
+     * @param formData Form data indexed by element name
+     * @return This form
+     */
+    Form populate(Map<String, List<String>> formData, boolean keepOtherValues);
+    
+    /**
+     * Clears data and validation status (like {@link #reset()}) from all elements in the form only if {@code keepOtherValues} is false,
+     * and populates them <b>by name</b> calling their {@code populate} method.
+     * Input data can be any type for each element, or null.
+     * 
+     * If the object for an element is an array or collection, it is converted to a list of Strings, otherwise it is converted to a single String.
+     * @param formData Form data indexed by element name
+     * @return This form
+     */
+    Form populateSimple(Map<String, Object> formData, boolean keepOtherValues);
+    
+    /**
+     * Does the same as {@link #populateSimple(java.util.Map, boolean)}
+     * but automatically extracting all accessible bean properties from the given object.
+     * @param bean Bean object
+     * @return This form
+     */
+    Form populateBean(Object bean, boolean keepOtherValues);
     
     /**
      * Returns all properties in this form.

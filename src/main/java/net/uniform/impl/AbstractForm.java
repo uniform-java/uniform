@@ -652,7 +652,14 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public Form populate(Map<String, List<String>> formData) {
-        this.reset();
+        return populate(formData, false);
+    }
+    
+    @Override
+    public Form populate(Map<String, List<String>> formData, boolean keepOtherValues) {
+        if(!keepOtherValues){
+            this.reset();
+        }
         if (formData == null) {
             return this;
         }
@@ -688,10 +695,17 @@ public abstract class AbstractForm implements Form {
 
         return this;
     }
-
+    
     @Override
     public Form populateSimple(Map<String, Object> formData) {
-        this.reset();
+        return populateSimple(formData, false);
+    }
+
+    @Override
+    public Form populateSimple(Map<String, Object> formData, boolean keepOtherValues) {
+        if(!keepOtherValues){
+            this.reset();
+        }
         if (formData == null) {
             return this;
         }
@@ -707,14 +721,19 @@ public abstract class AbstractForm implements Form {
             populateData.put(name, valueList);
         }
 
-        return populate(populateData);
+        return populate(populateData, keepOtherValues);
     }
 
     @Override
     public Form populateBean(Object bean) {
+        return populateBean(bean, false);
+    }
+    
+    @Override
+    public Form populateBean(Object bean, boolean keepOtherValues) {
         if (bean != null) {
             Map<String, Object> formData = UniformUtils.getBeanProperties(bean);
-            return this.populateSimple(formData);
+            return this.populateSimple(formData, keepOtherValues);
         } else {
             return this;
         }

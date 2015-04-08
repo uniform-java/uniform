@@ -226,7 +226,9 @@ public class HTMLFormTest {
         assertEquals(Arrays.asList(new BigDecimal(1), new BigDecimal(4)), form.getElementValueConvertedToValueType("multi"));
 
         //Test that a null value should be an empty list:
-        form.setElementValue("multi", (String) null);
+        form.populateSimple(new HashMap<String, Object>(){{
+            put("multi", null);
+        }}, true);
 
         form.getFormDataConvertedToElementValueTypes();
 
