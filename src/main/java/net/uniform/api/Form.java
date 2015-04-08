@@ -367,6 +367,7 @@ public interface Form {
      * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data must be a list of Strings or null for every element with a value.
      * @param formData Form data indexed by element name
+     * @param keepOtherValues True to keep values of elements not specified in the {@code formData} parameter
      * @return This form
      */
     Form populate(Map<String, List<String>> formData, boolean keepOtherValues);
@@ -378,6 +379,7 @@ public interface Form {
      * 
      * If the object for an element is an array or collection, it is converted to a list of Strings, otherwise it is converted to a single String.
      * @param formData Form data indexed by element name
+     * @param keepOtherValues True to keep values of elements not specified in the {@code formData} parameter
      * @return This form
      */
     Form populateSimple(Map<String, Object> formData, boolean keepOtherValues);
@@ -386,6 +388,7 @@ public interface Form {
      * Does the same as {@link #populateSimple(java.util.Map, boolean)}
      * but automatically extracting all accessible bean properties from the given object.
      * @param bean Bean object
+     * @param keepOtherValues True to keep values of elements not specified in the {@code bean} parameter
      * @return This form
      */
     Form populateBean(Object bean, boolean keepOtherValues);
