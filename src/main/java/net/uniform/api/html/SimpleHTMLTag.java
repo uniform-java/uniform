@@ -144,6 +144,13 @@ public class SimpleHTMLTag {
 
         return new ArrayList<>(subTags);
     }
+    
+    /**
+     * Clears all the subtags
+     */
+    public void clearSubTags() {
+        subTags = null;
+    }
 
     /**
      * Adds a subtag to this tag.

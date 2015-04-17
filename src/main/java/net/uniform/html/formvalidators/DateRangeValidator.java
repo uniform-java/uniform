@@ -45,27 +45,29 @@ public class DateRangeValidator implements FormValidator {
         ElementWithValueConversion<Date> dateStartElement = findDateElement(form, dateStartId);
         ElementWithValueConversion<Date> dateEndElement = findDateElement(form, dateEndId);
         
-        Date dateStart = dateStartElement.getConvertedValue();
-        Date dateEnd = dateEndElement.getConvertedValue();
+        if(dateStartElement.isValid() && dateEndElement.isValid()){
+            Date dateStart = dateStartElement.getConvertedValue();
+            Date dateEnd = dateEndElement.getConvertedValue();
 
-        if (dateStart == null || dateEnd == null) {
-            return null;//Some of the dates might not be required
-        }
+            if (dateStart == null || dateEnd == null) {
+                return null;//Some of the dates might not be required
+            }
 
-        if (dateStart.after(dateEnd)) {
-            return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate(
-                    "uniform.formvalidators.daterange.invalid",
-                    dateStartElement.getLabelTranslated(),
-                    dateEndElement.getLabelTranslated()
-            ));
-        }
+            if (dateStart.after(dateEnd)) {
+                return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate(
+                        "uniform.formvalidators.daterange.invalid",
+                        dateStartElement.getLabelTranslated(),
+                        dateEndElement.getLabelTranslated()
+                ));
+            }
 
-        if (!allowSameDate && dateStart.equals(dateEnd)) {
-            return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate(
-                    "uniform.formvalidators.daterange.sameNotAllowed",
-                    dateStartElement.getLabelTranslated(),
-                    dateEndElement.getLabelTranslated()
-            ));
+            if (!allowSameDate && dateStart.equals(dateEnd)) {
+                return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate(
+                        "uniform.formvalidators.daterange.sameNotAllowed",
+                        dateStartElement.getLabelTranslated(),
+                        dateEndElement.getLabelTranslated()
+                ));
+            }
         }
 
         return null;

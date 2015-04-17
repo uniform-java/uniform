@@ -400,6 +400,12 @@ public interface Element {
     List<String> getValidationErrors();
     
     /**
+     * Returns true if {@link #getValidationErrors()} returns no errors
+     * @return True if element valid, false otherwise
+     */
+    boolean isValid();
+    
+    /**
      * Indicates if the validation has been performed with this element ({@link #getValidationErrors()} method has been called).
      * @return True if validation has been performed, false otherwise
      */

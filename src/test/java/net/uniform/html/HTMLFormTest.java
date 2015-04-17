@@ -148,14 +148,14 @@ public class HTMLFormTest {
                 put("inputName", "Testing...");
                 put("selectName", null);
                 put("multi", Arrays.asList("1", "4"));
-                put("chk", Arrays.asList("1"));
+                put("chk", Arrays.asList("true"));
             }
         });
     }
 
     @Test
     public void testRender() {
-        assertHTMLEquals("<form method=\"POST\"><div id=\"superSuperGroup\"><fieldset id=\"superGroup\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><div class=\"class1\" data-abc=\"abc\" id=\"group1\"><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select></div><div class=\"class2\" id=\"group2\"><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"1\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></div></fieldset></div></form>", form.renderHTML());
+        assertHTMLEquals("<form method=\"POST\"><div id=\"superSuperGroup\"><fieldset id=\"superGroup\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><div class=\"class1\" data-abc=\"abc\" id=\"group1\"><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select></div><div class=\"class2\" id=\"group2\"><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"true\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></div></fieldset></div></form>", form.renderHTML());
 
         //Now test removing all decorators:
         Map<String, Decorator> decorators = form.getDecorators();
@@ -164,13 +164,13 @@ public class HTMLFormTest {
         }
 
         //Normal form
-        assertHTMLEquals("<form method=\"POST\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"1\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
+        assertHTMLEquals("<form method=\"POST\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"true\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
 
         //Form with validation errors:
         form.getElement("selectId").setRequired(true);
         form.getElement("multi").setValue(Arrays.asList("a", "b", "c", "3"));
         assertFalse(form.isValid());
-        assertHTMLEquals("<form method=\"POST\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\" required=\"required\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><ul class=\"validation-errors\" data-id=\"field2\"><li>A value is required</li></ul><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option value=\"1\">One</option><option value=\"2\">Two</option><option selected=\"selected\" value=\"3\">Three</option><option value=\"4\">Four</option></select><ul class=\"validation-errors\" data-id=\"multi\"><li>Invalid value selected</li></ul><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"1\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
+        assertHTMLEquals("<form method=\"POST\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\" required=\"required\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><ul class=\"validation-errors\" data-id=\"field2\"><li>A value is required</li></ul><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option value=\"1\">One</option><option value=\"2\">Two</option><option selected=\"selected\" value=\"3\">Three</option><option value=\"4\">Four</option></select><ul class=\"validation-errors\" data-id=\"multi\"><li>Invalid value selected</li></ul><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"true\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
     }
 
     @Test
@@ -181,7 +181,7 @@ public class HTMLFormTest {
                 put("inputName", Arrays.asList("Testing..."));
                 put("selectName", null);
                 put("multi", Arrays.asList("1", "4"));
-                put("chk", Arrays.asList("1"));
+                put("chk", Arrays.asList("true"));
             }
         }, form.getFormDataMultivalue());
 
@@ -191,7 +191,7 @@ public class HTMLFormTest {
                 put("inputName", "Testing...");
                 put("selectName", null);
                 put("multi", Arrays.asList("1", "4"));
-                put("chk", "1");
+                put("chk", "true");
             }
         }, form.getFormData());
 
@@ -226,9 +226,7 @@ public class HTMLFormTest {
         assertEquals(Arrays.asList(new BigDecimal(1), new BigDecimal(4)), form.getElementValueConvertedToValueType("multi"));
 
         //Test that a null value should be an empty list:
-        form.populateSimple(new HashMap<String, Object>(){{
-            put("multi", null);
-        }}, true);
+        form.setElementValue("multi", (String) null);
 
         form.getFormDataConvertedToElementValueTypes();
 
@@ -262,9 +260,9 @@ public class HTMLFormTest {
         private final String inputName;
         private final String selectName;
         private final List<String> multi;
-        private final String chk;
+        private final Boolean chk;
 
-        public FormBeanGettters(String inputName, String selectName, List<String> multi, String chk) {
+        public FormBeanGettters(String inputName, String selectName, List<String> multi, Boolean chk) {
             this.inputName = inputName;
             this.selectName = selectName;
             this.multi = multi;
@@ -283,7 +281,7 @@ public class HTMLFormTest {
             return multi;
         }
 
-        public String getChk() {
+        public Boolean getChk() {
             return chk;
         }
     }
@@ -293,9 +291,9 @@ public class HTMLFormTest {
         public String inputName;
         public String selectName;
         public String multi;
-        public String chk;
+        public boolean chk;
 
-        public FormBeanPublic(String inputName, String selectName, String multi, String chk) {
+        public FormBeanPublic(String inputName, String selectName, String multi, boolean chk) {
             this.inputName = inputName;
             this.selectName = selectName;
             this.multi = multi;
@@ -307,7 +305,7 @@ public class HTMLFormTest {
     public void testPopulateBean() {
         form.reset();
 
-        FormBeanGettters bean = new FormBeanGettters("1", "2", Arrays.asList("3"), "");
+        FormBeanGettters bean = new FormBeanGettters("1", "2", Arrays.asList("3"), false);
         form.populateBean(bean);
 
         assertEquals(new HashMap<String, Object>() {
@@ -315,11 +313,11 @@ public class HTMLFormTest {
                 put("inputName", "1");
                 put("selectName", "2");
                 put("multi", Arrays.asList("3"));
-                put("chk", "");
+                put("chk", "false");
             }
         }, form.getFormData());
 
-        FormBeanPublic bean2 = new FormBeanPublic("4", "5", "6", "1");
+        FormBeanPublic bean2 = new FormBeanPublic("4", "5", "6", true);
         form.populateBean(bean2);
 
         assertEquals(new HashMap<String, Object>() {
@@ -327,7 +325,7 @@ public class HTMLFormTest {
                 put("inputName", "4");
                 put("selectName", "5");
                 put("multi", Arrays.asList("6"));
-                put("chk", "1");
+                put("chk", "true");
             }
         }, form.getFormData());
     }

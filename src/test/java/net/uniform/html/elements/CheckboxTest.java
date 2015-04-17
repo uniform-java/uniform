@@ -15,7 +15,6 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Checkbox;
 import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -41,7 +40,7 @@ public class CheckboxTest {
         
         assertTrue(chk.getConvertedValue());
         
-        assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"1\"/>", HTMLRenderingUtils.render(chk.render()));
+        assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"true\"/>", HTMLRenderingUtils.render(chk.render()));
         chk.setProperty("value", "on");
         
         assertHTMLEquals("<input id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"on\"/>", HTMLRenderingUtils.render(chk.render()));

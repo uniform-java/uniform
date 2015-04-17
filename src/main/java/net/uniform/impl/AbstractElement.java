@@ -343,6 +343,12 @@ public abstract class AbstractElement implements Element {
     }
 
     @Override
+    public boolean isValid() {
+        List<String> errors = getValidationErrors();
+        return errors == null || errors.isEmpty();
+    }
+
+    @Override
     public List<Filter> getFilters() {
         return new ArrayList<>(filters);
     }

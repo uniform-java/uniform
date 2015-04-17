@@ -27,10 +27,12 @@ import net.uniform.impl.AbstractHTMLElement;
  */
 public class Checkbox extends AbstractHTMLElement implements ElementWithValueConversion<Boolean> {
 
+    public static final String DEFAULT_ENABLED_VALUE = "true";
+    
     public Checkbox(String id) {
         super(id);
         this.setProperty("type", "checkbox");
-        this.setProperty("value", "1");
+        this.setProperty("value", DEFAULT_ENABLED_VALUE);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class Checkbox extends AbstractHTMLElement implements ElementWithValueCon
     
     /**
      * Sets the value string considered as checked/enabled.
-     * @param value Checked value, {@code "1"} by default
+     * @param value Checked value, {@code DEFAULT_ENABLED_VALUE} by default
      * @return This element
      */
     public Checkbox setEnabledValueString(String value){
@@ -85,12 +87,12 @@ public class Checkbox extends AbstractHTMLElement implements ElementWithValueCon
     
     /**
      * Returns the value string considered as checked/enabled.
-     * @return Checked value, {@code "1"} by default
+     * @return Checked value, {@code DEFAULT_ENABLED_VALUE} by default
      */
     public String getEnabledValueString(){
         String valueEnabledString = this.getProperty("value");
         if(valueEnabledString == null){
-            valueEnabledString = "1";
+            valueEnabledString = DEFAULT_ENABLED_VALUE;
         }
         
         return valueEnabledString;
