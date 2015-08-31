@@ -138,7 +138,7 @@ public class UniformUtils {
                                 if(Collection.class.isAssignableFrom(fieldClass)){
                                     //Double check for collections when we have the type info:
                                     if(collectionsGenericTypes.containsKey(name)){
-                                        if(isGenericTypeCompatible(field.getType(), collectionsGenericTypes.get(name))){
+                                        if(isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))){
                                             field.set(bean, value);
                                         }
                                     }else{

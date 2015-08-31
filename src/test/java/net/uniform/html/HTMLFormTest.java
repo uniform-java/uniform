@@ -37,6 +37,8 @@ import net.uniform.exceptions.UniformException;
 import net.uniform.html.beans.FormBeanGettersAndSetters;
 import net.uniform.html.beans.FormBeanMixed;
 import net.uniform.html.beans.FormBeanPublic;
+import net.uniform.html.beans.FormBeanPublic2;
+import net.uniform.html.beans.FormBeanPublic3;
 import net.uniform.html.decorators.HTMLTagDecorator;
 import net.uniform.html.decorators.LabelDecorator;
 import net.uniform.html.elements.Checkbox;
@@ -312,20 +314,28 @@ public class HTMLFormTest {
 
         FormBeanGettersAndSetters expectedBean1 = new FormBeanGettersAndSetters("1", "2", null, false);//Field 2 is compatible with an string conversion but generic list type of field 3 (String) is not compatible with the form type (Long)
         FormBeanPublic expectedBean2 = new FormBeanPublic("1", "2", null, false);//Note field 3 is not of the same type
-        FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList((Number) 3L), false);//Every field is type compatible
+        FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList((Number) 3L), false);//Every field is type compatible (superclass list type)
+        FormBeanPublic2 expectedBean4 = new FormBeanPublic2("1", 2, Arrays.asList(3L), false);//Every field is type compatible (raw list type)
+        FormBeanPublic3 expectedBean5 = new FormBeanPublic3("1", 2, Arrays.asList(3L), false);//Every field is type compatible (same class list type)
         
         FormBeanGettersAndSetters resultBean1 = new FormBeanGettersAndSetters(null, null, null, true);
         FormBeanPublic resultBean2 = new FormBeanPublic(null, null, null, true);
         FormBeanMixed resultBean3 = new FormBeanMixed(null, null, null, true);
+        FormBeanPublic2 resultBean4 = new FormBeanPublic2(null, null, null, true);
+        FormBeanPublic3 resultBean5 = new FormBeanPublic3(null, null, null, true);
         
         
         form.getFormDataIntoBean(resultBean1);
         form.getFormDataIntoBean(resultBean2);
         form.getFormDataIntoBean(resultBean3);
+        form.getFormDataIntoBean(resultBean4);
+        form.getFormDataIntoBean(resultBean5);
         
         assertEquals(expectedBean1, resultBean1);
         assertEquals(expectedBean2, resultBean2);
         assertEquals(expectedBean3, resultBean3);
+        assertEquals(expectedBean4, resultBean4);
+        assertEquals(expectedBean5, resultBean5);
     }
     
     @Test

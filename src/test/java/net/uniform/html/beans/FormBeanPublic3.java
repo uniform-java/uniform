@@ -22,59 +22,27 @@ import java.util.Objects;
  *
  * @author Eduardo Ramos
  */
-public class FormBeanGettersAndSetters {
+public class FormBeanPublic3 {
 
-    private String inputName;
-    private String selectName;
-    private List<String> multi;
-    private Boolean chk;
+    public String inputName;
+    public Number selectName;
+    public List<Long> multi;
+    public boolean chk;
 
-    public FormBeanGettersAndSetters(String inputName, String selectName, List<String> multi, Boolean chk) {
+    public FormBeanPublic3(String inputName, Number selectName, List<Long> multi, boolean chk) {
         this.inputName = inputName;
         this.selectName = selectName;
         this.multi = multi;
-        this.chk = chk;
-    }
-
-    public String getInputName() {
-        return inputName;
-    }
-
-    public String getSelectName() {
-        return selectName;
-    }
-
-    public List<String> getMulti() {
-        return multi;
-    }
-
-    public Boolean getChk() {
-        return chk;
-    }
-
-    public void setInputName(String inputName) {
-        this.inputName = inputName;
-    }
-
-    public void setSelectName(String selectName) {
-        this.selectName = selectName;
-    }
-
-    public void setMulti(List<String> multi) {
-        this.multi = multi;
-    }
-
-    public void setChk(Boolean chk) {
         this.chk = chk;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.inputName);
-        hash = 67 * hash + Objects.hashCode(this.selectName);
-        hash = 67 * hash + Objects.hashCode(this.multi);
-        hash = 67 * hash + Objects.hashCode(this.chk);
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.inputName);
+        hash = 17 * hash + Objects.hashCode(this.selectName);
+        hash = 17 * hash + Objects.hashCode(this.multi);
+        hash = 17 * hash + (this.chk ? 1 : 0);
         return hash;
     }
 
@@ -86,7 +54,7 @@ public class FormBeanGettersAndSetters {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final FormBeanGettersAndSetters other = (FormBeanGettersAndSetters) obj;
+        final FormBeanPublic3 other = (FormBeanPublic3) obj;
         if (!Objects.equals(this.inputName, other.inputName)) {
             return false;
         }
@@ -96,14 +64,14 @@ public class FormBeanGettersAndSetters {
         if (!Objects.equals(this.multi, other.multi)) {
             return false;
         }
-        if (!Objects.equals(this.chk, other.chk)) {
+        if (this.chk != other.chk) {
             return false;
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
-        return "FormBeanGettersAndSetters{" + "inputName=" + inputName + ", selectName=" + selectName + ", multi=" + multi + ", chk=" + chk + '}';
+        return "FormBeanPublic3{" + "inputName=" + inputName + ", selectName=" + selectName + ", multi=" + multi + ", chk=" + chk + '}';
     }
 }
