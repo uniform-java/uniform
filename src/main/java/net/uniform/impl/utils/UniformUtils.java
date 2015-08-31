@@ -124,7 +124,7 @@ public class UniformUtils {
                 }
             }
             
-            //Getters:
+            //Setters:
             BeanInfo info = Introspector.getBeanInfo(clazz);
             for (PropertyDescriptor desc : info.getPropertyDescriptors()) {
                 Method writeMethod = desc.getWriteMethod();
