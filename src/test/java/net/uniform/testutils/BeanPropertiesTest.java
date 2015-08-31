@@ -16,6 +16,7 @@
 package net.uniform.testutils;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,26 +63,27 @@ public class BeanPropertiesTest {
         );
         
         Map<String, Object> newProps = new HashMap<String, Object>(){{
-            put("a", 3.5);//Ignored because of wrong type
+            put("a", 3.5);
             put("b", 1);
             put("c", Arrays.asList(2L));
             put("d", null);//Ignored because of null and primitive
         }};
         UniformUtils.fillBeanProperties(bean, newProps);
         
-        newProps.put("a", "1");
+        newProps.put("a", "3.5");
         newProps.put("d", (short) 5);
         assertEquals(newProps, UniformUtils.getBeanProperties(bean));
         
         
         Map<String, Object> newProps2 = new HashMap<String, Object>(){{
-            put("a", null);
+            put("a", new Date());//Ignored because of wrong type
             put("b", 1);
             put("c", Arrays.asList(2L));
             put("d", null);//Ignored because of null and primitive
         }};
         UniformUtils.fillBeanProperties(bean, newProps2);
         
+        newProps2.put("a", "3.5");
         newProps2.put("d", (short) 5);
         assertEquals(newProps2, UniformUtils.getBeanProperties(bean));
     }

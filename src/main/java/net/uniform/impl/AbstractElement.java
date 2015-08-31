@@ -63,6 +63,10 @@ public abstract class AbstractElement implements Element {
         this.decorators = new ArrayList<>();
         this.id = id;
         
+        if(id == null){
+            throw new IllegalArgumentException("id cannot be null");
+        }
+        
         init();
     }
     

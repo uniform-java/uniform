@@ -57,4 +57,8 @@ public class AbstractElementTest {
        assertEquals(elemSingle.getValue(), Arrays.asList("test-val2"));
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testRequiredId() {
+        Element elem = new EmptyElement(null);
+    }
 }

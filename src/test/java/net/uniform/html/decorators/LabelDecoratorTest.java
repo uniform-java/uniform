@@ -15,7 +15,6 @@
  */
 package net.uniform.html.decorators;
 
-import net.uniform.html.decorators.LabelDecorator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;

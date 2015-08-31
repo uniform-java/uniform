@@ -88,9 +88,6 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form addElement(Element element, boolean useDefaultDecorators) {
         String id = element.getId();
-        if (id == null) {
-            throw new IllegalArgumentException("Element id cannot be null");
-        }
 
         if (this.formElements.containsKey(id)) {
             throw new IllegalArgumentException("Element id '" + id + "' already in use");
@@ -320,7 +317,7 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form endDecorator() {
         if (openDecorators.isEmpty()) {
-            throw new IllegalArgumentException("No open decorators in the form");
+            throw new IllegalStateException("No open decorators in the form");
         }
 
         this.renderingParts.add(END_DECORATOR_PREFIX + openDecorators.pop());

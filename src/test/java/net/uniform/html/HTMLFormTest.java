@@ -34,6 +34,9 @@ import net.uniform.api.Element;
 import net.uniform.api.Form;
 import net.uniform.api.TranslationEngineContext;
 import net.uniform.exceptions.UniformException;
+import net.uniform.html.beans.FormBeanGettersAndSetters;
+import net.uniform.html.beans.FormBeanMixed;
+import net.uniform.html.beans.FormBeanPublic;
 import net.uniform.html.decorators.HTMLTagDecorator;
 import net.uniform.html.decorators.LabelDecorator;
 import net.uniform.html.elements.Checkbox;
@@ -63,9 +66,14 @@ public class HTMLFormTest {
 
         form.startDecorator("superGroup", new HTMLTagDecorator("fieldset", new HashMap<String, Object>() {
             {
-                this.put("id", "superGroup");
+                this.put("id", "sg");
             }
         }));
+        
+        Decorator superGroupDecorator = form.getDecorator("superGroup");
+        assertNotNull(superGroupDecorator);
+        
+        superGroupDecorator.setProperty("id", "superGroup");
 
         //Input
         Input input = new Input("field1");
@@ -151,6 +159,13 @@ public class HTMLFormTest {
                 put("chk", Arrays.asList("true"));
             }
         });
+        
+        Map<String, Element> expectedElementsMap = new HashMap<>();
+        expectedElementsMap.put("field1", input);
+        expectedElementsMap.put("selectId", select);
+        expectedElementsMap.put("multi", multi);
+        expectedElementsMap.put("chk", checkbox);
+        assertEquals(expectedElementsMap, form.getElements());
     }
 
     @Test
@@ -255,57 +270,11 @@ public class HTMLFormTest {
         form.getFormDataConvertedToElementValueTypes();
     }
 
-    public class FormBeanGettters {
-
-        private final String inputName;
-        private final String selectName;
-        private final List<String> multi;
-        private final Boolean chk;
-
-        public FormBeanGettters(String inputName, String selectName, List<String> multi, Boolean chk) {
-            this.inputName = inputName;
-            this.selectName = selectName;
-            this.multi = multi;
-            this.chk = chk;
-        }
-
-        public String getInputName() {
-            return inputName;
-        }
-
-        public String getSelectName() {
-            return selectName;
-        }
-
-        public List<String> getMulti() {
-            return multi;
-        }
-
-        public Boolean getChk() {
-            return chk;
-        }
-    }
-
-    public class FormBeanPublic {
-
-        public String inputName;
-        public String selectName;
-        public String multi;
-        public boolean chk;
-
-        public FormBeanPublic(String inputName, String selectName, String multi, boolean chk) {
-            this.inputName = inputName;
-            this.selectName = selectName;
-            this.multi = multi;
-            this.chk = chk;
-        }
-    }
-
     @Test
     public void testPopulateBean() {
         form.reset();
 
-        FormBeanGettters bean = new FormBeanGettters("1", "2", Arrays.asList("3"), false);
+        FormBeanGettersAndSetters bean = new FormBeanGettersAndSetters("1", "2", Arrays.asList(3l), false);
         form.populateBean(bean);
 
         assertEquals(new HashMap<String, Object>() {
@@ -330,6 +299,41 @@ public class HTMLFormTest {
         }, form.getFormData());
     }
 
+    
+    @Test
+    public void testGetFormDataIntoBean() {
+        form.reset();
+
+        form.setElementValue("field1", "1");
+        form.setElementValue("selectId", "2");
+        form.setElementValue("multi", Arrays.asList("3"));
+        form.setElementValue("chk", false);
+        
+
+        FormBeanGettersAndSetters expectedBean1 = new FormBeanGettersAndSetters("1", "2", Arrays.asList(3l), false);//Every field is compatible with an string conversion of field 2
+        FormBeanPublic expectedBean2 = new FormBeanPublic("1", "2", null, false);//Note field 3 is not of the same type
+        FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList(3l), false);//Every field is type compatible
+        
+        FormBeanGettersAndSetters resultBean1 = new FormBeanGettersAndSetters(null, null, null, true);
+        FormBeanPublic resultBean2 = new FormBeanPublic(null, null, null, true);
+        FormBeanMixed resultBean3 = new FormBeanMixed(null, null, null, true);
+        
+        
+        form.getFormDataIntoBean(resultBean1);
+        form.getFormDataIntoBean(resultBean2);
+        form.getFormDataIntoBean(resultBean3);
+        
+        
+        System.out.println(form.getFormData());
+        System.out.println(resultBean2);
+        System.out.println(resultBean3);
+        System.out.println(resultBean1);
+        
+        assertEquals(expectedBean1, resultBean1);
+        assertEquals(expectedBean2, resultBean2);
+        assertEquals(expectedBean3, resultBean3);
+    }
+    
     @Test
     public void testDefaults() {
         assertNotNull(form.getDefaultDecoratorsForElementClass(Element.class));
@@ -419,5 +423,33 @@ public class HTMLFormTest {
         TranslationEngineContext.getTranslationEngine().setLocale(spanish);
 
         assertHTMLEquals("<form method=\"POST\"><label class=\"element-label\" for=\"test\">Prueba label</label><input id=\"test\" name=\"test\" type=\"text\" value=\"\"><label class=\"element-label\" for=\"test2\">uniform.test.resource3</label><input id=\"test2\" name=\"test2\" type=\"text\" value=\"\"></form>", translationForm.renderHTML());
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddDuplicatedElementId(){
+        Input input = new Input("field1");
+        form.addElement(input);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testDuplicatedFormDecoratorId(){
+        form.startDecorator("dec1", new HTMLTagDecorator("div"));
+        form.startDecorator("dec2", new HTMLTagDecorator("div"));
+        form.startDecorator("dec3", new HTMLTagDecorator("div"));
+        form.startDecorator("dec1", new HTMLTagDecorator("div"));
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testDecoratorNotOpen(){
+        form.endDecorator();
+        
+        form.render();
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testDecoratorNotClosed(){
+        form.startDecorator("dec1", new HTMLTagDecorator("div"));
+        
+        form.render();
     }
 }

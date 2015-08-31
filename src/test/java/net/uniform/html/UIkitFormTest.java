@@ -16,6 +16,7 @@
 package net.uniform.html;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import static junit.framework.Assert.assertFalse;
@@ -123,5 +124,43 @@ public class UIkitFormTest {
         assertNull(form.getDefaultRendererForElementClass(Select.class));
         assertNotNull(form.getDefaultRendererForElementClass(DatePicker.class));
         assertNotNull(form.getDefaultRendererAppliedToElementClass(DatePicker.class));
+    }
+    
+    @Test
+    public void testAddWithoutDefaultDecorators(){
+        UIkitForm form = new UIkitForm();
+        
+        //Input
+        Input input1 = new Input("field1");
+        input1.setLabel("Field 1");
+        input1.setProperty("class", "class");
+        input1.addClass("class1");
+        input1.setValue("value1");
+        input1.setRequired(true);
+        
+        //Input
+        Input input2 = new Input("field2");
+        input2.setLabel("Field 2");
+        input2.setProperty("class", "class");
+        input2.addClass("class2");
+        input2.setValue("value2");
+        input2.setRequired(true);
+        
+        form.addElements(false, input1, input2);
+        
+        assertHTMLEquals("<form class=\"uk-form\" method=\"POST\"><input class=\"class class1\" id=\"field1\" name=\"field1\" required=\"required\" type=\"text\" value=\"value1\"><input class=\"class class2\" id=\"field2\" name=\"field2\" required=\"required\" type=\"text\" value=\"value2\"></form>", form.renderHTML());
+        
+        form.removeElement("field1");
+        
+        assertHTMLEquals("<form class=\"uk-form\" method=\"POST\"><input class=\"class class2\" id=\"field2\" name=\"field2\" required=\"required\" type=\"text\" value=\"value2\"></form>", form.renderHTML());
+        form.removeElement(input2);
+        
+        assertHTMLEquals("<form class=\"uk-form\" method=\"POST\"></form>", form.renderHTML());
+        
+        form.addElement(input2, false);
+        form.addElement(input1, false);
+        
+        assertHTMLEquals("<form class=\"uk-form\" method=\"POST\"><input class=\"class class2\" id=\"field2\" name=\"field2\" required=\"required\" type=\"text\" value=\"value2\"><input class=\"class class1\" id=\"field1\" name=\"field1\" required=\"required\" type=\"text\" value=\"value1\"></form>", form.renderHTML());
+        
     }
 }
