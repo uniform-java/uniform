@@ -22,6 +22,9 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +90,8 @@ public class UniformUtils {
             throw new UniformException("Error while getting bean object properties of class" + clazz.getName(), ex);
         }
     }
+    
+    private static final Map<String, Class<?>> EMPTY_MAP = new HashMap<>();
 
     /**
      * Injects the values of the given properties into the given Java bean object. It makes sure that object class properties names match and their types are compatible.
@@ -95,8 +100,23 @@ public class UniformUtils {
      * @param props Properties to inject
      */
     public static void fillBeanProperties(Object bean, Map<String, Object> props) {
+        fillBeanProperties(bean, props, EMPTY_MAP);
+    }
+    
+    /**
+     * Injects the values of the given properties into the given Java bean object. It makes sure that object class properties names match and their types are compatible.
+     *
+     * @param bean Input object
+     * @param props Properties to inject
+     * @param collectionsGenericTypes Generic types for each collection value in {@code props}
+     */
+    public static void fillBeanProperties(Object bean, Map<String, Object> props, Map<String, Class<?>> collectionsGenericTypes) {
         if (bean == null || props == null) {
             return;
+        }
+        
+        if(collectionsGenericTypes == null){
+            collectionsGenericTypes = EMPTY_MAP;
         }
 
         Class<?> clazz = bean.getClass();
@@ -115,7 +135,19 @@ public class UniformUtils {
                             Class<?> valueClass = value.getClass();
 
                             if (fieldClass.isAssignableFrom(valueClass)) {
-                                field.set(bean, value);
+                                if(Collection.class.isAssignableFrom(fieldClass)){
+                                    //Double check for collections when we have the type info:
+                                    if(collectionsGenericTypes.containsKey(name)){
+                                        if(isGenericTypeCompatible(field.getType(), collectionsGenericTypes.get(name))){
+                                            field.set(bean, value);
+                                        }
+                                    }else{
+                                        //We have no info, assume the generic type is correct
+                                        field.set(bean, value);
+                                    }
+                                }else{
+                                    field.set(bean, value);
+                                }
                             } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
                                 field.set(bean, value);
                             } else if(fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)){
@@ -146,7 +178,20 @@ public class UniformUtils {
                             Class<?> valueClass = value.getClass();
 
                             if (fieldClass.isAssignableFrom(valueClass)) {
-                                writeMethod.invoke(bean, value);
+                                if(Collection.class.isAssignableFrom(fieldClass)){
+                                    //Double check for collections when we have the type info:
+                                    if(collectionsGenericTypes.containsKey(name)){
+                                        if(isGenericTypeCompatible(writeMethod.getGenericParameterTypes()[0], collectionsGenericTypes.get(name))){
+                                            writeMethod.invoke(bean, value);
+                                        }
+                                    }else{
+                                        //We have no info, assume the generic type is correct
+                                        writeMethod.invoke(bean, value);
+                                    }
+                                }else{
+                                    writeMethod.invoke(bean, value);
+                                }
+                                
                             } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
                                 writeMethod.invoke(bean, value);
                             } else if(fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)){
@@ -164,6 +209,15 @@ public class UniformUtils {
             }
         } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new UniformException("Error while setting bean object properties of class" + clazz.getName(), ex);
+        }
+    }
+    
+    private static boolean isGenericTypeCompatible(Type type, Class<?> genericClass){
+        if (type instanceof ParameterizedType) {
+            ParameterizedType pType = (ParameterizedType)type;
+            return pType.getActualTypeArguments().length == 1 && ((Class<?>) pType.getActualTypeArguments()[0]).isAssignableFrom(genericClass);
+        } else {
+            return true;//No generic, raw collection, Object is compatible with any type
         }
     }
 

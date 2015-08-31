@@ -642,7 +642,17 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form getFormDataIntoBean(Object bean) {
         Map<String, Object> formData = getFormDataConvertedToElementValueTypes();
-        UniformUtils.fillBeanProperties(bean, formData);
+        
+        //Prepare type info for each value so generic types can be checked:
+        Map<String, Class<?>> collectionsGenericTypes = new HashMap<>();
+        for (Element element : formElements.values()) {
+            if(element.isMultiValue()){
+                String name = element.getProperty("name");
+                collectionsGenericTypes.put(name, element.getValueType());
+            }
+        }
+        
+        UniformUtils.fillBeanProperties(bean, formData, collectionsGenericTypes);
 
         return this;
     }

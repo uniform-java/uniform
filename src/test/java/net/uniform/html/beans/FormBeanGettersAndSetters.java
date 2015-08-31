@@ -27,10 +27,10 @@ public class FormBeanGettersAndSetters {
 
     private String inputName;
     private String selectName;
-    private List<Long> multi;
+    private List<String> multi;
     private Boolean chk;
 
-    public FormBeanGettersAndSetters(String inputName, String selectName, List<Long> multi, Boolean chk) {
+    public FormBeanGettersAndSetters(String inputName, String selectName, List<String> multi, Boolean chk) {
         this.inputName = inputName;
         this.selectName = selectName;
         this.multi = multi;
@@ -45,7 +45,7 @@ public class FormBeanGettersAndSetters {
         return selectName;
     }
 
-    public List<Long> getMulti() {
+    public List<String> getMulti() {
         return multi;
     }
 
@@ -61,7 +61,7 @@ public class FormBeanGettersAndSetters {
         this.selectName = selectName;
     }
 
-    public void setMulti(List<Long> multi) {
+    public void setMulti(List<String> multi) {
         this.multi = multi;
     }
 

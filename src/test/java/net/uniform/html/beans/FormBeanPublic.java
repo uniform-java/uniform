@@ -15,7 +15,6 @@
  */
 package net.uniform.html.beans;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**

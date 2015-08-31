@@ -26,10 +26,10 @@ public class FormBeanMixed {
 
     public String inputName;
     public Integer selectName;
-    private List<Long> multi;
+    private List<Number> multi;
     private boolean chk;
 
-    public FormBeanMixed(String inputName, Integer selectName, List<Long> multi, boolean chk) {
+    public FormBeanMixed(String inputName, Integer selectName, List<Number> multi, boolean chk) {
         this.inputName = inputName;
         this.selectName = selectName;
         this.multi = multi;
@@ -52,11 +52,11 @@ public class FormBeanMixed {
         this.selectName = selectName;
     }
 
-    public List<Long> getMulti() {
+    public List<Number> getMulti() {
         return multi;
     }
 
-    public void setMulti(List<Long> multi) {
+    public void setMulti(List<Number> multi) {
         this.multi = multi;
     }
 

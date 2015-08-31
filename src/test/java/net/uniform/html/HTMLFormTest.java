@@ -274,7 +274,7 @@ public class HTMLFormTest {
     public void testPopulateBean() {
         form.reset();
 
-        FormBeanGettersAndSetters bean = new FormBeanGettersAndSetters("1", "2", Arrays.asList(3l), false);
+        FormBeanGettersAndSetters bean = new FormBeanGettersAndSetters("1", "2", Arrays.asList("3"), false);
         form.populateBean(bean);
 
         assertEquals(new HashMap<String, Object>() {
@@ -310,9 +310,9 @@ public class HTMLFormTest {
         form.setElementValue("chk", false);
         
 
-        FormBeanGettersAndSetters expectedBean1 = new FormBeanGettersAndSetters("1", "2", Arrays.asList(3l), false);//Every field is compatible with an string conversion of field 2
+        FormBeanGettersAndSetters expectedBean1 = new FormBeanGettersAndSetters("1", "2", null, false);//Field 2 is compatible with an string conversion but generic list type of field 3 (String) is not compatible with the form type (Long)
         FormBeanPublic expectedBean2 = new FormBeanPublic("1", "2", null, false);//Note field 3 is not of the same type
-        FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList(3l), false);//Every field is type compatible
+        FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList((Number) 3L), false);//Every field is type compatible
         
         FormBeanGettersAndSetters resultBean1 = new FormBeanGettersAndSetters(null, null, null, true);
         FormBeanPublic resultBean2 = new FormBeanPublic(null, null, null, true);
@@ -322,12 +322,6 @@ public class HTMLFormTest {
         form.getFormDataIntoBean(resultBean1);
         form.getFormDataIntoBean(resultBean2);
         form.getFormDataIntoBean(resultBean3);
-        
-        
-        System.out.println(form.getFormData());
-        System.out.println(resultBean2);
-        System.out.println(resultBean3);
-        System.out.println(resultBean1);
         
         assertEquals(expectedBean1, resultBean1);
         assertEquals(expectedBean2, resultBean2);
