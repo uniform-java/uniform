@@ -15,8 +15,8 @@
  */
 package net.uniform.html.validators;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.text.SimpleDateFormat;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import net.uniform.api.Element;
 import net.uniform.html.elements.EmptyElement;
@@ -25,34 +25,32 @@ import net.uniform.html.elements.EmptyElement;
  *
  * @author Eduardo Ramos
  */
-public class StringLengthValidatorTest {
+public class DateValidatorTest {
     
     @Test
     public void test() {
         Element element = new EmptyElement("test");
         
-        StringLengthValidator validator = new StringLengthValidator(5, 20);
+        DateValidator validator = new DateValidator();
         element.addValidator(validator);
         
-        element.setValue("a");//Too short
+        assertTrue(element.isValid());//No value, not required
+        
+        element.setValue("01/09/2015");
         assertFalse(element.isValid());
         
-        element.setValue("012345678901234567891");//Too long
-        
-        assertFalse(element.isValid());
-        
-        element.setValue("0123456789012345");//Ok
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        validator.setDateFormat(sdf);
+        assertEquals(validator.getDateFormat(), sdf);
+        validator.setDateFormat(sdf.toPattern());
         
         assertTrue(element.isValid());
         
-        validator.setMinLength(20);//Increase min
-        
+        element.removeValidator(validator);
+        validator = new DateValidator(DateValidator.DEFAULT_DATE_FORMAT);
+        element.addValidator(validator);
         assertFalse(element.isValid());
-        
-        validator.setMaxLength(null);//Remove max
-        
-        element.setValue("012345678901234567890123");
-        
+        element.setValue("2015-09-01");
         assertTrue(element.isValid());
     }
 }

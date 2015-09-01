@@ -15,7 +15,6 @@
  */
 package net.uniform.html.validators;
 
-import net.uniform.html.validators.AlphanumericValidator;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -35,14 +34,14 @@ public class AlphanumericValidatorTest {
         AlphanumericValidator validator = new AlphanumericValidator();
         element.addValidator(validator);
         
-        assertTrue(element.getValidationErrors().isEmpty());//No value, not required
+        assertTrue(element.isValid());//No value, not required
         
         element.setValue("466ad4bc13");
         
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         element.setValue("Other val %&$");
         
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
     }
 }

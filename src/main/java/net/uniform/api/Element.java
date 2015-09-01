@@ -315,6 +315,13 @@ public interface Element {
     Decorator getDecorator(Class<?> clazz);
     
     /**
+     * Returns the last decorator in this element with the given class, or null if not found.
+     * @param clazz Decorator class
+     * @return Decorator or null
+     */
+    Decorator getLastDecorator(Class<?> clazz);
+    
+    /**
      * Removes a decorator of this element, if present.
      * @param decorator Decorator to remove
      * @return This element
@@ -329,6 +336,15 @@ public interface Element {
      * @param value Property value
      */
     void setDecoratorProperty(Class<?> clazz, String key, Object value);
+    
+    /**
+     * Finds the last decorator of this element with the given class and sets the given property value.
+     * Throws an exception if no decorator with that class is found.
+     * @param clazz Decorator class
+     * @param key Property key
+     * @param value Property value
+     */
+    void setLastDecoratorProperty(Class<?> clazz, String key, Object value);
     
     /**
      * Removes all decorators from this element.

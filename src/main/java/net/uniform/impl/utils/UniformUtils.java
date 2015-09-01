@@ -50,6 +50,11 @@ public class UniformUtils {
         }
         return null;
     }
+    
+    private final static double EPSILON = 1e-9;
+    public static boolean equalsEpsilon(double a, double b){
+        return Math.abs(a - b) < EPSILON;
+    }
 
     /**
      * Returns an index of all the accessible properties of a Java bean object.

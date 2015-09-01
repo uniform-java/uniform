@@ -294,8 +294,31 @@ public abstract class AbstractElement implements Element {
     }
 
     @Override
+    public Decorator getLastDecorator(Class<?> clazz) {
+        Decorator last = null;
+        
+        for (Decorator decorator : decorators) {
+            if (decorator != null && decorator.getClass().equals(clazz)) {
+                last = decorator;
+            }
+        }
+
+        return last;
+    }
+
+    @Override
     public void setDecoratorProperty(Class<?> clazz, String key, Object value) {
         Decorator decorator = this.getDecorator(clazz);
+        if (decorator != null) {
+            decorator.setProperty(key, value);
+        } else {
+            throw new IllegalArgumentException("Could not find decorator with class " + clazz.getName() + " for the element " + this.getId());
+        }
+    }
+    
+    @Override
+    public void setLastDecoratorProperty(Class<?> clazz, String key, Object value) {
+        Decorator decorator = this.getLastDecorator(clazz);
         if (decorator != null) {
             decorator.setProperty(key, value);
         } else {

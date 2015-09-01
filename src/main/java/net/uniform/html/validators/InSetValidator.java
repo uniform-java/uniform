@@ -36,7 +36,9 @@ public class InSetValidator implements Validator<Element> {
     }
     
     public InSetValidator(Set<String> validValues) {
-        this.valuesSet.addAll(valuesSet);
+        if(validValues != null){
+            this.valuesSet.addAll(validValues);
+        }
     }
 
     @Override
@@ -58,9 +60,11 @@ public class InSetValidator implements Validator<Element> {
         return true;
     }
 
-    public void setValidValuesValues(Set<String> validValues) {
+    public void setValidValues(Set<String> validValues) {
         this.valuesSet.clear();
-        this.valuesSet.addAll(validValues);
+        if(validValues != null){
+            this.valuesSet.addAll(validValues);
+        }
     }
     
     public void addValidValue(String value){

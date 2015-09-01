@@ -15,7 +15,6 @@
  */
 package net.uniform.html.validators;
 
-import net.uniform.html.validators.RegexValidator;
 import java.util.regex.Pattern;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -36,30 +35,30 @@ public class RegexValidatorTest {
         RegexValidator validator = new RegexValidator("[A-za-z]+");
         element.addValidator(validator);
         
-        assertTrue(element.getValidationErrors().isEmpty());//No value, not required
+        assertTrue(element.isValid());//No value, not required
         
         element.setValue("466ad4bc13");
         
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
         
         element.setValue("abcdejkl");
         
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         element.setValue("A 2112 - text _ ");
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
         
         validator.setRegexPattern("[A-za-z0-9 -_]+");
         
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         String literal = ".#~$%()[]";
         validator.setRegexPattern(Pattern.quote(literal));
         
         element.setValue(literal);
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         element.setValue(literal+"more");
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
     }
 }

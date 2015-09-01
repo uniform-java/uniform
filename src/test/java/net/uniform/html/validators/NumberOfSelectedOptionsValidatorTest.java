@@ -15,10 +15,9 @@
  */
 package net.uniform.html.validators;
 
-import net.uniform.html.validators.NumberOfSelectedOptionsValidator;
 import java.util.Arrays;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.List;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import net.uniform.html.elements.Multiselect;
 
@@ -38,29 +37,49 @@ public class NumberOfSelectedOptionsValidatorTest {
         NumberOfSelectedOptionsValidator validator = new NumberOfSelectedOptionsValidator();
         element.addValidator(validator);
         
-        assertTrue(element.getValidationErrors().isEmpty());//No value, not required
+        assertTrue(element.isValid());//No value, not required
         
         element.setValue("1");
         
-        assertTrue(element.getValidationErrors().isEmpty());//No min or max config
+        assertTrue(element.isValid());//No min or max config
         
         validator.setMin(2);
         
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
         
         validator.setMin(1);
         
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertEquals((long) validator.getMin(), 1);
+        
+        assertTrue(element.isValid());
         
         validator.setMin(null);
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         validator.setMax(2);
         
+        assertEquals((long) validator.getMax(), 2);
+        
         element.setValue(Arrays.asList("1", "2"));
-        assertTrue(element.getValidationErrors().isEmpty());
+        assertTrue(element.isValid());
         
         element.setValue(Arrays.asList("1", "2", "3"));
-        assertFalse(element.getValidationErrors().isEmpty());
+        assertFalse(element.isValid());
+        
+        element.removeValidator(validator);
+        validator = new NumberOfSelectedOptionsValidator(2);
+        element.addValidator(validator);
+        assertFalse(element.isValid());
+        
+        element.removeValidator(validator);
+        validator = new NumberOfSelectedOptionsValidator(3, 4);
+        element.addValidator(validator);
+        assertTrue(element.isValid());
+        
+        element.setValue((List<String>) null);
+        assertTrue(element.isValid());
+        
+        element.setValue((String) null);
+        assertTrue(element.isValid());
     }
 }

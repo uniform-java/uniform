@@ -55,27 +55,27 @@ public class NumericValidator implements Validator<Element>{
         try {
             firstValue = firstValue.trim();
             if(allowDecimals){
-                    numberValue = Double.parseDouble(firstValue);
+                numberValue = Double.parseDouble(firstValue);
             }else {
-                    numberValue = Long.parseLong(firstValue);
+                numberValue = Long.parseLong(firstValue);
             }
         } catch (NumberFormatException e) {
             String numberTypeName;
             if(allowDecimals){
-                    numberTypeName = "number";
+                numberTypeName = "number";
             }else{
-                    numberTypeName = "integer";
+                numberTypeName = "integer";
             }
             return translate("uniform.validators.numeric.invalid", firstValue, numberTypeName);
         }
         
         if(min != null){
             if(minInclusive){
-                if(numberValue < min){
+                if(numberValue < min && !UniformUtils.equalsEpsilon(numberValue, min)){
                     return translate("uniform.validators.numeric.greaterequal", firstValue, min);
                 }
             }else{
-                if(numberValue <= min){
+                if(numberValue < min || UniformUtils.equalsEpsilon(numberValue, min)){
                     return translate("uniform.validators.numeric.greater", firstValue, min);
                 }
             }
@@ -83,11 +83,11 @@ public class NumericValidator implements Validator<Element>{
         
         if(max != null){
             if(maxInclusive){
-                if(numberValue > max){
+                if(numberValue > max && !UniformUtils.equalsEpsilon(numberValue, max)){
                     return translate("uniform.validators.numeric.lessequal", firstValue, max);
                 }
             }else{
-                if(numberValue >= max){
+                if(numberValue > max || UniformUtils.equalsEpsilon(numberValue, max)){
                     return translate("uniform.validators.numeric.less", firstValue, max);
                 }
             }

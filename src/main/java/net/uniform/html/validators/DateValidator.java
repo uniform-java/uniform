@@ -32,7 +32,7 @@ public class DateValidator implements Validator<Element> {
 
     private SimpleDateFormat dateFormat;
 
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
     public DateValidator() {
         this(DEFAULT_DATE_FORMAT);
@@ -43,7 +43,7 @@ public class DateValidator implements Validator<Element> {
         sdf.setLenient(false);
         this.dateFormat = sdf;
     }
-
+    
     public DateValidator(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
@@ -74,5 +74,11 @@ public class DateValidator implements Validator<Element> {
 
     public void setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
+    }
+    
+    public void setDateFormat(String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        sdf.setLenient(false);
+        this.setDateFormat(sdf);
     }
 }
