@@ -15,17 +15,17 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.HTMLElement;
 import java.util.Arrays;
 import java.util.HashMap;
+import net.uniform.api.html.SimpleHTMLTag;
+import net.uniform.exceptions.UniformException;
+import net.uniform.impl.utils.HTMLRenderingUtils;
+import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import net.uniform.api.html.SimpleHTMLTag;
-import net.uniform.impl.utils.HTMLRenderingUtils;
-import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 
 /**
  *
@@ -90,12 +90,18 @@ public class HTMLElementTest {
         assertHTMLEquals("<span class=\"test-class\" data-test=\"&quot;other value&quot;\" id=\"test-id\"><p>Don't escape me</p></span>", HTMLRenderingUtils.render(element.render()));
         
         
-        assertTrue(element.getValidationErrors() == null || element.getValidationErrors().isEmpty());
+        assertTrue(element.getValidationErrors() == null || element.isValid());
         
         //Other element:
         HTMLElement element2 = new HTMLElement("test-2");
         element2.setContent("Tag content simple");
         
         assertHTMLEquals("Tag content simple", HTMLRenderingUtils.render(element2.render()));
+    }
+    
+    @Test(expected = UniformException.class)
+    public void testUnsupportedTypeChange() {
+        HTMLElement element  = new HTMLElement("test", new SimpleHTMLTag("div"));
+        element.setValueType(String.class);
     }
 }

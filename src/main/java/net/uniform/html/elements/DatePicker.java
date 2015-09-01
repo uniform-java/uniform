@@ -34,7 +34,7 @@ import net.uniform.impl.AbstractHTMLElement;
 public class DatePicker extends AbstractHTMLElement implements ElementWithValueConversion<Date>{
     private SimpleDateFormat dateFormat;
     
-    private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
     public DatePicker(String id) {
         this(id, DEFAULT_DATE_FORMAT);
@@ -115,6 +115,19 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
             }
         }
         return this;
+    }
+    
+    /**
+     * Sets the date format for this element.
+     * It also changes the date format for the date validator, if present.
+     * @param dateFormat Date format
+     * @return This element
+     */
+    public DatePicker setDateFormat(String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        sdf.setLenient(false);
+        
+        return setDateFormat(sdf);
     }
     
     /**

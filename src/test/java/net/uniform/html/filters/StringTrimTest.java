@@ -15,7 +15,6 @@
  */
 package net.uniform.html.filters;
 
-import net.uniform.html.filters.StringTrim;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;

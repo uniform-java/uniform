@@ -30,7 +30,6 @@ public class Hidden extends AbstractHTMLElement {
     
     public Hidden(String id) {
         super(id);
-        this.setRenderer(new HiddenRenderer());
     }
 
     @Override
@@ -42,5 +41,11 @@ public class Hidden extends AbstractHTMLElement {
     @Override
     public Renderer getDefaultRenderer() {
         return new HiddenRenderer();
+    }
+
+    @Override
+    public Element reset() {
+        //Hidden value should not change by form reset
+        return this;
     }
 }

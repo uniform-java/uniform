@@ -18,8 +18,6 @@ package net.uniform.html.decorators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import net.uniform.api.Decorator;
 import net.uniform.api.Element;
 import net.uniform.api.TranslationEngineContext;
@@ -27,6 +25,8 @@ import net.uniform.api.html.SimpleHTMLTag;
 import net.uniform.html.elements.Input;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import net.uniform.testutils.HTMLTest;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *

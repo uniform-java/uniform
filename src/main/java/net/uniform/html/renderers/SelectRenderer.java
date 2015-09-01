@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.uniform.api.Renderer;
 import net.uniform.api.html.Option;
 import net.uniform.api.html.OptionGroup;
-import net.uniform.api.Renderer;
 import net.uniform.api.html.SimpleHTMLTag;
-import net.uniform.html.elements.Select;
 import net.uniform.html.elements.Multiselect;
+import net.uniform.html.elements.Select;
 import net.uniform.impl.ElementWithOptions;
 
 /**

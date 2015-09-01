@@ -15,7 +15,6 @@
  */
 package net.uniform.impl.translation;
 
-import net.uniform.impl.translation.SimpleTranslationEngine;
 import java.util.Locale;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

@@ -16,15 +16,15 @@
 package net.uniform.html.elements;
 
 import java.util.HashMap;
+import net.uniform.api.Form;
+import net.uniform.html.HTMLForm;
+import net.uniform.impl.utils.HTMLRenderingUtils;
+import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import net.uniform.api.Form;
-import net.uniform.html.HTMLForm;
-import net.uniform.impl.utils.HTMLRenderingUtils;
-import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 
 /**
  *

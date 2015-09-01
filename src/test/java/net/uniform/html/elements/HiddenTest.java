@@ -15,10 +15,11 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Hidden;
-import org.junit.Test;
+import java.util.HashMap;
+import net.uniform.html.HTMLForm;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import org.junit.Test;
 
 /**
  *
@@ -32,6 +33,13 @@ public class HiddenTest {
         hidden.setValue("myHiddenValue");
         
         assertHTMLEquals("<input id=\"my-hidden\" name=\"my-hidden\" value=\"myHiddenValue\" type=\"hidden\"/>", HTMLRenderingUtils.render(hidden.render()));
+        
+        HTMLForm form = new HTMLForm();
+        form.addElement(hidden, false);
+        form.populateSimple(new HashMap<String, Object>(){{
+            put("my-hidden", "populateValueIgnored");
+        }});
+        
+        assertHTMLEquals("<form method=\"POST\"><input id=\"my-hidden\" name=\"my-hidden\" value=\"myHiddenValue\" type=\"hidden\"/></form>", form.renderHTML());
     }
-    
 }

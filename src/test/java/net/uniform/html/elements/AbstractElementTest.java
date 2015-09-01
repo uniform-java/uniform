@@ -16,9 +16,10 @@
 package net.uniform.html.elements;
 
 import java.util.Arrays;
+import net.uniform.api.Element;
+import net.uniform.impl.AbstractElement;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import net.uniform.api.Element;
 
 /**
  *
@@ -60,5 +61,11 @@ public class AbstractElementTest {
     @Test(expected = IllegalArgumentException.class)
     public void testRequiredId() {
         Element elem = new EmptyElement(null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testRequiredValueType() {
+        AbstractElement elem = new EmptyElement("elem");
+        elem.setValueType(null);
     }
 }

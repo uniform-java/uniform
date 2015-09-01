@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import net.uniform.api.Decorator;
 import net.uniform.api.Element;
-import net.uniform.api.ElementWithValueConversion;
 import net.uniform.api.Filter;
 import net.uniform.api.Form;
 import net.uniform.api.Renderer;
@@ -474,15 +473,11 @@ public abstract class AbstractElement implements Element {
         return valueType;
     }
 
-    /**
-     * <p>Changes the value type returned by {@link #getValueType()} method.</p>
-     * <p>This type is used in a form to do automatic value conversion in methods such as <code>getFormDataConvertedToElementValueTypes</code>.</p>
-     * <p>By default, all elements have <code>String</code> value type.</p>
-     * <p>This type should only be set to a type which any value set to the element (after validation and filtering) can be converted to.</p>
-     * <p>Conversion of simple types such as numbers is supported by a form. For any other complex type such as <code>Date</code>, the element can implement the {@link ElementWithValueConversion} interface to completely override the conversion of values.</p>
-     * @param valueType New class for values of the element.
-     */
+    @Override
     public void setValueType(Class<?> valueType) {
+        if(valueType == null){
+            throw new IllegalArgumentException("valueType cannot be null");
+        }
         this.valueType = valueType;
     }
 

@@ -15,10 +15,9 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Input;
-import org.junit.Test;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import org.junit.Test;
 
 /**
  *

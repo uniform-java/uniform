@@ -16,14 +16,14 @@
 package net.uniform.html.formvalidators;
 
 import java.util.HashMap;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import net.uniform.api.Form;
 import net.uniform.html.HTMLForm;
 import net.uniform.html.elements.DatePicker;
 import net.uniform.html.elements.Input;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *
@@ -78,7 +78,7 @@ public class DateRangeValidatorTest {
         validator.setAllowSameDate(false);
 
         assertFalse(form.isValid());
-        assertFalse(form.getValidationErrors().isEmpty());
+        assertFalse(form.isValid());
 
         assertHTMLEquals("<form method=\"POST\"><ul class=\"form-validation-errors\"><li>Same date is not allowed for 'Start date' and 'End date'</li></ul><label class=\"element-label\" for=\"start\">Start date</label><input id=\"start\" name=\"start\" required=\"required\" type=\"date\" value=\"2015-03-28\"><label class=\"element-label\" for=\"end\">End date</label><input id=\"end\" name=\"end\" type=\"date\" value=\"2015-03-28\"></form>", form.renderHTML());
 

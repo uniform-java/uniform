@@ -15,17 +15,16 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.DatePicker;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import net.uniform.exceptions.UniformException;
+import net.uniform.impl.utils.HTMLRenderingUtils;
+import net.uniform.testutils.HTMLTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import net.uniform.exceptions.UniformException;
-import net.uniform.impl.utils.HTMLRenderingUtils;
-import net.uniform.testutils.HTMLTest;
 
 /**
  *
@@ -37,19 +36,29 @@ public class DatePickerTest {
     public void test() throws ParseException {
         DatePicker datePicker = new DatePicker("my-date");
         
+        datePicker = new DatePicker("my-date", datePicker.getDateFormat());
+        
         datePicker.setValue("2015-03-46");
         
-        assertFalse(datePicker.getValidationErrors().isEmpty());
+        assertFalse(datePicker.isValid());
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         
         Date date = sdf.parse("16/03/2015");
         datePicker.setValue(date);
         
-        assertTrue(datePicker.getValidationErrors().isEmpty());
+        assertTrue(datePicker.isValid());
         assertEquals(date, datePicker.getConvertedValue());
         
         HTMLTest.assertHTMLEquals("<input id=\"my-date\" name=\"my-date\" type=\"date\" value=\"2015-03-16\">", HTMLRenderingUtils.render(datePicker.render()));
+        
+        SimpleDateFormat sdf2 = new SimpleDateFormat("ddMMyyyy");
+        datePicker.setDateFormat(sdf2);
+        datePicker.setDateFormat(datePicker.getDateFormat().toPattern());
+        
+        assertFalse(datePicker.isValid());
+        datePicker.setValue("01092015");
+        assertTrue(datePicker.isValid());
     }
     
     @Test(expected = UniformException.class)
@@ -59,5 +68,11 @@ public class DatePickerTest {
         datePicker.setValue("2015-13-03");
         
         datePicker.getConvertedValue();
+    }
+    
+    @Test(expected = UniformException.class)
+    public void testUnsupportedTypeChange() {
+        DatePicker datePicker = new DatePicker("date");
+        datePicker.setValueType(Integer.class);
     }
 }

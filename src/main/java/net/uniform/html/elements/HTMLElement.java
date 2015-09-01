@@ -22,6 +22,7 @@ import net.uniform.api.Element;
 import net.uniform.api.Renderer;
 import net.uniform.api.annotations.IgnoreDefaultFormDecorators;
 import net.uniform.api.html.SimpleHTMLTag;
+import net.uniform.exceptions.UniformException;
 import net.uniform.impl.AbstractElement;
 
 /**
@@ -58,6 +59,11 @@ public class HTMLElement extends AbstractElement {
     @Override
     public Class<?> getValueType() {
         return null;
+    }
+
+    @Override
+    public void setValueType(Class<?> valueType) {
+        throw new UniformException("HTMLElement does not support value type change");
     }
 
     @Override

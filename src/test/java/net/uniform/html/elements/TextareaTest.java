@@ -15,11 +15,10 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Textarea;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *

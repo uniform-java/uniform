@@ -15,14 +15,13 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Multiselect;
 import java.util.Arrays;
 import java.util.List;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 import net.uniform.html.decorators.ElementErrorsDecorator;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *

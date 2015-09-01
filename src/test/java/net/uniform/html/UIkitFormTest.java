@@ -16,14 +16,9 @@
 package net.uniform.html;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import org.junit.Test;
 import net.uniform.api.Element;
 import net.uniform.html.elements.Button;
 import net.uniform.html.elements.DatePicker;
@@ -33,6 +28,10 @@ import net.uniform.html.elements.Select;
 import net.uniform.html.uikit.UIkitButton;
 import net.uniform.html.uikit.UIkitForm;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import org.junit.Test;
 
 /**
  *

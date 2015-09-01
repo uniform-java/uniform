@@ -18,6 +18,8 @@ package net.uniform.api;
 import java.util.List;
 import java.util.Map;
 import net.uniform.api.html.SimpleHTMLTag;
+import net.uniform.html.elements.Checkbox;
+import net.uniform.html.elements.DatePicker;
 import net.uniform.html.elements.Hidden;
 import net.uniform.html.elements.Multicheckbox;
 import net.uniform.html.elements.Multiselect;
@@ -132,12 +134,23 @@ public interface Element {
      * </p>
      * 
      * <p>
-     * If the returned type is null, the element will never by populated by a form, and its values will never be included in extracted form data with methods such as {@code getFormData}.
+     * <b>If the returned type is null, the element will never by populated by a form, and its values will never be included in extracted form data with methods such as {@code getFormData}.</b>
      * </p>
      * 
      * @return Value type class or null
      */
     Class<?> getValueType();
+    
+    /**
+     * <p>Changes the value type returned by {@link #getValueType()} method.</p>
+     * <p>This type is used in a form to do automatic value conversion in methods such as {@code getFormDataConvertedToElementValueTypes}.</p>
+     * <p>By default, all elements have {@code String} value type.</p>
+     * <p>This type should only be set to a type which any value set to the element (after validation and filtering) can be converted to.</p>
+     * <p>Conversion of simple types such as numbers is supported by a form. For any other complex type such as {@code Date}, the element can implement the {@link ElementWithValueConversion} interface to completely override the conversion of values.</p>
+     * <p>Not every element supports change of this type. For example, a {@link Checkbox} is always {@code Boolean} and {@link DatePicker} is always {@code Date}</p>
+     * @param valueType New class for values of the element.
+     */
+    void setValueType(Class<?> valueType);
     
     /**
      * Indicates if this element is multi-value (for example, a {@link Multiselect} or {@link Multicheckbox}) or not.

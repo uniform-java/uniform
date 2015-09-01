@@ -20,9 +20,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.uniform.impl.utils.UniformUtils;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import net.uniform.impl.utils.UniformUtils;
 
 /**
  *

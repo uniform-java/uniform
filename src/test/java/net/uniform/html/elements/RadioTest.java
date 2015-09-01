@@ -15,16 +15,15 @@
  */
 package net.uniform.html.elements;
 
-import net.uniform.html.elements.Radio;
 import java.util.Arrays;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import org.junit.Test;
 import net.uniform.api.html.Option;
 import net.uniform.api.html.OptionGroup;
 import net.uniform.html.decorators.ElementErrorsDecorator;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import org.junit.Test;
 
 /**
  *
@@ -106,7 +105,7 @@ public class RadioTest {
         
         radio.setValue("x");
         
-        assertFalse(radio.getValidationErrors().isEmpty());
+        assertFalse(radio.isValid());
         
         //All disabled:
         radio.reset();

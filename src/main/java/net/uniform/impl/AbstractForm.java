@@ -157,8 +157,11 @@ public abstract class AbstractForm implements Form {
         ArrayList<Decorator> list = new ArrayList<>();
 
         if (decorators != null) {
+            list.addAll(decorators);
             for (Decorator decorator : decorators) {
-                list.add(decorator);
+                if(decorator != null){
+                    list.add(decorator);
+                }
             }
         }
         this.defaultElementDecorators.put(clazz, list);

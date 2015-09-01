@@ -22,13 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
 import net.uniform.api.Decorator;
 import net.uniform.api.Element;
 import net.uniform.api.Form;
@@ -47,6 +40,13 @@ import net.uniform.html.elements.Multiselect;
 import net.uniform.html.elements.Select;
 import net.uniform.impl.translation.SimpleTranslationEngine;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -181,6 +181,9 @@ public class HTMLFormTest {
         }
 
         //Normal form
+        form.setProperty("method", HTMLForm.METHOD_GET);
+        assertHTMLEquals("<form method=\"GET\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"true\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
+        form.setProperty("method", HTMLForm.METHOD_POST);
         assertHTMLEquals("<form method=\"POST\"><label class=\"test-label-class\" for=\"field1\">Some Input <i class=\"icon-unescaped-test\"></i></label><input class=\"class\" id=\"field1\" name=\"inputName\" type=\"text\" value=\"Testing...\"/><label class=\"test-label-class\" for=\"field2\">Some Input &lt;i class=\"icon-escaped-test\"&gt;&lt;/i&gt;</label><select data-id=\"selectId\" id=\"field2\" name=\"selectName\"><option value=\"\">---</option><option value=\"1\">One</option><option value=\"2\">Two</option></select><label class=\"test-label-class\" for=\"multi\">Multi test</label><select id=\"multi\" multiple=\"multiple\" name=\"multi\"><option selected=\"selected\" value=\"1\">One</option><option value=\"2\">Two</option><option value=\"3\">Three</option><option selected=\"selected\" value=\"4\">Four</option></select><input checked=\"checked\" id=\"chk\" name=\"chk\" type=\"checkbox\" value=\"true\"/><label class=\"test-label-class\" for=\"chk\">CHK</label></form>", form.renderHTML());
 
         //Form with validation errors:
