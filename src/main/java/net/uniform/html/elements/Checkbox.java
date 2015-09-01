@@ -52,7 +52,7 @@ public class Checkbox extends AbstractHTMLElement implements ElementWithValueCon
      */
     public Checkbox setChecked(boolean checked){
         if(checked){
-            String valueEnabledString = this.getProperty("value");
+            String valueEnabledString = this.getEnabledValueString();
             this.setValue(valueEnabledString);
         }else{
             this.setValue("");
@@ -75,11 +75,12 @@ public class Checkbox extends AbstractHTMLElement implements ElementWithValueCon
     
     /**
      * Sets the value string considered as checked/enabled.
+     * Maintains the checked status considering the current value enabled string.
      * @param value Checked value, {@code DEFAULT_ENABLED_VALUE} by default
      * @return This element
      */
     public Checkbox setEnabledValueString(String value){
-        boolean checked = this.isChecked();
+        boolean checked = this.isChecked();//Maintain checked status
         this.setProperty("value", value);
         this.setChecked(checked);
         return this;

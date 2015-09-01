@@ -39,6 +39,8 @@ public class CheckboxRenderer implements Renderer<Checkbox> {
             finalProps.put("required", "required");
         }
         
+        finalProps.put("value", checkbox.getEnabledValueString());
+        
         String valueEnabledString = checkbox.getEnabledValueString();
         
         String value = checkbox.getFirstValue();

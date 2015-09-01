@@ -17,12 +17,14 @@ package net.uniform.html.elements;
 
 import java.util.HashMap;
 import net.uniform.api.Form;
+import net.uniform.exceptions.UniformException;
 import net.uniform.html.HTMLForm;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -42,15 +44,24 @@ public class CheckboxTest {
         
         assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"true\"/>", HTMLRenderingUtils.render(chk.render()));
         chk.setProperty("value", "on");
+        assertEquals(chk.getEnabledValueString(), "on");
         
         assertHTMLEquals("<input id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"on\"/>", HTMLRenderingUtils.render(chk.render()));
         
         chk.setValue("on");
-        
         assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"on\"/>", HTMLRenderingUtils.render(chk.render()));
+        
+        chk.setEnabledValueString(null);
+        assertNull(chk.getProperty("value"));
+        assertEquals(chk.getEnabledValueString(), Checkbox.DEFAULT_ENABLED_VALUE);
+        assertEquals(chk.getFirstValue(), Checkbox.DEFAULT_ENABLED_VALUE);
+        assertTrue(chk.isChecked());
+        chk.setChecked(false);
+        assertHTMLEquals("<input id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"true\"/>", HTMLRenderingUtils.render(chk.render()));
         
         
         //Test data:
+        chk.setEnabledValueString("on");
         chk.setValue("off");
         assertNotNull(chk.getConvertedValue());
         assertFalse(chk.getConvertedValue());
@@ -96,5 +107,11 @@ public class CheckboxTest {
                 }},
                 form.getFormDataConvertedToElementValueTypes()
         );
+    }
+    
+    @Test(expected = UniformException.class)
+    public void testUnsupportedTypeChange() {
+        Checkbox chk = new Checkbox("chk");
+        chk.setValueType(Integer.class);
     }
 }

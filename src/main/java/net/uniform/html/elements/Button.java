@@ -18,6 +18,7 @@ package net.uniform.html.elements;
 import java.util.List;
 import net.uniform.api.Element;
 import net.uniform.api.Renderer;
+import net.uniform.exceptions.UniformException;
 import net.uniform.html.renderers.ButtonRenderer;
 import net.uniform.impl.AbstractHTMLElement;
 
@@ -31,12 +32,14 @@ public class Button extends AbstractHTMLElement {
     public static final String BUTTON_TYPE_BUTTON = "button";
     public static final String BUTTON_TYPE_RESET = "reset";
     
+    public static final String DEFAULT_BUTTON_TYPE = BUTTON_TYPE_BUTTON;
+    
     public static final boolean DEFAULT_ESCAPE = true;
     
     protected boolean escape = DEFAULT_ESCAPE;
 
     public Button(String id) {
-        this(id, BUTTON_TYPE_BUTTON);
+        this(id, DEFAULT_BUTTON_TYPE);
     }
     
     public Button(String id, String type) {
@@ -49,6 +52,11 @@ public class Button extends AbstractHTMLElement {
     @Override
     public Class<?> getValueType() {
         return null;
+    }
+    
+    @Override
+    public void setValueType(Class<?> valueType) {
+        throw new UniformException("Button does not support value type change");
     }
 
     @Override
@@ -63,6 +71,11 @@ public class Button extends AbstractHTMLElement {
 
     @Override
     public Element setValue(List<String> value) {
+        return this;
+    }
+
+    @Override
+    public Element reset() {
         return this;
     }
 
