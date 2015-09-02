@@ -29,6 +29,11 @@ public class EmptyElement extends AbstractElement {
     }
 
     @Override
+    public boolean isMultiValue() {
+        return true;
+    }
+    
+    @Override
     public Renderer getDefaultRenderer() {
         return null;
     }

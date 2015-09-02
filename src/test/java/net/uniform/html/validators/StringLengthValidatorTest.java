@@ -17,7 +17,9 @@ package net.uniform.html.validators;
 
 import net.uniform.api.Element;
 import net.uniform.html.elements.EmptyElement;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -26,33 +28,52 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class StringLengthValidatorTest {
-    
+
     @Test
     public void test() {
         Element element = new EmptyElement("test");
-        
+
         StringLengthValidator validator = new StringLengthValidator(5, 20);
         element.addValidator(validator);
         
+        assertEquals((long) validator.getMinLength(), 5);
+        assertEquals((long) validator.getMaxLength(), 20);
+
         element.setValue("a");//Too short
         assertFalse(element.isValid());
-        
+
         element.setValue("012345678901234567891");//Too long
-        
+
         assertFalse(element.isValid());
-        
+
         element.setValue("0123456789012345");//Ok
-        
+
+        assertTrue(element.isValid());
+
+        validator.setMinLength(20);//Increase min
+
+        assertFalse(element.isValid());
+
+        validator.setMaxLength(null);//Remove max
+
+        element.setValue("012345678901234567890123");
+
         assertTrue(element.isValid());
         
-        validator.setMinLength(20);//Increase min
-        
+        element.removeValidator(validator);
+        validator = new StringLengthValidator(2);
+        assertNull(validator.getMinLength());
+        element.addValidator(validator);
+        element.setValue("123");
         assertFalse(element.isValid());
         
-        validator.setMaxLength(null);//Remove max
-        
-        element.setValue("012345678901234567890123");
-        
+        element.removeValidator(validator);
+        validator = new StringLengthValidator().setMinLength(4).setMaxLength(6);
+        element.addValidator(validator);
+        element.setValue("1234");
         assertTrue(element.isValid());
+        
+        assertEquals((long) validator.getMinLength(), 4);
+        assertEquals((long) validator.getMaxLength(), 6);
     }
 }

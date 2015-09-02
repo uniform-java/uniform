@@ -23,6 +23,7 @@ import net.uniform.api.Validator;
 
 /**
  * Validator for any single or multi value element to ensure that a not null and not empty value after trimming is entered.
+ * This validator is automatically run for each element that has been set {@code required} flag to true.
  * @author Eduardo Ramos
  */
 public class RequiredValidator implements Validator<Element> {

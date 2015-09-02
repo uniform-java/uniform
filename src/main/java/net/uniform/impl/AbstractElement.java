@@ -147,9 +147,10 @@ public abstract class AbstractElement implements Element {
         List<String> filteredValues = new ArrayList<>();
 
         for (String current : value) {
-
             for (Filter filter : filters) {
-                current = filter.filter(current);
+                if(filter != null){
+                    current = filter.filter(current);
+                }
             }
 
             filteredValues.add(current);
@@ -181,6 +182,8 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public boolean hasProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         return properties.containsKey(key);
     }
     
@@ -191,17 +194,23 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public String getProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         return properties.get(key);
     }
 
     @Override
     public Element setProperty(String key, String value) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         properties.put(key, value);
         return this;
     }
 
     @Override
     public Element removeProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         properties.remove(key);
         return this;
     }
@@ -462,7 +471,9 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public Element reset() {
-        this.setValue((List<String>) null);
+        if(!hasProperty("disabled")){
+            this.setValue((List<String>) null);
+        }
         this.validationPerformed = false;
 
         return this;

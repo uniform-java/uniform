@@ -394,7 +394,18 @@ public class HTMLFormTest {
         //Populate won't affect disabled elements:
         form.populateSimple(values2);
         assertEquals(new HashMap<String, Object>(){{
-            put("inputName", null);
+            put("inputName", "test");
+            put("selectName", "2");
+            put("multi", Arrays.asList("1", "2"));
+            put("chk", null);
+        }}, form.getFormData());
+        
+        form.setElementValue("selectId", (List<String>) null);
+        form.setElementValue("multi", (List<String>) null);
+        
+        form.populateSimple(values2);
+        assertEquals(new HashMap<String, Object>(){{
+            put("inputName", "test");
             put("selectName", null);
             put("multi", null);
             put("chk", null);
@@ -407,6 +418,58 @@ public class HTMLFormTest {
         form.populateSimple(values2);
         values2.put("multi", Arrays.asList(new String[]{"6", "7"}));//Array is converted to list 
         assertEquals(values2, form.getFormData());
+    }
+    
+    @Test
+    public void testPopulateKeepOtherValues() {
+        form.setElementValue("field1", "test");
+        form.setElementValue("selectId", "2");
+        form.setElementValue("multi", Arrays.asList("1", "2"));
+        form.setElementValue("chk", true);
+
+        HashMap<String, Object> values1 = new HashMap<String, Object>() {
+            {
+                put("inputName", "test");
+                put("selectName", "2");
+                put("multi", Arrays.asList("1", "2"));
+                put("chk", "true");
+            }
+        };
+        
+        HashMap<String, Object> values1Converted = new HashMap<String, Object>() {
+            {
+                put("inputName", "test");
+                put("selectName", 2);
+                put("multi", Arrays.asList(1L, 2L));
+                put("chk", true);
+            }
+        };
+
+        assertEquals(values1, form.getFormData());
+        assertEquals(values1Converted, form.getFormDataConvertedToElementValueTypes());
+
+        HashMap<String, Object> values2 = new HashMap<String, Object>() {
+            {
+                put("inputName", "new");
+                put("selectName", "5");
+            }
+        };
+
+        form.populateSimple(values2, true);
+        assertEquals(new HashMap<String, Object>(){{
+            put("inputName", "new");
+            put("selectName", "5");
+            put("multi", Arrays.asList("1", "2"));
+            put("chk", "true");
+        }}, form.getFormData());
+        
+        form.populateSimple(values2, false);
+        assertEquals(new HashMap<String, Object>(){{
+            put("inputName", "new");
+            put("selectName", "5");
+            put("multi", null);
+            put("chk", null);
+        }}, form.getFormData());
     }
 
     @Test
@@ -458,5 +521,37 @@ public class HTMLFormTest {
         form.startDecorator("dec1", new HTMLTagDecorator("div"));
         
         form.render();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullPropertyInvalid(){
+        form.setProperty(null, "test");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyPropertyInvalid(){
+        form.setProperty("", "test");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testEmptyAfterTrimPropertyInvalid(){
+        form.setProperty("  ", "test");
+    }
+    
+    @Test
+    public void testLowerCasePropertyNames(){
+        form.setProperty("TITLE", "Test");
+        assertTrue(form.hasProperty("TITLE"));
+        assertTrue(form.hasProperty("title"));
+        assertTrue(form.hasProperty("Title"));
+        assertEquals(form.getProperty("title"), "Test");
+        
+        form.setProperty("title", "Test2");
+        assertTrue(form.hasProperty("TITLE"));
+        assertTrue(form.hasProperty("title"));
+        assertTrue(form.hasProperty("Title"));
+        assertEquals(form.getProperty("TITLE"), "Test2");
+        
+        assertEquals(form.getProperties().get("title"), "Test2");
     }
 }

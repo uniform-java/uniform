@@ -795,17 +795,30 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public String getProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         return properties.get(key);
     }
 
     @Override
+    public boolean hasProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
+        return properties.containsKey(key);
+    }
+    
+    @Override
     public Form setProperty(String key, String value) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         properties.put(key, value);
         return this;
     }
 
     @Override
     public Form removeProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         properties.remove(key);
         return this;
     }

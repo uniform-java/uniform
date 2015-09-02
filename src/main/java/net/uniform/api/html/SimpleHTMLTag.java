@@ -20,8 +20,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import net.uniform.impl.utils.HTMLRenderer;
 import net.uniform.impl.utils.HTMLRenderingUtils;
+import net.uniform.impl.utils.UniformUtils;
 
 /**
  * A Simple HTML tag is able to:
@@ -34,6 +36,8 @@ import net.uniform.impl.utils.HTMLRenderingUtils;
  * <p><b>If any not null text content is set, subtags will be ignored</b></p>
  * 
  * <p>These tags can be rendered as HTML String with the {@link HTMLRenderer} class.</p>
+ * 
+ * <p>All property names will be converted to lower-case</p>
  *
  * @author Eduardo Ramos
  * @see HTMLRenderingUtils
@@ -179,6 +183,8 @@ public class SimpleHTMLTag {
      * @return This tag
      */
     public SimpleHTMLTag setProperty(String key, String value) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         if (properties == null) {
             properties = new HashMap<>();
         }
@@ -194,6 +200,8 @@ public class SimpleHTMLTag {
      * @return This tag
      */
     public SimpleHTMLTag removeProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         if (properties != null) {
             properties.remove(key);
         }
@@ -201,15 +209,22 @@ public class SimpleHTMLTag {
     }
 
     /**
-     * Replaces all properties of the tag with a map of proeprties indexed by key.
+     * Replaces all properties of the tag with a map of properties indexed by key.
      * @param properties New properties
      * @return This tag
      */
     public SimpleHTMLTag setProperties(Map<String, String> properties) {
-        if (properties == null) {
+        if (properties == null || properties.isEmpty()) {
             this.properties = null;
         } else {
-            this.properties = new HashMap<>(properties);
+            this.properties = new HashMap<>();
+            
+            for (Entry<String, String> entry : properties.entrySet()) {
+                String key = entry.getKey();
+                key = UniformUtils.checkPropertyNameAndLowerCase(key);
+                
+                this.properties.put(key, entry.getValue());
+            }
         }
 
         return this;
@@ -221,6 +236,8 @@ public class SimpleHTMLTag {
      * @return Property value or null
      */
     public String getProperty(String key) {
+        key = UniformUtils.checkPropertyNameAndLowerCase(key);
+        
         if (properties == null) {
             return null;
         }

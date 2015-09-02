@@ -55,6 +55,26 @@ public class UniformUtils {
     public static boolean equalsEpsilon(double a, double b){
         return Math.abs(a - b) < EPSILON;
     }
+    
+    /**
+     * Makes sure that a property name is not empty an is lower-case.
+     * Throws an {@code IllegalArgumentException} if the key is null or empty after trimming.
+     * @param key Original key
+     * @return Trimmed and lower-case key
+     */
+    public static String checkPropertyNameAndLowerCase(String key){
+        if(key == null){
+            throw new IllegalArgumentException("key cannot be null");
+        }
+        
+        key = key.trim().toLowerCase();
+        
+        if(key.isEmpty()){
+            throw new IllegalArgumentException("key cannot be empty");
+        }
+        
+        return key;
+    }
 
     /**
      * Returns an index of all the accessible properties of a Java bean object.

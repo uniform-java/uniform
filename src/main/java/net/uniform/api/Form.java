@@ -36,6 +36,8 @@ import net.uniform.html.HTMLForm;
  * <li>Hold {@code String} properties indexed by name, to be used when rendering the form. A form will put all the properties in the main HTML form tag as attributes</li>
  * </ul>
  * 
+ * <p>All form and elements property names will be converted to lower-case</p>
+ * 
  * The way that default decorators and renderers work is:
  * <ol>
  * <li>An element is added to the form</li>
@@ -407,6 +409,13 @@ public interface Form {
     String getProperty(String key);
     
     /**
+     * Indicates if the form has a value for the property (even null).
+     * @param key Property key
+     * @return True if a value is set, false otherwise
+     */
+    boolean hasProperty(String key);
+    
+    /**
      * Sets the value of a property in this form.
      * @param key Property key
      * @param value Property value
@@ -456,6 +465,7 @@ public interface Form {
     
     /**
      * Resets the values and validation status of the form an all its elements.
+     * Values of disabled elements won't be reset.
      * @return This form
      */
     Form reset();

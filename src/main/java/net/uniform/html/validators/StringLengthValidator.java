@@ -37,7 +37,7 @@ public class StringLengthValidator implements Validator<Element> {
     }
 
     public StringLengthValidator(Integer maxLength) {
-        this(0, maxLength);
+        this(null, maxLength);
     }
 
     public StringLengthValidator() {
@@ -70,15 +70,17 @@ public class StringLengthValidator implements Validator<Element> {
         return minLength;
     }
 
-    public void setMinLength(Integer minLength) {
+    public StringLengthValidator setMinLength(Integer minLength) {
         this.minLength = minLength;
+        return this;
     }
 
     public Integer getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(Integer maxLength) {
+    public StringLengthValidator setMaxLength(Integer maxLength) {
         this.maxLength = maxLength;
+        return this;
     }
 }

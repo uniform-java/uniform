@@ -45,6 +45,8 @@ import net.uniform.impl.AbstractElement;
  * <li>Hold {@code String} properties indexed by name, to be used when rendering the element. Normally, a renderer will put all the properties in the main HTML tag as attributes, but this depends on the element and the renderer</li>
  * </ul>
  * 
+ * <p>All property names will be converted to lower-case</p>
+ * 
  * <p>
  * Unless explicitely changed with {@link #setProperty(java.lang.String, java.lang.String)}, the id and name HTML attributes of an element will correspond with the id of the element.
  * </p>
@@ -467,6 +469,7 @@ public interface Element {
     
     /**
      * Resets the values and validation state of the element.
+     * The value of a disabled element won't be reset.
      * @return This element
      */
     Element reset();
