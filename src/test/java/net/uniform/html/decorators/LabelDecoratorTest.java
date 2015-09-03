@@ -53,7 +53,7 @@ public class LabelDecoratorTest {
         element.setTranslationEnabled(false);
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">uniform.test.resource2</label>\n", render(decorator, element));
         
-        element.setTranslationEnabled(true);
+        element.setTranslationEnabled();
         TranslationEngineContext.getTranslationEngine().setLocale(spanish);
         
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">Translation test</label>\n", render(decorator, element));

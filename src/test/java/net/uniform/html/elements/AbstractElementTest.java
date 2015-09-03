@@ -16,14 +16,22 @@
 package net.uniform.html.elements;
 
 import java.util.Arrays;
+import java.util.List;
 import net.uniform.api.Decorator;
 import net.uniform.api.Element;
 import net.uniform.api.Filter;
+import net.uniform.api.Renderer;
+import net.uniform.api.Validator;
+import net.uniform.api.html.SimpleHTMLTag;
 import net.uniform.html.decorators.HTMLTagDecorator;
 import net.uniform.html.decorators.LabelDecorator;
 import net.uniform.html.filters.StringTrim;
+import net.uniform.html.renderers.InputRenderer;
+import net.uniform.html.validators.NumericValidator;
+import net.uniform.html.validators.RequiredValidator;
 import net.uniform.html.validators.StringLengthValidator;
 import net.uniform.impl.AbstractElement;
+import net.uniform.impl.utils.HTMLRenderingUtils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -227,6 +235,13 @@ public class AbstractElementTest {
         elem.clearValidators();
         assertNotNull(elem.getValidators());
         assertTrue(elem.getValidators().isEmpty());
+        
+        elem.setValidators(Arrays.asList((Validator) new RequiredValidator(), new NumericValidator(false)));
+        assertEquals(elem.getValidators().size(), 2);
+        
+        elem.setValidators(null);
+        assertNotNull(elem.getValidators());
+        assertTrue(elem.getValidators().isEmpty());
     }
     
     @Test
@@ -240,5 +255,39 @@ public class AbstractElementTest {
         
         assertEquals(elem.getLabel(), "label");
         assertEquals(elem.getDescription(), "desc");
+    }
+    
+    @Test(expected = IllegalStateException.class)
+    public void testNoRenderer(){
+        Element elem = new EmptyElement("id");
+        assertNotNull(elem.toString());
+        elem.render();
+    }
+    
+    @Test
+    public void testRenderToString(){
+        Element elem = new EmptyElement("id");
+        elem.setRenderer(new Renderer() {
+
+            @Override
+            public List<SimpleHTMLTag>  render(Element element) {
+                return Arrays.asList(new SimpleHTMLTag().setContent("content"));
+            }
+        });
+        assertEquals(elem.toString(), "content");
+    }
+    
+    @Test
+    public void testRendererProducingNullTags(){
+        Element elem = new EmptyElement("id");
+        elem.setRenderer(new Renderer() {
+
+            @Override
+            public List<SimpleHTMLTag>  render(Element element) {
+                return null;
+            }
+        });
+        assertNotNull(elem.render());
+        assertTrue(elem.render().isEmpty());
     }
 }

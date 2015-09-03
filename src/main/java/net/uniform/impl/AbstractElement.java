@@ -457,7 +457,7 @@ public abstract class AbstractElement implements Element {
             }
         }
 
-        if (elementTags == null || elementTags.isEmpty()) {
+        if (elementTags == null) {
             elementTags = new ArrayList<>();
         }
 
@@ -506,31 +506,6 @@ public abstract class AbstractElement implements Element {
     @Override
     public Element setTranslationEnabled() {
         return setTranslationEnabled(true);
-    }
-
-    public boolean getBooleanProperty(String key) {
-        String val = this.getProperty(key);
-
-        if (val != null) {
-            return Boolean.valueOf(val.toLowerCase());
-        } else {
-            return false;//False by default
-        }
-    }
-
-    public Integer getIntegerProperty(String key) {
-        String val = this.getProperty(key);
-
-        if (val != null) {
-            try {
-                Integer integer = Integer.parseInt(val);
-                return integer;
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        } else {
-            return null;
-        }
     }
 
     @Override

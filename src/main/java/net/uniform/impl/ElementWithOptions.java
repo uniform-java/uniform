@@ -112,7 +112,7 @@ public abstract class ElementWithOptions extends AbstractHTMLElement {
         OptionGroup group = optionGroups.get(groupId);
         
         if(group == null){
-            group = new OptionGroup(null, null);
+            group = new OptionGroup(groupId, null);
             this.addOptionGroup(group);
         }
         
@@ -265,10 +265,10 @@ public abstract class ElementWithOptions extends AbstractHTMLElement {
 
     /**
      * Replaces all options of this element.
-     * @param options Options to use
+     * @param options Options to use. {@link LinkedHashMap} to keep options original ordering.
      * @return This element
      */
-    public ElementWithOptions setOptions(Map<String, String> options) {
+    public ElementWithOptions setOptions(LinkedHashMap<String, String> options) {
         this.optionGroups.clear();
         for (Map.Entry<String, String> entry : options.entrySet()) {
             this.addOption(entry.getKey(), entry.getValue());

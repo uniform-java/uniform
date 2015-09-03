@@ -17,12 +17,15 @@ package net.uniform.html.elements;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import net.uniform.api.html.Option;
 import net.uniform.api.html.OptionGroup;
 import net.uniform.html.decorators.ElementErrorsDecorator;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -34,7 +37,7 @@ public class SelectTest {
     @Test
     public void test() {
         Select select = new Select("test");
-        select.addOption("", "---");
+        select.addOption(null, "---");//Empty string option
         select.addOption("1", "One");
         select.addOption("2", "Two");
         select.addOption("3", "Three");
@@ -58,6 +61,24 @@ public class SelectTest {
         select.setValue(Arrays.asList("1", "2"));
         assertEquals("1", select.getFirstValue());
         assertEquals(Arrays.asList("1"), select.getValue());
+        
+        //Options management
+        assertEquals(select.getOptionsValues().size(), 4);
+        assertTrue(select.hasValue("2"));
+        select.removeOption("2");
+        assertFalse(select.hasValue("2"));
+        assertEquals(select.getOptionsValues().size(), 3);
+        
+        assertTrue(select.hasValueEnabled("1"));
+        select.removeOption(new Option("1", "any"));
+        assertFalse(select.hasValueEnabled("1"));
+        select.addOption(new Option("1", "one", false));
+        assertFalse(select.hasValueEnabled("1"));
+        assertTrue(select.hasValue("1"));
+        
+        
+        select.clearOptions();
+        assertTrue(select.getOptions().isEmpty());
     }
 
     @Test
@@ -137,5 +158,68 @@ public class SelectTest {
         );
         
         assertHTMLEquals("<select id=\"test\" name=\"test\"><option value=\"1\">One</option><option value=\"2\">Two</option><option disabled value=\"3\">Three</option><optgroup id=\"test-g1\" label=\"Group one\"><option value=\"4\">Four</option><option disabled value=\"5\">Five</option><option value=\"6\">Six</option></optgroup><optgroup id=\"test-g2\" label=\"Group 2\"><option value=\"7\">Seven</option><option value=\"8\">Eight</option></optgroup><optgroup disabled id=\"test-disabled\" label=\"Disabled group\"><option value=\"9\">Nine</option></optgroup></select>", HTMLRenderingUtils.render(select.render()));
+        
+        //Replace all options:
+        select.setOptions(new LinkedHashMap<String, String>(){{
+            put("1", "uno");
+            put("", "empty");
+        }});
+        assertHTMLEquals("<select id=\"test\" name=\"test\"><option value=\"1\">uno</option><option value=\"\">empty</option></select>", HTMLRenderingUtils.render(select.render()));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoRepeatedOptions(){
+        Select select = new Select("test");
+        select.addOption("1", "One");
+        select.addOption("2", "Two");
+        select.addOption("1", "Uno");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoNullOption(){
+        Select select = new Select("test");
+        select.removeOption((Option) null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoNullOption2(){
+        Select select = new Select("test");
+        select.addOption((Option) null);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoNullOption3(){
+        Select select = new Select("test");
+        select.addOptionToGroup((Option) null, "group");
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoNullOptionGroup(){
+        Select select = new Select("test");
+        select.addOptionGroup(null);
+    }
+    
+    @Test
+    public void testAutoUnexistingOptionGroups(){
+        Select select = new Select("test");
+        select.addOptionToGroup("value1", "text1", "groupId1");
+        select.addOptionToGroup("value2", "text2", "groupId2");
+        assertEquals("<select id=\"test\" name=\"test\"><option value=\"value1\">text1</option><option value=\"value2\">text2</option></select>", HTMLRenderingUtils.render(select.render()));//Option groups without label don't show as groups
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoRepeatedOptionGroup(){
+        Select select = new Select("test");
+        select.addOptionToGroup("value1", "text1", "groupId1");
+        select.addOptionToGroup("value2", "text2", "groupId2");
+        select.addOptionGroup(new OptionGroup("groupId1", "repeated id group name"));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoRepeatedValueInOptionGroup(){
+        Select select = new Select("test");
+        select.addOptionToGroup("value1", "text1", "groupId1");
+        select.addOptionToGroup("value2", "text2", "groupId2");
+        select.addOptionGroup(new OptionGroup("groupId3", "label").addOption("value1", "repeated"));
     }
 }
