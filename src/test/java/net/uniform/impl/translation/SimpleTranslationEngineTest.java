@@ -16,8 +16,14 @@
 package net.uniform.impl.translation;
 
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -53,5 +59,31 @@ public class SimpleTranslationEngineTest {
 
         assertNull(eng.getTranslationString("uniform.test.missing"));
         assertEquals("Default", eng.getTranslationString("uniform.test.missing", "Default"));
+        
+        //Change the locale context:
+        eng.setLocale(spanish);
+        assertEquals("Test traducción {0} - {1}", eng.getTranslationString("uniform.test.resource"));
+        assertEquals("Translation test", eng.getTranslationString("uniform.test.resource2"));
+    }
+    
+    @Test
+    public void testThreadLocal() throws InterruptedException, ExecutionException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        
+        assertEquals("Translation test 1 - 2", eng.translate("uniform.test.resource", 1, 2));
+        
+        
+        Future<Boolean> future = executor.submit(new Callable<Boolean>(){
+
+            @Override
+            public Boolean call() throws Exception {
+                Locale spanish = new Locale("es");
+                eng.setLocale(spanish);
+                return "Test traducción 1 - 2".equals(eng.translate("uniform.test.resource", 1, 2));
+            }
+        });
+        assertTrue(future.get());
+        
+        assertEquals("Translation test 1 - 2", eng.translate("uniform.test.resource", 1, 2));
     }
 }

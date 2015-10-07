@@ -24,7 +24,10 @@ import java.util.ResourceBundle;
 import net.uniform.api.TranslationEngine;
 
 /**
- * Default implementation of the translation engine that is able to read the Uniform base implementation message resources.
+ * Default implementation of the translation engine that is able to read the Uniform base implementation message resources, and hold a ThreadLocal {@link Locale}.
+ * 
+ * If no {@code Locale} is set, {@link #DEFAULT_LOCALE} will be used.
+ * 
  * @author Eduardo Ramos
  */
 public class SimpleTranslationEngine implements TranslationEngine {
@@ -33,7 +36,7 @@ public class SimpleTranslationEngine implements TranslationEngine {
     
     private static final String DEFAULT_RESOURCE_BASENAME = "net.uniform.impl.translation.messages";
     
-    protected Locale locale = DEFAULT_LOCALE;
+    protected ThreadLocal<Locale> localeHolder = new InheritableThreadLocal<>();
     protected Map<Locale, ResourceBundle> bundles = new HashMap<>();
     
     protected String resourceBaseName;
@@ -48,6 +51,12 @@ public class SimpleTranslationEngine implements TranslationEngine {
 
     @Override
     public Locale getLocale() {
+        Locale locale = localeHolder.get();
+        
+        if(locale == null){
+            locale = DEFAULT_LOCALE;
+        }
+        
         return locale;
     }
     
@@ -68,7 +77,7 @@ public class SimpleTranslationEngine implements TranslationEngine {
         if(locale == null){
             throw new IllegalArgumentException("Locale cannot be null");
         }
-        this.locale = locale;
+        this.localeHolder.set(locale);
     }
 
     @Override
@@ -84,22 +93,22 @@ public class SimpleTranslationEngine implements TranslationEngine {
     
     @Override
     public String translateWithDefault(String code, String defaultTranslation, Object... args) {
-        return this.translateWithDefault(code, defaultTranslation, locale, args);
+        return this.translateWithDefault(code, defaultTranslation, getLocale(), args);
     }
 
     @Override
     public String translateWithDefault(String code, String defaultTranslation) {
-        return this.translateWithDefault(code, defaultTranslation, locale, (Object[]) null);
+        return this.translateWithDefault(code, defaultTranslation, getLocale(), (Object[]) null);
     }
 
     @Override
     public String translate(String code, Object... args) {
-        return this.translateWithDefault(code, null, locale, args);
+        return this.translateWithDefault(code, null, getLocale(), args);
     }
 
     @Override
     public String translate(String code) {
-        return this.translateWithDefault(code, null, locale, (Object[]) null);
+        return this.translateWithDefault(code, null, getLocale(), (Object[]) null);
     }
 
     @Override
@@ -119,12 +128,12 @@ public class SimpleTranslationEngine implements TranslationEngine {
 
     @Override
     public String getTranslationString(String code) {
-        return this.getTranslationString(code, null, locale);
+        return this.getTranslationString(code, null, getLocale());
     }
 
     @Override
     public String getTranslationString(String code, String defaultTranslation) {
-        return this.getTranslationString(code, defaultTranslation, locale);
+        return this.getTranslationString(code, defaultTranslation, getLocale());
     }
 
     @Override
@@ -139,7 +148,7 @@ public class SimpleTranslationEngine implements TranslationEngine {
         if(localeBundle != null && localeBundle.containsKey(code)){
             return localeBundle.getString(code);
         }else{
-            ResourceBundle configuredLocaleBundle = getBundle(this.locale);
+            ResourceBundle configuredLocaleBundle = getBundle(getLocale());
             if(configuredLocaleBundle != null && configuredLocaleBundle.containsKey(code)){
                 return configuredLocaleBundle.getString(code);
             }else{

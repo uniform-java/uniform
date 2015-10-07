@@ -19,7 +19,7 @@ import net.uniform.impl.translation.SimpleTranslationEngine;
 
 /**
  * This class is responsible of holding the translation engine used in all Uniform classes.
- * The translation engine can be changed so Uniform uses any other message resource locator, such as Spring framework MessageResource.
+ * The translation engine can be changed so Uniform uses any other message resource locator, such as Spring Framework's {@code MessageResource}.
  * @author Eduardo Ramos
  */
 public class TranslationEngineContext {

@@ -26,7 +26,11 @@ import java.util.Locale;
  * </p>
  * 
  * <p>
- * The translation engine tries to find the translation in the current locale, and use the default locale if the resource is missing.
+ * The translation engine tries to find the translation in the current locale, and use the default locale (english) if the resource is missing.
+ * </p>
+ * 
+ * <p>
+ * Like Spring Framework's {@code LocaleContextHolder}, it holds a {@code Locale} instance with the current thread. The {@code Locale} will be inherited by any child threads spawned by the current thread.
  * </p>
  * 
  * <p>
@@ -37,13 +41,13 @@ import java.util.Locale;
 public interface TranslationEngine {
 
     /**
-     * Returns the current locale
+     * Returns the current locale (ThreadLocal)
      * @return Current locale
      */
     Locale getLocale();
 
     /**
-     * Sets the current locale
+     * Sets the current locale (ThreadLocal)
      * @param locale Locale to set
      */
     void setLocale(Locale locale);
