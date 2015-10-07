@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/eduramiba/uniform.svg)](https://travis-ci.org/eduramiba/uniform)
-[![Coverage Status](https://coveralls.io/repos/eduramiba/uniform/badge.svg?branch=master)](https://coveralls.io/r/eduramiba/uniform?branch=master)
+[![Build Status](https://travis-ci.org/uniform-java/uniform.svg)](https://travis-ci.org/uniform-java/uniform)
+[![Coverage Status](https://coveralls.io/repos/uniform-java/uniform/badge.svg?branch=master&service=github)](https://coveralls.io/github/uniform-java/uniform?branch=master)
 
 Uniform is a Java library for dealing with HTML forms in web applications.
 It integrates in one place:
