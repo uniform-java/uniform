@@ -60,13 +60,11 @@ public class NumericValidator implements Validator<Element>{
                 numberValue = Long.parseLong(firstValue);
             }
         } catch (NumberFormatException e) {
-            String numberTypeName;
             if(allowDecimals){
-                numberTypeName = "number";
+                return translate("uniform.validators.numeric.invalid.number", firstValue);
             }else{
-                numberTypeName = "integer";
+                return translate("uniform.validators.numeric.invalid.integer", firstValue);
             }
-            return translate("uniform.validators.numeric.invalid", firstValue, numberTypeName);
         }
         
         if(min != null){
