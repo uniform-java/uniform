@@ -354,7 +354,7 @@ public interface Form {
      * @param formData Form data indexed by element name
      * @return This form
      */
-    Form populateSimple(Map<String, Object> formData);
+    Form populateSimple(Map<String, ?> formData);
     
     /**
      * Does the same as {@link #populateSimple(java.util.Map)}
@@ -384,7 +384,7 @@ public interface Form {
      * @param keepOtherValues True to keep values of elements not specified in the {@code formData} parameter
      * @return This form
      */
-    Form populateSimple(Map<String, Object> formData, boolean keepOtherValues);
+    Form populateSimple(Map<String, ?> formData, boolean keepOtherValues);
     
     /**
      * Does the same as {@link #populateSimple(java.util.Map, boolean)}

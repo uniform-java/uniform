@@ -707,12 +707,12 @@ public abstract class AbstractForm implements Form {
     }
     
     @Override
-    public Form populateSimple(Map<String, Object> formData) {
+    public Form populateSimple(Map<String, ?> formData) {
         return populateSimple(formData, false);
     }
 
     @Override
-    public Form populateSimple(Map<String, Object> formData, boolean keepOtherValues) {
+    public Form populateSimple(Map<String, ?> formData, boolean keepOtherValues) {
         if(!keepOtherValues){
             this.reset();
         }
@@ -722,7 +722,7 @@ public abstract class AbstractForm implements Form {
 
         Map<String, List<String>> populateData = new HashMap<>();
 
-        for (Map.Entry<String, Object> entry : formData.entrySet()) {
+        for (Map.Entry<String, ?> entry : formData.entrySet()) {
             String name = entry.getKey();
             Object value = entry.getValue();
 
