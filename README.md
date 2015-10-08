@@ -9,6 +9,6 @@ It integrates in one place:
 * Form data validation
 * Reusable and extensible components
 
-If you are looking for a library similar to PHP's Zend Form but for Java, this is the perfect fit.
+If you are looking for a library similar to PHP's Zend Form but for Java, this one is the perfect fit.
 
 Easy to use with Spring framework + no dependencies!
