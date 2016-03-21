@@ -18,6 +18,7 @@ package net.uniform.html.elements;
 import java.util.List;
 import net.uniform.api.Element;
 import net.uniform.api.Renderer;
+import net.uniform.api.annotations.IgnoreDefaultFormDecorators;
 import net.uniform.exceptions.UniformException;
 import net.uniform.html.renderers.ButtonRenderer;
 import net.uniform.impl.AbstractHTMLElement;
@@ -26,6 +27,7 @@ import net.uniform.impl.AbstractHTMLElement;
  * Element that represents an HTML Button.
  * @author Eduardo Ramos
  */
+@IgnoreDefaultFormDecorators
 public class Button extends AbstractHTMLElement {
     
     public static final String BUTTON_TYPE_SUBMIT = "submit";

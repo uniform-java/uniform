@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import net.uniform.api.html.SimpleHTMLTag;
 import net.uniform.exceptions.UniformException;
+import net.uniform.html.HTMLForm;
+import net.uniform.html.decorators.HTMLTagDecorator;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertEquals;
@@ -97,6 +99,21 @@ public class HTMLElementTest {
         element2.setContent("Tag content simple");
         
         assertHTMLEquals("Tag content simple", HTMLRenderingUtils.render(element2.render()));
+    }
+    
+    @Test
+    public void testNoFormDefaultDecorators(){
+        HTMLForm form = new HTMLForm();
+        
+        HTMLElement element  = new HTMLElement("test", new SimpleHTMLTag("span").setContent("Content"));
+
+        //No default decorators should be added here for this type of element:        
+        form.addElement(element);
+        assertHTMLEquals("<form method='POST'><span>Content</span></form>", form.renderHTML());
+        
+        //Actually add a decorator
+        element.addDecorator(new HTMLTagDecorator("div"));
+        assertHTMLEquals("<form method='POST'><div><span>Content</span></div></form>", form.renderHTML());
     }
     
     @Test(expected = UniformException.class)

@@ -16,12 +16,13 @@
 package net.uniform.html.elements;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import net.uniform.exceptions.UniformException;
+import net.uniform.html.HTMLForm;
+import net.uniform.html.decorators.HTMLTagDecorator;
 import net.uniform.impl.utils.HTMLRenderingUtils;
 import net.uniform.testutils.HTMLTest;
-import static org.junit.Assert.assertFalse;
+import static net.uniform.testutils.HTMLTest.assertHTMLEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -54,6 +55,24 @@ public class ButtonTest {
         button.setProperty("type", Button.BUTTON_TYPE_SUBMIT);
         HTMLTest.assertHTMLEquals("<button id=\"btn\" type=\"submit\">My button</button>", HTMLRenderingUtils.render(button.render()));
     }
+    
+    @Test
+    public void testNoFormDefaultDecorators(){
+        HTMLForm form = new HTMLForm();
+        
+        Button button  = new Button("sbmt", Button.BUTTON_TYPE_SUBMIT);
+        button.setLabel("Submit me");
+
+        //No default decorators should be added here for this type of element:        
+        form.addElement(button);
+        System.out.println(form.renderHTML());
+        assertHTMLEquals("<form method='POST'><button id='sbmt' type='submit'>Submit me</button></form>", form.renderHTML());
+        
+        //Actually add a decorator
+        button.addDecorator(new HTMLTagDecorator("div"));
+        assertHTMLEquals("<form method='POST'><div><button id='sbmt' type='submit'>Submit me</button></div></form>", form.renderHTML());
+    }
+    
     
     @Test(expected = UniformException.class)
     public void testUnsupportedTypeChange() {
