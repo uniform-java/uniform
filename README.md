@@ -11,7 +11,7 @@ It integrates in one place:
 
 If you are looking for a library similar to PHP's Zend Form but for Java, this one is the perfect fit.
 
-Easy to use with Spring framework + no dependencies!
+Easy to use with Spring framework + **no dependencies!**
 
 ## Available in Maven Central
 
