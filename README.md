@@ -13,6 +13,8 @@ If you are looking for a library similar to PHP's Zend Form but for Java, this o
 
 Easy to use with Spring framework + **no dependencies!**
 
+[See online Javadoc here](http://uniform-java.github.io/uniform/apidocs)
+
 ## Available in Maven Central
 
 http://search.maven.org/#search|ga|1|com.github.uniform-java
