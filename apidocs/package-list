@@ -1,0 +1,14 @@
+net.uniform.api
+net.uniform.api.annotations
+net.uniform.api.html
+net.uniform.exceptions
+net.uniform.html
+net.uniform.html.decorators
+net.uniform.html.elements
+net.uniform.html.filters
+net.uniform.html.formvalidators
+net.uniform.html.renderers
+net.uniform.html.validators
+net.uniform.impl
+net.uniform.impl.translation
+net.uniform.impl.utils
