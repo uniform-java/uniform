@@ -27,7 +27,7 @@ import net.uniform.impl.AbstractHTMLElement;
  * @author Eduardo Ramos
  */
 public class Hidden extends AbstractHTMLElement {
-    
+
     public Hidden(String id) {
         super(id);
     }

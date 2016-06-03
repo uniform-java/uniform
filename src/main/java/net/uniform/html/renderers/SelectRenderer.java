@@ -56,7 +56,7 @@ public class SelectRenderer implements Renderer<ElementWithOptions> {
         List<OptionGroup> optionGroups = select.getOptionGroups();
 
         for (OptionGroup optionGroup : optionGroups) {
-            if(optionGroup.hasOptions()){
+            if (optionGroup.hasOptions()) {
                 List<SimpleHTMLTag> tags = this.renderOptionGroup(select, optionGroup, currentValues);
 
                 for (SimpleHTMLTag tag : tags) {
@@ -80,7 +80,7 @@ public class SelectRenderer implements Renderer<ElementWithOptions> {
             groupTag = new SimpleHTMLTag("optgroup");
             groupTag.setProperty("id", select.getId() + "-" + id);
             groupTag.setProperty("label", label);
-            if(!optionGroup.isEnabled()){
+            if (!optionGroup.isEnabled()) {
                 groupTag.setProperty("disabled", "disabled");
             }
         } else {
@@ -96,8 +96,8 @@ public class SelectRenderer implements Renderer<ElementWithOptions> {
             if (currentValues.contains(optionValue)) {
                 optionTag.setProperty("selected", "selected");
             }
-            
-            if(!option.isEnabled()){
+
+            if (!option.isEnabled()) {
                 optionTag.setProperty("disabled", "disabled");
             }
 

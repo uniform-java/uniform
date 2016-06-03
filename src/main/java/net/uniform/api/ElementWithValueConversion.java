@@ -28,6 +28,7 @@ public interface ElementWithValueConversion<T> extends Element {
     /**
      * Returns the final value for the list of values hold by the element.
      * This is used for example by {@link DatePicker} element to return date objects instead of Strings.
+
      * @return Value with the type declared by the element
      */
     public T getConvertedValue();

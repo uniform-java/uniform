@@ -22,6 +22,7 @@ import net.uniform.impl.ElementWithOptions;
 
 /**
  * Element that represents a HTML select with multiple values selection.
+ *
  * @author Eduardo Ramos
  */
 public class Multiselect extends ElementWithOptions {
@@ -30,7 +31,7 @@ public class Multiselect extends ElementWithOptions {
         super(id);
         this.addValidator(new MultipleOptionValidator());
     }
-    
+
     @Override
     public boolean isMultiValue() {
         return true;

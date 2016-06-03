@@ -21,6 +21,7 @@ import net.uniform.impl.AbstractHTMLElement;
 
 /**
  * Element that represents any input HTML element.
+ *
  * @author Eduardo Ramos
  */
 public class Input extends AbstractHTMLElement {

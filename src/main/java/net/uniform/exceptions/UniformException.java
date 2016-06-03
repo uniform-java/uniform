@@ -17,6 +17,7 @@ package net.uniform.exceptions;
 
 /**
  * Unchecked exception for errors in Uniform that should not happen normally.
+ *
  * @author Eduardo Ramos
  */
 public class UniformException extends RuntimeException {

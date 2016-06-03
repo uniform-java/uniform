@@ -71,10 +71,10 @@ public class HTMLFormTest {
                 this.put("id", "sg");
             }
         }));
-        
+
         Decorator superGroupDecorator = form.getDecorator("superGroup");
         assertNotNull(superGroupDecorator);
-        
+
         superGroupDecorator.setProperty("id", "superGroup");
 
         //Input
@@ -161,7 +161,7 @@ public class HTMLFormTest {
                 put("chk", Arrays.asList("true"));
             }
         });
-        
+
         Map<String, Element> expectedElementsMap = new HashMap<>();
         expectedElementsMap.put("field1", input);
         expectedElementsMap.put("selectId", select);
@@ -304,7 +304,6 @@ public class HTMLFormTest {
         }, form.getFormData());
     }
 
-    
     @Test
     public void testGetFormDataIntoBean() {
         form.reset();
@@ -313,34 +312,32 @@ public class HTMLFormTest {
         form.setElementValue("selectId", "2");
         form.setElementValue("multi", Arrays.asList("3"));
         form.setElementValue("chk", false);
-        
 
         FormBeanGettersAndSetters expectedBean1 = new FormBeanGettersAndSetters("1", "2", null, false);//Field 2 is compatible with an string conversion but generic list type of field 3 (String) is not compatible with the form type (Long)
         FormBeanPublic expectedBean2 = new FormBeanPublic("1", "2", null, false);//Note field 3 is not of the same type
         FormBeanMixed expectedBean3 = new FormBeanMixed("1", 2, Arrays.asList((Number) 3L), false);//Every field is type compatible (superclass list type)
         FormBeanPublic2 expectedBean4 = new FormBeanPublic2("1", 2, Arrays.asList(3L), false);//Every field is type compatible (raw list type)
         FormBeanPublic3 expectedBean5 = new FormBeanPublic3("1", 2, Arrays.asList(3L), false);//Every field is type compatible (same class list type)
-        
+
         FormBeanGettersAndSetters resultBean1 = new FormBeanGettersAndSetters(null, null, null, true);
         FormBeanPublic resultBean2 = new FormBeanPublic(null, null, null, true);
         FormBeanMixed resultBean3 = new FormBeanMixed(null, null, null, true);
         FormBeanPublic2 resultBean4 = new FormBeanPublic2(null, null, null, true);
         FormBeanPublic3 resultBean5 = new FormBeanPublic3(null, null, null, true);
-        
-        
+
         form.getFormDataIntoBean(resultBean1);
         form.getFormDataIntoBean(resultBean2);
         form.getFormDataIntoBean(resultBean3);
         form.getFormDataIntoBean(resultBean4);
         form.getFormDataIntoBean(resultBean5);
-        
+
         assertEquals(expectedBean1, resultBean1);
         assertEquals(expectedBean2, resultBean2);
         assertEquals(expectedBean3, resultBean3);
         assertEquals(expectedBean4, resultBean4);
         assertEquals(expectedBean5, resultBean5);
     }
-    
+
     @Test
     public void testDefaults() {
         assertNotNull(form.getDefaultDecoratorsForElementClass(Element.class));
@@ -393,23 +390,27 @@ public class HTMLFormTest {
 
         //Populate won't affect disabled elements:
         form.populateSimple(values2);
-        assertEquals(new HashMap<String, Object>(){{
-            put("inputName", "test");
-            put("selectName", "2");
-            put("multi", Arrays.asList("1", "2"));
-            put("chk", null);
-        }}, form.getFormData());
-        
+        assertEquals(new HashMap<String, Object>() {
+            {
+                put("inputName", "test");
+                put("selectName", "2");
+                put("multi", Arrays.asList("1", "2"));
+                put("chk", null);
+            }
+        }, form.getFormData());
+
         form.setElementValue("selectId", (List<String>) null);
         form.setElementValue("multi", (List<String>) null);
-        
+
         form.populateSimple(values2);
-        assertEquals(new HashMap<String, Object>(){{
-            put("inputName", "test");
-            put("selectName", null);
-            put("multi", null);
-            put("chk", null);
-        }}, form.getFormData());
+        assertEquals(new HashMap<String, Object>() {
+            {
+                put("inputName", "test");
+                put("selectName", null);
+                put("multi", null);
+                put("chk", null);
+            }
+        }, form.getFormData());
 
         form.getElement("field1").removeProperty("disabled");
         form.getElement("selectId").removeProperty("disabled");
@@ -419,7 +420,7 @@ public class HTMLFormTest {
         values2.put("multi", Arrays.asList(new String[]{"6", "7"}));//Array is converted to list 
         assertEquals(values2, form.getFormData());
     }
-    
+
     @Test
     public void testPopulateKeepOtherValues() {
         form.setElementValue("field1", "test");
@@ -435,7 +436,7 @@ public class HTMLFormTest {
                 put("chk", "true");
             }
         };
-        
+
         HashMap<String, Object> values1Converted = new HashMap<String, Object>() {
             {
                 put("inputName", "test");
@@ -456,20 +457,24 @@ public class HTMLFormTest {
         };
 
         form.populateSimple(values2, true);
-        assertEquals(new HashMap<String, Object>(){{
-            put("inputName", "new");
-            put("selectName", "5");
-            put("multi", Arrays.asList("1", "2"));
-            put("chk", "true");
-        }}, form.getFormData());
-        
+        assertEquals(new HashMap<String, Object>() {
+            {
+                put("inputName", "new");
+                put("selectName", "5");
+                put("multi", Arrays.asList("1", "2"));
+                put("chk", "true");
+            }
+        }, form.getFormData());
+
         form.populateSimple(values2, false);
-        assertEquals(new HashMap<String, Object>(){{
-            put("inputName", "new");
-            put("selectName", "5");
-            put("multi", null);
-            put("chk", null);
-        }}, form.getFormData());
+        assertEquals(new HashMap<String, Object>() {
+            {
+                put("inputName", "new");
+                put("selectName", "5");
+                put("multi", null);
+                put("chk", null);
+            }
+        }, form.getFormData());
     }
 
     @Test
@@ -494,64 +499,64 @@ public class HTMLFormTest {
 
         assertHTMLEquals("<form method=\"POST\"><label class=\"element-label\" for=\"test\">Prueba label</label><input id=\"test\" name=\"test\" type=\"text\" value=\"\"><label class=\"element-label\" for=\"test2\">uniform.test.resource3</label><input id=\"test2\" name=\"test2\" type=\"text\" value=\"\"></form>", translationForm.renderHTML());
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void testAddDuplicatedElementId(){
+    public void testAddDuplicatedElementId() {
         Input input = new Input("field1");
         form.addElement(input);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void testDuplicatedFormDecoratorId(){
+    public void testDuplicatedFormDecoratorId() {
         form.startDecorator("dec1", new HTMLTagDecorator("div"));
         form.startDecorator("dec2", new HTMLTagDecorator("div"));
         form.startDecorator("dec3", new HTMLTagDecorator("div"));
         form.startDecorator("dec1", new HTMLTagDecorator("div"));
     }
-    
+
     @Test(expected = IllegalStateException.class)
-    public void testDecoratorNotOpen(){
+    public void testDecoratorNotOpen() {
         form.endDecorator();
-        
+
         form.render();
     }
-    
+
     @Test(expected = IllegalStateException.class)
-    public void testDecoratorNotClosed(){
+    public void testDecoratorNotClosed() {
         form.startDecorator("dec1", new HTMLTagDecorator("div"));
-        
+
         form.render();
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void testNullPropertyInvalid(){
+    public void testNullPropertyInvalid() {
         form.setProperty(null, "test");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyPropertyInvalid(){
+    public void testEmptyPropertyInvalid() {
         form.setProperty("", "test");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
-    public void testEmptyAfterTrimPropertyInvalid(){
+    public void testEmptyAfterTrimPropertyInvalid() {
         form.setProperty("  ", "test");
     }
-    
+
     @Test
-    public void testLowerCasePropertyNames(){
+    public void testLowerCasePropertyNames() {
         form.setProperty("TITLE", "Test");
         assertTrue(form.hasProperty("TITLE"));
         assertTrue(form.hasProperty("title"));
         assertTrue(form.hasProperty("Title"));
         assertEquals(form.getProperty("title"), "Test");
-        
+
         form.setProperty("title", "Test2");
         assertTrue(form.hasProperty("TITLE"));
         assertTrue(form.hasProperty("title"));
         assertTrue(form.hasProperty("Title"));
         assertEquals(form.getProperty("TITLE"), "Test2");
-        
+
         assertEquals(form.getProperties().get("title"), "Test2");
     }
 }

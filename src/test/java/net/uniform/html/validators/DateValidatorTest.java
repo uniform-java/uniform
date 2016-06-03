@@ -28,26 +28,26 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class DateValidatorTest {
-    
+
     @Test
     public void test() {
         Element element = new EmptyElement("test");
-        
+
         DateValidator validator = new DateValidator();
         element.addValidator(validator);
-        
+
         assertTrue(element.isValid());//No value, not required
-        
+
         element.setValue("01/09/2015");
         assertFalse(element.isValid());
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         validator.setDateFormat(sdf);
         assertEquals(validator.getDateFormat(), sdf);
         validator.setDateFormat(sdf.toPattern());
-        
+
         assertTrue(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new DateValidator(DateValidator.DEFAULT_DATE_FORMAT);
         element.addValidator(validator);

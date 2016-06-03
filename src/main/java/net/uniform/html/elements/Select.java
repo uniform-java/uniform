@@ -22,6 +22,7 @@ import net.uniform.impl.ElementWithOptions;
 
 /**
  * Element that represents a HTML select with single value selection.
+ *
  * @author Eduardo Ramos
  */
 public class Select extends ElementWithOptions {
@@ -30,7 +31,7 @@ public class Select extends ElementWithOptions {
         super(id);
         this.addValidator(new SingleOptionValidator());
     }
-    
+
     @Override
     public Renderer getDefaultRenderer() {
         return new SelectRenderer();

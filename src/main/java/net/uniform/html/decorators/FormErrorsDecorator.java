@@ -24,6 +24,7 @@ import net.uniform.impl.AbstractDecorator;
 
 /**
  * Decorator for appending or prepending a list of form validation errors to the form content.
+ *
  * @author Eduardo Ramos
  */
 public class FormErrorsDecorator extends AbstractDecorator {
@@ -31,7 +32,7 @@ public class FormErrorsDecorator extends AbstractDecorator {
     public static final String DEFAULT_ERRORS_LIST_CLASS = "form-validation-errors";
 
     public static final String PROPERTY_PREPEND = "prepend";
-    
+
     public static final String PROPERTY_CLASS = "class";
 
     public FormErrorsDecorator(String errorsListClass) {
@@ -77,16 +78,16 @@ public class FormErrorsDecorator extends AbstractDecorator {
     public final void setPrepend(Boolean prepend) {
         this.setProperty(PROPERTY_PREPEND, prepend);
     }
-    
-    public Boolean isPrepend(){
+
+    public Boolean isPrepend() {
         return this.getBooleanProperty(PROPERTY_PREPEND);
     }
-    
-    public  final void setErrorsClass(String clazz){
+
+    public final void setErrorsClass(String clazz) {
         this.setProperty(PROPERTY_CLASS, clazz);
     }
-    
-    public String getErrorsClass(){
+
+    public String getErrorsClass() {
         return this.getStringProperty(PROPERTY_CLASS);
     }
 }

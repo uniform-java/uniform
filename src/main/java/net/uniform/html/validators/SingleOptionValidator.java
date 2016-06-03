@@ -34,13 +34,13 @@ public class SingleOptionValidator implements Validator<ElementWithOptions> {
     @Override
     public List<String> getValidationErrors(ElementWithOptions element, List<String> values) {
         String firstValue = UniformUtils.firstValue(values);
-        if(firstValue != null && !firstValue.isEmpty()){//May be not required
-            
-            if(!element.hasValueEnabled(firstValue)){
+        if (firstValue != null && !firstValue.isEmpty()) {//May be not required
+
+            if (!element.hasValueEnabled(firstValue)) {
                 return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.select.invalid"));
             }
         }
-        
+
         return null;
     }
 

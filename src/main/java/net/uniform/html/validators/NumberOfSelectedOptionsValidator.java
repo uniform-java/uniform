@@ -26,60 +26,59 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for any element with options to ensure that a minimum and/or a maximum number of elements is selected.
+ *
  * @author Eduardo Ramos
  */
 public class NumberOfSelectedOptionsValidator implements Validator<ElementWithOptions> {
-    
+
     private Integer min = null;
     private Integer max = null;
-    
 
     public NumberOfSelectedOptionsValidator() {
     }
-    
-    
-    public NumberOfSelectedOptionsValidator(int max){
+
+    public NumberOfSelectedOptionsValidator(int max) {
         this.max = max;
     }
-    
-    public NumberOfSelectedOptionsValidator(int min, int max){
+
+    public NumberOfSelectedOptionsValidator(int min, int max) {
         this.min = min;
         this.max = max;
     }
-    
+
     @Override
     public List<String> getValidationErrors(ElementWithOptions element, List<String> values) {
-        if(min == null && max == null){
+        if (min == null && max == null) {
             return null;//Nothing to validate
         }
-        
+
         //Only validate if there is at least one value and it's not empty
-        if(values == null || values.isEmpty()){//May be not required
+        if (values == null || values.isEmpty()) {//May be not required
             return null;
         }
-        
-        if(values.size() == 1){
+
+        if (values.size() == 1) {
             String firstValue = UniformUtils.firstValue(values);
-            if(firstValue == null || firstValue.isEmpty()){
+            if (firstValue == null || firstValue.isEmpty()) {
                 return null;
             }
         }
-        
+
         Set<String> uniqueSelectedValues = new HashSet<>();
-        
+
         for (String value : values) {
             uniqueSelectedValues.add(value);
         }
-        
+
         int count = uniqueSelectedValues.size();
-        if(min != null && count < min){
+        if (min != null && count < min) {
             return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.numberofoptions.min", min));
         }
-        
-        if(max != null && count > max){
+
+        if (max != null && count > max) {
             return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.numberofoptions.max", max));
         }
-        
+
         return null;
     }
 

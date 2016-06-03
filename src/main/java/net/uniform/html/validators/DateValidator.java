@@ -26,6 +26,7 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for date single-value inputs, with date format.
+ *
  * @author Eduardo Ramos
  */
 public class DateValidator implements Validator<Element> {
@@ -43,7 +44,7 @@ public class DateValidator implements Validator<Element> {
         sdf.setLenient(false);
         this.dateFormat = sdf;
     }
-    
+
     public DateValidator(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
@@ -75,7 +76,7 @@ public class DateValidator implements Validator<Element> {
     public void setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
-    
+
     public void setDateFormat(String dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);

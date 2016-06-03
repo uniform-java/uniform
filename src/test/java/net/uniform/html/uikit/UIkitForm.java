@@ -51,7 +51,7 @@ public class UIkitForm extends HTMLForm {
                 put("class", "uk-form-row");
             }
         }));
-        
+
         //No decorators for button in this form:
         setDefaultDecoratorsForElementClass(Button.class, null);
     }

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -44,8 +45,17 @@ import net.uniform.impl.utils.UniformUtils;
  */
 public abstract class AbstractForm implements Form {
 
+    /**
+     * Elements indexed by id
+     */
     protected final Map<String, Element> formElements;
+    /**
+     * Decorators indexed by id
+     */
     protected final Map<String, Decorator> formDecorators;
+    /**
+     * Form properties
+     */
     protected final Map<String, String> properties;
     protected final List<FormValidator> validators;
     protected boolean validationPeformed = false;
@@ -159,7 +169,7 @@ public abstract class AbstractForm implements Form {
         if (decorators != null) {
             list.addAll(decorators);
             for (Decorator decorator : decorators) {
-                if(decorator != null){
+                if (decorator != null) {
                     list.add(decorator);
                 }
             }
@@ -484,19 +494,40 @@ public abstract class AbstractForm implements Form {
     public Map<String, List<String>> getFormDataMultivalue() {
         Map<String, List<String>> formData = new HashMap<>();
 
-        for (Element element : formElements.values()) {
-            String name = element.getProperty("name");
+        Map<String, List<Element>> elementsIndexByName = elementsIndexByName();
+        for (String name : elementsIndexByName.keySet()) {
+            List<Element> elements = elementsIndexByName.get(name);
+            boolean multipleElements = elements.size() > 1;
 
-            if (name != null && !name.trim().isEmpty() && element.getValueType() != null) {//Skip elements without data type or name
-                if (formData.containsKey(name)) {
-                    throw new IllegalStateException("Name '" + name + "' cannot be repeated in the form");
-                }
+            for (Element element : elements) {
+                if (element.getValueType() != null) {//Skip elements without data type
+                    if (element.isMultiValue() && multipleElements) {
+                        throw new IllegalStateException("Name '" + name + "' cannot be repeated in the form if any of the elements is multi-valued");
+                    }
 
-                List<String> value = element.getValue();
-                if (!element.isMultiValue() && value != null && value.size() > 1) {
-                    value = value.subList(0, 1);
+                    List<String> elementValue = element.getValue();
+                    if (element.isMultiValue()) {
+                        formData.put(name, elementValue);
+                    } else {
+                        if (elementValue != null && elementValue.size() > 1) {
+                            elementValue = elementValue.subList(0, 1);
+                        }
+
+                        if (multipleElements) {
+                            if (formData.get(name) == null) {
+                                formData.put(name, new ArrayList<String>());
+                            }
+
+                            if (elementValue != null) {
+                                formData.get(name).addAll(elementValue);
+                            } else {
+                                formData.get(name).add(null);
+                            }
+                        } else {
+                            formData.put(name, elementValue);
+                        }
+                    }
                 }
-                formData.put(name, value);
             }
         }
 
@@ -506,16 +537,16 @@ public abstract class AbstractForm implements Form {
     @Override
     public Map<String, Object> getFormData() {
         Map<String, List<String>> formDataMultivalue = getFormDataMultivalue();
-        Map<String, Element> elementsIndexByName = elementsIndexByName();
+        Map<String, List<Element>> elementsIndexByName = elementsIndexByName();
 
         Map<String, Object> formData = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : formDataMultivalue.entrySet()) {
             String name = entry.getKey();
             List<String> value = entry.getValue();
 
-            Element element = elementsIndexByName.get(name);
+            List<Element> elements = elementsIndexByName.get(name);
 
-            if (element.isMultiValue()) {
+            if (elements.size() > 1 || elements.get(0).isMultiValue()) {
                 formData.put(name, value);
             } else {
                 formData.put(name, UniformUtils.firstValue(value));
@@ -528,14 +559,23 @@ public abstract class AbstractForm implements Form {
     @Override
     public Map<String, Object> getFormDataConvertedToElementValueTypes() {
         Map<String, List<String>> formDataMultivalue = getFormDataMultivalue();
-        Map<String, Element> elementsIndexByName = elementsIndexByName();
+        Map<String, List<Element>> elementsIndexByName = elementsIndexByName();
 
         Map<String, Object> formDataConverted = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : formDataMultivalue.entrySet()) {
             String name = entry.getKey();
 
-            Element element = elementsIndexByName.get(name);
-            formDataConverted.put(name, getElementValueConvertedToValueType(element));
+            List<Element> elements = elementsIndexByName.get(name);
+
+            if (elements.size() > 1) {
+                List<Object> values = new ArrayList<>();
+                for (Element element : elements) {
+                    values.add(getElementValueConvertedToValueType(element));
+                }
+                formDataConverted.put(name, values);
+            } else {
+                formDataConverted.put(name, getElementValueConvertedToValueType(elements.get(0)));
+            }
         }
 
         return formDataConverted;
@@ -596,27 +636,23 @@ public abstract class AbstractForm implements Form {
             }
 
             return converted;
-        } else {
-            if (values != null) {
-                List<Object> convertedValues = new ArrayList<>();
+        } else if (values != null) {
+            List<Object> convertedValues = new ArrayList<>();
 
-                for (String value : values) {
-                    Object convertedValue = convertBasicValue(value, elementValueType);
-                    convertedValues.add(convertedValue);
-                }
-
-                if (element.isMultiValue()) {
-                    return convertedValues;
-                } else {
-                    return UniformUtils.firstValue(convertedValues);
-                }
-            } else {
-                if (element.isMultiValue()) {
-                    return new ArrayList<>();
-                } else {
-                    return null;
-                }
+            for (String value : values) {
+                Object convertedValue = convertBasicValue(value, elementValueType);
+                convertedValues.add(convertedValue);
             }
+
+            if (element.isMultiValue()) {
+                return convertedValues;
+            } else {
+                return UniformUtils.firstValue(convertedValues);
+            }
+        } else if (element.isMultiValue()) {
+            return new ArrayList<>();
+        } else {
+            return null;
         }
     }
 
@@ -645,16 +681,14 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form getFormDataIntoBean(Object bean) {
         Map<String, Object> formData = getFormDataConvertedToElementValueTypes();
-        
+
         //Prepare type info for each value so generic types can be checked:
         Map<String, Class<?>> collectionsGenericTypes = new HashMap<>();
         for (Element element : formElements.values()) {
-            if(element.isMultiValue()){
-                String name = element.getProperty("name");
-                collectionsGenericTypes.put(name, element.getValueType());
-            }
+            String name = element.getProperty("name");
+            collectionsGenericTypes.put(name, element.getValueType());
         }
-        
+
         UniformUtils.fillBeanProperties(bean, formData, collectionsGenericTypes);
 
         return this;
@@ -664,39 +698,44 @@ public abstract class AbstractForm implements Form {
     public Form populate(Map<String, List<String>> formData) {
         return populate(formData, false);
     }
-    
+
     @Override
     public Form populate(Map<String, List<String>> formData, boolean keepOtherValues) {
-        if(!keepOtherValues){
+        if (!keepOtherValues) {
             this.reset();
         }
         if (formData == null) {
             return this;
         }
 
-        Map<String, Element> elementsIndexByName = this.elementsIndexByName();
+        Map<String, List<Element>> elementsIndexByName = elementsIndexByName();
 
         for (Map.Entry<String, List<String>> entry : formData.entrySet()) {
             String name = entry.getKey();
-            List<String> value = entry.getValue();
 
             if (elementsIndexByName.containsKey(name)) {
-                Element element = elementsIndexByName.get(name);
+                List<Element> elements = elementsIndexByName.get(name);
+                List<String> valuesList = entry.getValue();
+                int valuesCount = valuesList != null ? valuesList.size() : 0;
 
-                Class<?> valueType = element.getValueType();
-                boolean skipPopulate = valueType == null || element.hasProperty("disabled");//Skip elements without data type or disabled
+                for (int i = 0; i < elements.size(); i++) {
+                    Element element = elements.get(i);
 
-                if (!skipPopulate) {
-                    if (element.isMultiValue()) {
-                        element.populate(value);
-                    } else {
-                        if (value == null) {
-                            element.populate(value);
+                    Class<?> valueType = element.getValueType();
+                    boolean skipPopulate = valueType == null || element.hasProperty("disabled");//Skip elements without data type or disabled
+
+                    if (!skipPopulate) {
+                        if (element.isMultiValue()) {
+                            element.populate(valuesList);
+                        } else if (valuesList == null) {
+                            element.populate(valuesList);
                         } else {
-                            if (value.size() > 1) {
-                                value = value.subList(0, 1);
+                            List<String> currentValue = null;
+                            if (valuesCount > i) {
+                                currentValue = valuesList.subList(i, i + 1);
                             }
-                            element.populate(value);//Only first value of list since the element is not multivalue
+
+                            element.populate(currentValue);//Only first value of list since the element is not multivalue
                         }
                     }
                 }
@@ -705,7 +744,7 @@ public abstract class AbstractForm implements Form {
 
         return this;
     }
-    
+
     @Override
     public Form populateSimple(Map<String, ?> formData) {
         return populateSimple(formData, false);
@@ -713,7 +752,7 @@ public abstract class AbstractForm implements Form {
 
     @Override
     public Form populateSimple(Map<String, ?> formData, boolean keepOtherValues) {
-        if(!keepOtherValues){
+        if (!keepOtherValues) {
             this.reset();
         }
         if (formData == null) {
@@ -738,7 +777,7 @@ public abstract class AbstractForm implements Form {
     public Form populateBean(Object bean) {
         return populateBean(bean, false);
     }
-    
+
     @Override
     public Form populateBean(Object bean, boolean keepOtherValues) {
         if (bean != null) {
@@ -781,9 +820,9 @@ public abstract class AbstractForm implements Form {
             } else {
                 valueList.add(value.toString());
             }
-            
+
             return valueList;
-        }else{
+        } else {
             return null;
         }
     }
@@ -796,21 +835,21 @@ public abstract class AbstractForm implements Form {
     @Override
     public String getProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         return properties.get(key);
     }
 
     @Override
     public boolean hasProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         return properties.containsKey(key);
     }
-    
+
     @Override
     public Form setProperty(String key, String value) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         properties.put(key, value);
         return this;
     }
@@ -818,7 +857,7 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form removeProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         properties.remove(key);
         return this;
     }
@@ -849,7 +888,7 @@ public abstract class AbstractForm implements Form {
     @Override
     public Form setValidators(List<FormValidator> validators) {
         this.validators.clear();
-        if(validators != null){
+        if (validators != null) {
             this.validators.addAll(validators);
         }
         return this;
@@ -901,21 +940,36 @@ public abstract class AbstractForm implements Form {
      *
      * @return Index of elements by name
      */
-    protected Map<String, Element> elementsIndexByName() {
-        Map<String, Element> index = new HashMap<>();
-        for (Element element : formElements.values()) {
-            String name = element.getProperty("name");
-            if (name != null && !name.trim().isEmpty()) {
-                if (index.containsKey(name)) {
-                    throw new IllegalStateException("Name '" + name + "' cannot be repeated in the form");
-                }
+    protected Map<String, List<Element>> elementsIndexByName() {
+        HashMap<String, List<Element>> index = new HashMap<>();
+        for (Object part : renderingParts) {//We have to use the rendering order of elements for multiple elements with same name
+            if (part instanceof Element) {
+                Element element = (Element) part;
+                String name = element.getProperty("name");
+                if (name != null && !name.trim().isEmpty()) {
+                    boolean multiValued = element.isMultiValue();
+                    if (multiValued && index.containsKey(name)) {
+                        throw new IllegalStateException("Name '" + name + "' cannot be repeated in the form if any of the elements is multi-valued");
+                    }
 
-                if (name.contains("[") && name.contains("]")) {
-                    throw new IllegalStateException("Name '" + name + "' cannot be in array form");
-                }
+                    if (name.contains("[") && name.contains("]")) {
+                        throw new IllegalStateException("Name '" + name + "' cannot be in array form");
+                    }
 
-                index.put(name, element);
+                    if (!index.containsKey(name)) {
+                        index.put(name, new ArrayList<Element>());
+                    } else {
+                        Class<?> expectedType = index.get(name).get(0).getValueType();
+                        if (!element.getValueType().equals(expectedType)) {
+                            //This is necessary for calling fillBeanProperties
+                            throw new IllegalStateException("Multiple elements with same name '" + name + "' should all have the same value type");
+                        }
+                    }
+
+                    index.get(name).add(element);
+                }
             }
+
         }
 
         return index;

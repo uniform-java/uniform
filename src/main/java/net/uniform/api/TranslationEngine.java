@@ -28,26 +28,29 @@ import java.util.Locale;
  * <p>
  * The translation engine tries to find the translation in the current locale, and use the default locale (english) if the resource is missing.
  * </p>
- * 
+ *
  * <p>
  * Like Spring Framework's {@code LocaleContextHolder}, it holds a {@code Locale} instance with the current thread. The {@code Locale} will be inherited by any child threads spawned by the current thread.
  * </p>
- * 
+ *
  * <p>
  * Java {@link MessageFormat} formatting should be used in all resources.
  * </p>
+ *
  * @author Eduardo Ramos
  */
 public interface TranslationEngine {
 
     /**
      * Returns the current locale (ThreadLocal)
+     *
      * @return Current locale
      */
     Locale getLocale();
 
     /**
      * Sets the current locale (ThreadLocal)
+     *
      * @param locale Locale to set
      */
     void setLocale(Locale locale);
@@ -73,6 +76,7 @@ public interface TranslationEngine {
 
     /**
      * Translates a resource with values.
+     *
      * @param code Resource code
      * @param args Values
      * @return Translated text or null if resource missing
@@ -81,28 +85,30 @@ public interface TranslationEngine {
 
     /**
      * Translates a resource.
+     *
      * @param code Resource code
      * @return Translated text or null if resource missing
      */
     String translate(String code);
-    
+
     /**
      * Returns the translation string, without formatting values, if present.
+     *
      * @param code Resource code
      * @return Translation string or null
      */
     String getTranslationString(String code);
-    
+
     /**
      * Returns the translation string, without formatting values, if present.
+     *
      * @param code Resource code
      * @param defaultTranslation Default translation to use if resource is missing
      * @return Translation string or default translation if missing resource
      */
     String getTranslationString(String code, String defaultTranslation);
-    
 
-   /**
+    /**
      * Translates a resource with values, using an specific locale.
      * Uses the default translation if the resource is missing.
      * @param code Resource code
@@ -125,6 +131,7 @@ public interface TranslationEngine {
 
     /**
      * Translates a resource with values, using an specific locale.
+     *
      * @param code Resource code
      * @param locale Locale to use instead of current locale
      * @param args Values
@@ -134,22 +141,25 @@ public interface TranslationEngine {
 
     /**
      * Translates a resource, using an specific locale.
+     *
      * @param code Resource code
      * @param locale Locale to use instead of current locale
      * @return Translated text or null if resource missing
      */
     String translate(String code, Locale locale);
-    
+
     /**
      * Returns the translation string, without formatting values, if present, using an specific locale.
+     *
      * @param code Resource code
      * @param locale Locale to use instead of current locale
      * @return Translation string or null
      */
     String getTranslationString(String code, Locale locale);
-    
+
     /**
      * Returns the translation string, without formatting values, if present, using an specific locale.
+     *
      * @param code Resource code
      * @param defaultTranslation Default translation to use if resource is missing
      * @param locale Locale to use instead of current locale

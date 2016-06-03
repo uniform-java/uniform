@@ -25,26 +25,26 @@ import net.uniform.api.TranslationEngine;
 
 /**
  * Default implementation of the translation engine that is able to read the Uniform base implementation message resources, and hold a ThreadLocal {@link Locale}.
- * 
+ *
  * If no {@code Locale} is set, {@link #DEFAULT_LOCALE} will be used.
- * 
+ *
  * @author Eduardo Ramos
  */
 public class SimpleTranslationEngine implements TranslationEngine {
 
     public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-    
+
     private static final String DEFAULT_RESOURCE_BASENAME = "net.uniform.impl.translation.messages";
-    
+
     protected ThreadLocal<Locale> localeHolder = new InheritableThreadLocal<>();
     protected Map<Locale, ResourceBundle> bundles = new HashMap<>();
-    
+
     protected String resourceBaseName;
 
     public SimpleTranslationEngine() {
         this(DEFAULT_RESOURCE_BASENAME);
     }
-    
+
     public SimpleTranslationEngine(String resourceBaseName) {
         this.resourceBaseName = resourceBaseName;
     }
@@ -52,29 +52,29 @@ public class SimpleTranslationEngine implements TranslationEngine {
     @Override
     public Locale getLocale() {
         Locale locale = localeHolder.get();
-        
-        if(locale == null){
+
+        if (locale == null) {
             locale = DEFAULT_LOCALE;
         }
-        
+
         return locale;
     }
-    
-    private ResourceBundle getBundle(Locale locale){
-        if(!bundles.containsKey(locale)){
+
+    private ResourceBundle getBundle(Locale locale) {
+        if (!bundles.containsKey(locale)) {
             try {
                 bundles.put(locale, ResourceBundle.getBundle(resourceBaseName, locale));
             } catch (MissingResourceException e) {
                 bundles.put(locale, null);
             }
         }
-        
+
         return bundles.get(locale);
     }
 
     @Override
     public void setLocale(Locale locale) {
-        if(locale == null){
+        if (locale == null) {
             throw new IllegalArgumentException("Locale cannot be null");
         }
         this.localeHolder.set(locale);
@@ -83,14 +83,13 @@ public class SimpleTranslationEngine implements TranslationEngine {
     @Override
     public String translateWithDefault(String code, String defaultTranslation, Locale locale, Object... args) {
         String translationString = getTranslationString(code, defaultTranslation, locale);
-        if(translationString == null){
+        if (translationString == null) {
             return null;
         }
-        
+
         return MessageFormat.format(translationString, args);
     }
 
-    
     @Override
     public String translateWithDefault(String code, String defaultTranslation, Object... args) {
         return this.translateWithDefault(code, defaultTranslation, getLocale(), args);
@@ -144,22 +143,22 @@ public class SimpleTranslationEngine implements TranslationEngine {
     @Override
     public String getTranslationString(String code, String defaultTranslation, Locale locale) {
         ResourceBundle localeBundle = getBundle(locale);
-        
-        if(localeBundle != null && localeBundle.containsKey(code)){
+
+        if (localeBundle != null && localeBundle.containsKey(code)) {
             return localeBundle.getString(code);
-        }else{
+        } else {
             ResourceBundle configuredLocaleBundle = getBundle(getLocale());
-            if(configuredLocaleBundle != null && configuredLocaleBundle.containsKey(code)){
+            if (configuredLocaleBundle != null && configuredLocaleBundle.containsKey(code)) {
                 return configuredLocaleBundle.getString(code);
-            }else{
+            } else {
                 ResourceBundle defaultLocaleBundle = getBundle(DEFAULT_LOCALE);
-                if(defaultLocaleBundle != null && defaultLocaleBundle.containsKey(code)){
+                if (defaultLocaleBundle != null && defaultLocaleBundle.containsKey(code)) {
                     return defaultLocaleBundle.getString(code);
-                }else{
+                } else {
                     return defaultTranslation;
                 }
             }
         }
     }
-    
+
 }

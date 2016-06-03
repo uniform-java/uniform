@@ -28,13 +28,13 @@ public class StringTrimTest {
     @Test
     public void test() {
         StringTrim filter = new StringTrim();
-        
+
         assertNull(filter.filter(null));
-        
+
         assertEquals("abc", filter.filter("abc"));
         assertEquals("abc", filter.filter("abc "));
         assertEquals("abc", filter.filter(" abc "));
         assertEquals("abc", filter.filter(" abc"));
     }
-    
+
 }

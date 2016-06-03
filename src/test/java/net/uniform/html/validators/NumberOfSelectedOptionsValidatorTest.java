@@ -28,59 +28,59 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class NumberOfSelectedOptionsValidatorTest {
-    
+
     @Test
     public void test() {
         Multiselect element = new Multiselect("test");
         element.addOption(1, "one");
         element.addOption(2, "two");
         element.addOption(3, "three");
-        
+
         NumberOfSelectedOptionsValidator validator = new NumberOfSelectedOptionsValidator();
         element.addValidator(validator);
-        
+
         assertTrue(element.isValid());//No value, not required
-        
+
         element.setValue("1");
-        
+
         assertTrue(element.isValid());//No min or max config
-        
+
         validator.setMin(2);
-        
+
         assertFalse(element.isValid());
-        
+
         validator.setMin(1);
-        
+
         assertEquals((long) validator.getMin(), 1);
-        
+
         assertTrue(element.isValid());
-        
+
         validator.setMin(null);
         assertTrue(element.isValid());
-        
+
         validator.setMax(2);
-        
+
         assertEquals((long) validator.getMax(), 2);
-        
+
         element.setValue(Arrays.asList("1", "2"));
         assertTrue(element.isValid());
-        
+
         element.setValue(Arrays.asList("1", "2", "3"));
         assertFalse(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new NumberOfSelectedOptionsValidator(2);
         element.addValidator(validator);
         assertFalse(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new NumberOfSelectedOptionsValidator(3, 4);
         element.addValidator(validator);
         assertTrue(element.isValid());
-        
+
         element.setValue((List<String>) null);
         assertTrue(element.isValid());
-        
+
         element.setValue((String) null);
         assertTrue(element.isValid());
     }

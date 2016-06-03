@@ -36,32 +36,32 @@ public class MultipleOptionValidator implements Validator<ElementWithOptions> {
     @Override
     public List<String> getValidationErrors(ElementWithOptions element, List<String> values) {
         //Only validate if there is at least one value and it's not empty
-        if(values == null || values.isEmpty()){//May be not required
+        if (values == null || values.isEmpty()) {//May be not required
             return null;
         }
-        
-        if(values.size() == 1){
+
+        if (values.size() == 1) {
             String firstValue = UniformUtils.firstValue(values);
-            if(firstValue == null || firstValue.isEmpty()){
+            if (firstValue == null || firstValue.isEmpty()) {
                 return null;
             }
         }
-        
+
         Set<String> enabledOptions = element.getEnabledOptionValues();
         Set<String> uniqueSelectedValues = new HashSet<>();
-        
+
         for (String value : values) {
-            if(!enabledOptions.contains(value)){
+            if (!enabledOptions.contains(value)) {
                 return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.multiselect.invalid"));
             }
 
             uniqueSelectedValues.add(value);
         }
-        
-        if(uniqueSelectedValues.size() != values.size()){
+
+        if (uniqueSelectedValues.size() != values.size()) {
             return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.multiselect.repeated"));
         }
-        
+
         return null;
     }
 

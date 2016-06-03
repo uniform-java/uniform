@@ -42,21 +42,21 @@ import net.uniform.html.elements.Select;
  * @author Eduardo Ramos
  */
 public class OptionGroup {
-    private final Map<String, Option> options = new LinkedHashMap<>();//Keep order
-    
-    private final String id;
-    
-    private final String text;
-    
-    private final boolean enabled;
 
+    private final Map<String, Option> options = new LinkedHashMap<>();//Keep order
+
+    private final String id;
+
+    private final String text;
+
+    private final boolean enabled;
 
     public OptionGroup(String id, String text, boolean enabled) {
         this.id = id;
         this.text = text;
         this.enabled = enabled;
     }
-    
+
     public OptionGroup(String id, String text) {
         this(id, text, true);
     }
@@ -64,7 +64,7 @@ public class OptionGroup {
     public OptionGroup() {
         this(null, null, true);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -76,93 +76,99 @@ public class OptionGroup {
     public boolean isEnabled() {
         return enabled;
     }
-    
+
     /**
      * Adds an option to the option group.
+     *
      * @param value Value, not null and not repeated in the group
      * @param text Text, not null
      * @return This group
      */
-    public OptionGroup addOption(String value, String text){
+    public OptionGroup addOption(String value, String text) {
         return this.addOption(new Option(value, text));
     }
-    
-     /**
+
+    /**
      * Adds an option to the option group.
+     *
      * @param option Option, with value not repeated in the group
      * @return This group
      */
-    public OptionGroup addOption(Option option){
-        if(option == null){
+    public OptionGroup addOption(Option option) {
+        if (option == null) {
             throw new IllegalArgumentException("Option cannot be null");
         }
-        
+
         String value = option.getValue();
-        
-        if(options.containsKey(value)){
+
+        if (options.containsKey(value)) {
             throw new IllegalArgumentException("An option with value '" + value + "' already exists in this group");
         }
-        
+
         options.put(value, option);
         return this;
     }
-    
+
     /**
      * Removes an option from this group by value, if present
+     *
      * @param value Option value to remove
      * @return This group
      */
-    public OptionGroup removeOption(String value){
-        if(value == null){
+    public OptionGroup removeOption(String value) {
+        if (value == null) {
             value = "";
         }
-        
+
         options.remove(value);
         return this;
     }
-    
+
     /**
      * Removes an option from this gruop, if present
+     *
      * @param option Option to remove
      * @return This group
      */
-    public OptionGroup removeOption(Option option){
-         if(option == null){
+    public OptionGroup removeOption(Option option) {
+        if (option == null) {
             throw new IllegalArgumentException("Option cannot be null");
         }
-         
-         options.remove(option.getValue());
-         return this;
+
+        options.remove(option.getValue());
+        return this;
     }
-    
+
     /**
      * Indicates if the group has an option with the given value.
+     *
      * @param value Option value to check
      * @return True if the option for the value exists
      */
-    public boolean hasValue(String value){
+    public boolean hasValue(String value) {
         return options.containsKey(value);
     }
-    
+
     /**
      * Indicates if the group has an option with the given value, which is also enabled.
      * This group must also be enabled.
      * @param value Option value to check
      * @return True if the option for the value exists, it's enabled and this group is enabled
      */
-    public boolean hasValueEnabled(String value){
+    public boolean hasValueEnabled(String value) {
         return enabled && options.containsKey(value) && options.get(value).isEnabled();
     }
-    
+
     /**
      * Returns the option in this group with the given value, if present.
+     *
      * @param value Option value
      * @return Option or null
      */
     public Option getOption(String value) {
         return options.get(value);
     }
-    
+
     /**
      * Returns all the options in this group, in list order.
      * @param includeDisabled Indicates if disabled options should be included in the list.
@@ -171,28 +177,29 @@ public class OptionGroup {
      */
     public List<Option> getOptions(boolean includeDisabled) {
         List<Option> result = new ArrayList<>(); //Keep order
-        
-        if(!includeDisabled && ! enabled){
+
+        if (!includeDisabled && !enabled) {
             return result;//This group is disabled entirely
         }
-        
+
         for (Option option : options.values()) {
-            if(includeDisabled || option.isEnabled()){
-                result.add( option);
+            if (includeDisabled || option.isEnabled()) {
+                result.add(option);
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Returns all the options in this group, in list order.
+     *
      * @return List of options
      */
     public List<Option> getOptions() {
         return this.getOptions(true);
     }
-    
+
     /**
      * Returns the options in this group that are not disabled, in list order.
      * If the group itself is disabled, options are also considered as disabled.
@@ -201,15 +208,16 @@ public class OptionGroup {
     public List<Option> getEnabledOptions() {
         return this.getOptions(false);
     }
-    
+
     /**
      * Returns all the values of the options of this group
+     *
      * @return Set of values
      */
-    public Set<String> getOptionValues(){
+    public Set<String> getOptionValues() {
         return options.keySet();
     }
-    
+
     /**
      * Returns all the values of the options of this group that are enabled.
      * If the group itself is disabled, its options are also considered as disabled.
@@ -217,30 +225,32 @@ public class OptionGroup {
      */
     public Set<String> getEnabledOptionValues() {
         Set<String> result = new HashSet<>();
-        if(!enabled){
+        if (!enabled) {
             return result;//This group is disabled entirely
         }
-        
+
         for (Option option : options.values()) {
-            if(option.isEnabled()){
+            if (option.isEnabled()) {
                 result.add(option.getValue());
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Removes all options from this group.
+     *
      * @return This group
      */
-    public OptionGroup clearOptions(){
+    public OptionGroup clearOptions() {
         options.clear();
         return this;
     }
-    
+
     /**
      * Indicates if the group has any option.
+     *
      * @return True if the group has any option, false otherwise
      */
     public boolean hasOptions() {

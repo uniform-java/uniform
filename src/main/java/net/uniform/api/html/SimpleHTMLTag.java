@@ -85,6 +85,7 @@ public class SimpleHTMLTag {
 
     /**
      * Copy constructor for a tag an its subtags.
+     *
      * @param tag Input tag to create a copy
      */
     public SimpleHTMLTag(SimpleHTMLTag tag) {
@@ -103,6 +104,7 @@ public class SimpleHTMLTag {
 
     /**
      * Sets the tag name.
+     *
      * @param name Tag name
      * @return This tag
      */
@@ -113,6 +115,7 @@ public class SimpleHTMLTag {
 
     /**
      * Sets the string content of the tag.
+     *
      * @param content Content
      * @return This tag
      */
@@ -123,6 +126,7 @@ public class SimpleHTMLTag {
 
     /**
      * Returns the name of this tag.
+     *
      * @return Tag name or null for content-only tags
      */
     public String getName() {
@@ -131,6 +135,7 @@ public class SimpleHTMLTag {
 
     /**
      * Returns the text content of this tag.
+     *
      * @return Text content of this tag or null
      */
     public String getContent() {
@@ -139,6 +144,7 @@ public class SimpleHTMLTag {
 
     /**
      * Returns the subtags of this tag, if any
+     *
      * @return List of tags, never null
      */
     public List<SimpleHTMLTag> getSubTags() {
@@ -148,7 +154,7 @@ public class SimpleHTMLTag {
 
         return new ArrayList<>(subTags);
     }
-    
+
     /**
      * Clears all the subtags
      */
@@ -178,13 +184,14 @@ public class SimpleHTMLTag {
 
     /**
      * Sets a property of the tag by key.
+     *
      * @param key Property key
      * @param value Property value
      * @return This tag
      */
     public SimpleHTMLTag setProperty(String key, String value) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         if (properties == null) {
             properties = new HashMap<>();
         }
@@ -196,12 +203,13 @@ public class SimpleHTMLTag {
 
     /**
      * Removes a property of the tag by key.
+     *
      * @param key Propery key
      * @return This tag
      */
     public SimpleHTMLTag removeProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         if (properties != null) {
             properties.remove(key);
         }
@@ -210,6 +218,7 @@ public class SimpleHTMLTag {
 
     /**
      * Replaces all properties of the tag with a map of properties indexed by key.
+     *
      * @param properties New properties
      * @return This tag
      */
@@ -218,11 +227,11 @@ public class SimpleHTMLTag {
             this.properties = null;
         } else {
             this.properties = new HashMap<>();
-            
+
             for (Entry<String, String> entry : properties.entrySet()) {
                 String key = entry.getKey();
                 key = UniformUtils.checkPropertyNameAndLowerCase(key);
-                
+
                 this.properties.put(key, entry.getValue());
             }
         }
@@ -232,12 +241,13 @@ public class SimpleHTMLTag {
 
     /**
      * Returns a property of this tag by key, if present.
+     *
      * @param key Property key
      * @return Property value or null
      */
     public String getProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         if (properties == null) {
             return null;
         }
@@ -246,6 +256,7 @@ public class SimpleHTMLTag {
 
     /**
      * Returns all the properties in this tag.
+     *
      * @return A properties index by key, never null
      */
     public Map<String, String> getProperties() {

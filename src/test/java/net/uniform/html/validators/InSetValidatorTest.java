@@ -29,37 +29,37 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class InSetValidatorTest {
-    
+
     @Test
     public void test() {
         Element element = new EmptyElement("test");
-        
+
         InSetValidator validator = new InSetValidator();
         validator = new InSetValidator(null);
         element.addValidator(validator);
-        
+
         assertTrue(element.isValid());//No value, not required
-        
+
         element.setValue("466ad4bc13");
-        
+
         assertFalse(element.isValid());
-        
+
         validator.addValidValue(element.getFirstValue());
-        
+
         assertTrue(element.isValid());
-        
+
         validator.removeValidValue(element.getFirstValue());
-        
+
         assertFalse(element.isValid());
-        
+
         validator.addValidValue("1");
         validator.addValidValue("2");
         validator.addValidValue("3");
-        
+
         assertEquals(validator.getValuesSet(), new HashSet<>(Arrays.asList("1", "2", "3")));
         validator.setValidValues(null);
         validator.setValidValues(new HashSet<>(Arrays.asList("1", "2", "3")));
-        
+
         element.setValue("1");
         assertTrue(element.isValid());
         element.setValue("2");
@@ -68,14 +68,14 @@ public class InSetValidatorTest {
         assertTrue(element.isValid());
         element.setValue("4");
         assertFalse(element.isValid());
-        
+
         element.setValue("1");
         validator.clearValidValues();
         assertFalse(element.isValid());
-        
+
         validator.getValuesSet().add("1");//Test that this does not affect the internals of the validator
         assertFalse(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new InSetValidator(new HashSet<>(Arrays.asList("1")));
         element.addValidator(validator);

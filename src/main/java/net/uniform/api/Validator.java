@@ -21,10 +21,11 @@ import java.util.List;
  * <p>
  * A validator can be added to an {@link Element} to extend its validation logic.
  * </p>
- * 
+ *
  * <p>
  * A set of basic validators are included in Uniform in the package {@code net.uniform.html.validators}
  * </p>
+ *
  * @author Eduardo Ramos
  * @param <T> Type of element supported by this validator
  * @see Element
@@ -33,6 +34,7 @@ public interface Validator<T extends Element> {
 
     /**
      * Returns the validation errors for the element data, if any.
+     *
      * @param element Element to validate
      * @param value Current list of values for the element
      * @return List of errors (may be empty) or null
@@ -41,6 +43,7 @@ public interface Validator<T extends Element> {
 
     /**
      * Indicates if this validator returning any error should prevent next element validators from being called.
+     *
      * @return True to stop next element validators on error, false otherwise
      */
     boolean breakChainOnError();

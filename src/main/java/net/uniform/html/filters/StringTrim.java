@@ -19,6 +19,7 @@ import net.uniform.api.Filter;
 
 /**
  * Trims any input string.
+ *
  * @author Eduardo Ramos
  */
 public class StringTrim implements Filter {

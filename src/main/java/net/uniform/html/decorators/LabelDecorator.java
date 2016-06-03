@@ -23,6 +23,7 @@ import net.uniform.impl.AbstractSingleElementDecorator;
 
 /**
  * Decorator for appending or prepending an HTML label for any element.
+ *
  * @author Eduardo Ramos
  */
 public class LabelDecorator extends AbstractSingleElementDecorator {
@@ -32,7 +33,6 @@ public class LabelDecorator extends AbstractSingleElementDecorator {
     public static final String PROPERTY_ESCAPE = "escape";
 
     public static final String PROPERTY_PREPEND = "prepend";
-
 
     public LabelDecorator(String elementClass) {
         this.setProperty("class", elementClass);

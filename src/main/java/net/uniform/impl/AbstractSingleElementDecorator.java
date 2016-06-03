@@ -22,19 +22,20 @@ import net.uniform.api.html.SimpleHTMLTag;
 
 /**
  * Abstract decorator implementation that contains all generic logic that any decorator only appliable to a single element should have.
+ *
  * @author Eduardo Ramos
  */
 public abstract class AbstractSingleElementDecorator extends AbstractDecorator {
 
     @Override
     public List<SimpleHTMLTag> render(Form form, List<Element> elements, List<SimpleHTMLTag> rendered) {
-        if(elements == null || elements.size() != 1){
+        if (elements == null || elements.size() != 1) {
             throw new IllegalArgumentException("Single element decorator expected only 1 element");
         }
-        
+
         return render(elements.get(0), rendered);
     }
-    
+
     protected abstract List<SimpleHTMLTag> render(Element element, List<SimpleHTMLTag> rendered);
-    
+
 }

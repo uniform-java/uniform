@@ -27,6 +27,7 @@ import net.uniform.api.TranslationEngineContext;
 
 /**
  * Form validator for making sure that date ranges are correct.
+ *
  * @author Eduardo Ramos
  */
 public class DateRangeValidator implements FormValidator {
@@ -44,8 +45,8 @@ public class DateRangeValidator implements FormValidator {
     public List<String> getValidationErrors(Form form, Map<String, List<String>> formData) {
         ElementWithValueConversion<Date> dateStartElement = findDateElement(form, dateStartId);
         ElementWithValueConversion<Date> dateEndElement = findDateElement(form, dateEndId);
-        
-        if(dateStartElement.isValid() && dateEndElement.isValid()){
+
+        if (dateStartElement.isValid() && dateEndElement.isValid()) {
             Date dateStart = dateStartElement.getConvertedValue();
             Date dateEnd = dateEndElement.getConvertedValue();
 

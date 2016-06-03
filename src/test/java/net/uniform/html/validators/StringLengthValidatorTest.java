@@ -35,7 +35,7 @@ public class StringLengthValidatorTest {
 
         StringLengthValidator validator = new StringLengthValidator(5, 20);
         element.addValidator(validator);
-        
+
         assertEquals((long) validator.getMinLength(), 5);
         assertEquals((long) validator.getMaxLength(), 20);
 
@@ -59,20 +59,20 @@ public class StringLengthValidatorTest {
         element.setValue("012345678901234567890123");
 
         assertTrue(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new StringLengthValidator(2);
         assertNull(validator.getMinLength());
         element.addValidator(validator);
         element.setValue("123");
         assertFalse(element.isValid());
-        
+
         element.removeValidator(validator);
         validator = new StringLengthValidator().setMinLength(4).setMaxLength(6);
         element.addValidator(validator);
         element.setValue("1234");
         assertTrue(element.isValid());
-        
+
         assertEquals((long) validator.getMinLength(), 4);
         assertEquals((long) validator.getMaxLength(), 6);
     }

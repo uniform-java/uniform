@@ -24,6 +24,7 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for any single-value element to ensure that the input string is within a min and/or max character length.
+ *
  * @author Eduardo Ramos
  */
 public class StringLengthValidator implements Validator<Element> {

@@ -28,16 +28,19 @@ import java.util.Map;
  * @author Eduardo Ramos
  */
 public interface FormValidator {
+
     /**
      * Returns the validation errors for the form, if any.
+     *
      * @param form Form
      * @param formData Current form data as multi-value strings
      * @return List of errors (may be empty) or null
      */
     List<String> getValidationErrors(Form form, Map<String, List<String>> formData);
-    
+
     /**
      * Indicates if this validator returning any error should prevent next form validators from being called.
+     *
      * @return True to stop next form validators on error, false otherwise
      */
     boolean breakChainOnError();

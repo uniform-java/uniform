@@ -29,13 +29,13 @@ public class TextareaTest {
     @Test
     public void test() {
         Textarea txt = new Textarea("txt");
-        
+
         assertHTMLEquals("<textarea id=\"txt\" name=\"txt\"></textarea>", HTMLRenderingUtils.render(txt.render()));
         assertTrue(HTMLRenderingUtils.render(txt.render()).contains("</textarea>"));
-        
+
         txt.setValue("<p>some <b>value</b></p>");
-        
+
         assertHTMLEquals("<textarea id=\"txt\" name=\"txt\"><p>some <b>value</b></p></textarea>", HTMLRenderingUtils.render(txt.render()));
     }
-    
+
 }

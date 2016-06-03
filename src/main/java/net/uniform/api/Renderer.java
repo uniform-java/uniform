@@ -20,13 +20,15 @@ import net.uniform.api.html.SimpleHTMLTag;
 
 /**
  * A Renderer is responsible of generating the HTML tags that represent a single {@link Element}.
+ *
  * @author Eduardo Ramos
  * @param <T> Element type to render
  */
 public interface Renderer<T extends Element> {
-    
+
     /**
      * Returns the list of HTML tags for an element.
+     *
      * @param element Element to render
      * @return List of tags for the element and renderer
      */

@@ -22,6 +22,7 @@ import net.uniform.impl.MultioptionInputElement;
 
 /**
  * Element that represents a group of checkboxes with the same name, similar to a {@link Multiselect} element.
+ *
  * @author Eduardo Ramos
  */
 public class Multicheckbox extends MultioptionInputElement {

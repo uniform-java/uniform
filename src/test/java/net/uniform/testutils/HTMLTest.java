@@ -34,11 +34,10 @@ public class HTMLTest {
         try {
             TolerantSaxDocumentBuilder tolerantSaxDocumentBuilder = new TolerantSaxDocumentBuilder(XMLUnit.getTestParser());
             HTMLDocumentBuilder htmlDocumentBuilder = new HTMLDocumentBuilder(tolerantSaxDocumentBuilder);
-            
+
             Document xml1 = htmlDocumentBuilder.parse(html1);
             Document xml2 = htmlDocumentBuilder.parse(html2);
-            
-            
+
             assertXMLEqual(xml1, xml2);
         } catch (SAXException | IOException | ParserConfigurationException ex) {
             throw new IllegalArgumentException("Invalid XML produced", ex);

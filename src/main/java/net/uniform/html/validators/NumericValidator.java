@@ -23,17 +23,17 @@ import net.uniform.api.Validator;
 import net.uniform.impl.utils.UniformUtils;
 
 /**
- * Validator for any single-value numeric input.
- * It supports:
+ * Validator for any single-value numeric input. It supports:
  * <ul>
  * <li>Allowing decimals or not</li>
  * <li>A minimum allowed value (inclusive or not)</li>
  * <li>A maximum allowed value (inclusive or not)</li>
  * </ul>
+ *
  * @author Eduardo Ramos
  */
-public class NumericValidator implements Validator<Element>{
-    
+public class NumericValidator implements Validator<Element> {
+
     private boolean allowDecimals;
     private Double min;
     private boolean minInclusive = true;
@@ -50,51 +50,47 @@ public class NumericValidator implements Validator<Element>{
         if (firstValue == null || firstValue.isEmpty()) {
             return null;
         }
-        
+
         double numberValue;
         try {
             firstValue = firstValue.trim();
-            if(allowDecimals){
+            if (allowDecimals) {
                 numberValue = Double.parseDouble(firstValue);
-            }else {
+            } else {
                 numberValue = Long.parseLong(firstValue);
             }
         } catch (NumberFormatException e) {
-            if(allowDecimals){
+            if (allowDecimals) {
                 return translate("uniform.validators.numeric.invalid.number", firstValue);
-            }else{
+            } else {
                 return translate("uniform.validators.numeric.invalid.integer", firstValue);
             }
         }
-        
-        if(min != null){
-            if(minInclusive){
-                if(numberValue < min && !UniformUtils.equalsEpsilon(numberValue, min)){
+
+        if (min != null) {
+            if (minInclusive) {
+                if (numberValue < min && !UniformUtils.equalsEpsilon(numberValue, min)) {
                     return translate("uniform.validators.numeric.greaterequal", firstValue, min);
                 }
-            }else{
-                if(numberValue < min || UniformUtils.equalsEpsilon(numberValue, min)){
-                    return translate("uniform.validators.numeric.greater", firstValue, min);
-                }
+            } else if (numberValue < min || UniformUtils.equalsEpsilon(numberValue, min)) {
+                return translate("uniform.validators.numeric.greater", firstValue, min);
             }
         }
-        
-        if(max != null){
-            if(maxInclusive){
-                if(numberValue > max && !UniformUtils.equalsEpsilon(numberValue, max)){
+
+        if (max != null) {
+            if (maxInclusive) {
+                if (numberValue > max && !UniformUtils.equalsEpsilon(numberValue, max)) {
                     return translate("uniform.validators.numeric.lessequal", firstValue, max);
                 }
-            }else{
-                if(numberValue > max || UniformUtils.equalsEpsilon(numberValue, max)){
-                    return translate("uniform.validators.numeric.less", firstValue, max);
-                }
+            } else if (numberValue > max || UniformUtils.equalsEpsilon(numberValue, max)) {
+                return translate("uniform.validators.numeric.less", firstValue, max);
             }
         }
-        
+
         return null;
     }
-    
-    protected List<String> translate(String code, Object... args){
+
+    protected List<String> translate(String code, Object... args) {
         return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate(code, args));
     }
 
@@ -142,32 +138,32 @@ public class NumericValidator implements Validator<Element>{
     public void setMaxInclusive(boolean maxInclusive) {
         this.maxInclusive = maxInclusive;
     }
-    
-    public void setGreaterThan(double min){
+
+    public void setGreaterThan(double min) {
         this.setMin(min);
         this.setMinInclusive(false);
     }
-    
-    public void setGreaterThanOrEqual(double min){
+
+    public void setGreaterThanOrEqual(double min) {
         this.setMin(min);
         this.setMinInclusive(true);
     }
-    
-    public void setLessThan(double max){
+
+    public void setLessThan(double max) {
         this.setMax(max);
         this.setMaxInclusive(false);
     }
-    
-    public void setLessThanOrEqual(double max){
+
+    public void setLessThanOrEqual(double max) {
         this.setMax(max);
         this.setMaxInclusive(true);
     }
-    
-    public void removeMin(){
+
+    public void removeMin() {
         this.min = null;
     }
-    
-    public void removeMax(){
+
+    public void removeMax() {
         this.max = null;
     }
 }

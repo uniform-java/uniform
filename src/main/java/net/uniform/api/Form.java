@@ -62,124 +62,141 @@ import net.uniform.html.HTMLForm;
  * @see HTMLForm
  */
 public interface Form {
+
     public static final String FORM_LEVEL_VALIDATION_ERRORS_INDEX = null;
-    
+
     /**
      * Adds an element to the form. The element id should be unique in the form.
      * Default decorators are added to the element if it does not have any decorator, and default decorators are defined for its class.
      * Default renderer is set to the element if it does not have a renderer, and a default renderer is defined for its class.
+     * 
      * @param element Element to add
      * @return This form
      */
     Form addElement(Element element);
-    
+
     /**
      * Adds an element to the form. The element id should be unique in the form.
      * Default decorators are added to the element if it does not have any decorator, default decorators are defined for its class, and {@code useDefaultDecorators} parameter is {@code true}.
      * Default renderer is set to the element if it does not have a renderer, and a default renderer is defined for its class.
+     * 
      * @param element Element to add
      * @param useDefaultDecorators Indicates if default decorators should be taken into account when adding the element
      * @return This form
      */
     Form addElement(Element element, boolean useDefaultDecorators);
-    
+
     /**
      * Adds several elements doing the same as {@link #addElement(net.uniform.api.Element)} method.
+     *
      * @param elements Elements to add
      * @return This form.
      */
     Form addElements(Element... elements);
-    
+
     /**
      * Adds several elements doing the same as {@link #addElement(net.uniform.api.Element, boolean)} method.
+     *
      * @param useDefaultDecorators Indicates if default decorators should be taken into account when adding the elements
      * @param elements Elements to add
      * @return This form.
      */
     Form addElements(boolean useDefaultDecorators, Element... elements);
-    
+
     /**
      * Removes an element from the form.
+     *
      * @param element Element to remove
      * @return This form
      */
     Form removeElement(Element element);
-    
+
     /**
      * Removes an element from the form by id.
+     *
      * @param id Id of the element
      * @return This element
      */
     Form removeElement(String id);
-    
+
     /**
      * Returns an element previously added to the form by id.
+     *
      * @param id Id of the element
      * @return Found element or null if not existing
      */
     Element getElement(String id);
-    
+
     /**
      * Returns an index of all elements in this form indexed by id.
+     *
      * @return Index of form elements
      */
     Map<String, Element> getElements();
-    
+
     /**
      * Adds a default decorator for the given element class, to be used when adding elements to the form without any decorators.
+     *
      * @param clazz Element class <b>and subclasses</b> to affect
      * @param decorator Decorator to add. Can be null to explicitely set no default decorators for the element class
      * @return This form
      */
     Form addDefaultDecoratorForElementClass(Class<? extends Element> clazz, Decorator decorator);
-    
+
     /**
      * Replaces the default decorators list for the given element class, to be used when adding elements to the form without any decorators.
+     *
      * @param clazz Element class <b>and subclasses</b> to affect
      * @param decorators List of decorators. Can be null or an empty list to explicitely set no default decorators for the element class
      * @return This form
      */
     Form setDefaultDecoratorsForElementClass(Class<? extends Element> clazz, List<Decorator> decorators);
-    
+
     /**
      * Returns the default decorators set for the given element class.
+     *
      * @param clazz Element class
      * @return List of decorators or null if no configuration found
      */
     List<Decorator> getDefaultDecoratorsForElementClass(Class<? extends Element> clazz);
-    
+
     /**
      * Removes any specific default decorators configuration for the given element class in this form, if existing.
+     *
      * @param clazz Element class
      * @return This form
      */
     Form removeDefaultDecoratorsForElementClass(Class<? extends Element> clazz);
-    
+
     /**
      * If the element class or superclasses decorators has been explicitely set with {@link #addDefaultDecoratorForElementClass(java.lang.Class, net.uniform.api.Decorator)},
      * this returns a list of decorators, otherwise returns null.
+     * 
      * @param clazz Element class
      * @return A list of decorators or null
      */
     List<Decorator> getDefaultDecoratorsAppliedToElementClass(Class<? extends Element> clazz);
-    
+
     /**
      * Sets a default renderer for the given element class, to be used when adding elements to the form without a renderer.
+     *
      * @param clazz Element class <b>and subclasses</b> to affect
      * @param renderer Renderer to use. Can be null to explicitely set no default decorators for the element class
      * @return This form
      */
     Form setDefaultRendererForElementClass(Class<? extends Element> clazz, Renderer renderer);
-    
-     /**
+
+    /**
      * Returns the default renderer set for the given element class.
+     *
      * @param clazz Element class
      * @return Renderer or null
      */
     Renderer getDefaultRendererForElementClass(Class<? extends Element> clazz);
-    
+
     /**
      * Removes any specific default render configuration for the given element class in this form, if existing.
+     *
      * @param clazz Element class
      * @return This form
      */
@@ -188,90 +205,102 @@ public interface Form {
     /**
      * If the element class or superclasses renderer has been explicitely set with {@link #setDefaultRendererForElementClass(java.lang.Class, net.uniform.api.Renderer)},
      * this returns a renderer, otherwise returns null.
+     * 
      * @param clazz Element class
      * @return Renderer or null
      */
     Renderer getDefaultRendererAppliedToElementClass(Class<? extends Element> clazz);
-    
+
     /**
      * Starts a form decorator that will be applied to any HTML tags produced between this and the
      * corresponding call to {@link #endDecorator()} method.
      * 
      * Form decorators can be nested.
-     * 
+     *
      * You can start a decorator within another decorator, and you can add any number of elements (even none) between the call to {@code startDecorator} and {@code endDecorator}.
+     *
      * @param id Decorator id
      * @param decorator Decorator to start
      * @return This form
      */
     Form startDecorator(String id, Decorator decorator);
-    
+
     /**
      * Ends the current open decorator.
      * Form decorators can be nested.
+     * 
      * @return This form.
      */
     Form endDecorator();
-    
+
     /**
      * Removes a decorator from the form by id, if existing.
+     *
      * @param id Decorator id
      * @return This form
      */
     Form removeDecorator(String id);
-    
+
     /**
      * Returns a decorator from the form by id, if existing.
+     *
      * @param id Decorator id
      * @return Decorator or null if not found
      */
     Decorator getDecorator(String id);
-    
+
     /**
      * Returns an index of all form decorators by id.
+     *
      * @return Form decorators index
      */
     Map<String, Decorator> getDecorators();
-    
+
     /**
      * Renders the whole form as an HTML string.
+     *
      * @return Complete HTML form
      */
     String renderHTML();
-    
+
     /**
      * Renders the whole form as a list of {@link SimpleHTMLTag}
+     *
      * @return Complete form tags list
      */
     List<SimpleHTMLTag> render();
-    
+
     /**
      * Performs validation on all the form elements and te form itself.
+     *
      * @return True if no validation errors were found, false otherwise
      */
     boolean isValid();
-    
+
     /**
      * Returns any the validation errors in the form indexed by element id.
      * It also includes the form level validation errors in the {@code null} key, if any.
+     * 
      * @return Index of validation errors, may be empty. Will only contain keys for elements with errors
      */
     Map<String, List<String>> getValidationErrors();
-    
+
     /**
      * Returns the values of all the form elements as lists of strings.
      * Data is indexed by element <b>name</b> (normally the same as the element id).
+     * 
      * @return Form data as list of string values.
      */
     Map<String, List<String>> getFormDataMultivalue();
-    
+
     /**
      * Returns the values of all the form elements as strings or lists of strings (dependin on each element {@code isMultiValue}).
      * Data is indexed by element <b>name</b> (normally the same as the element id).
+     * 
      * @return Form data as a string or list of string values.
      */
     Map<String, Object> getFormData();
-    
+
     /**
      * Returns the values of all the form elements as their target value type.
      * Conversion for simple types is done by the form, according to the element {@code getValueType()} method.
@@ -279,27 +308,31 @@ public interface Form {
      * Complex type conversion can also be done by elements implementing the {@link ElementWithValueConversion} interface.
      * 
      * Data is indexed by element <b>name</b> (normally the same as the element id).
+     * 
      * @return Form data as any target type.
      */
     Map<String, Object> getFormDataConvertedToElementValueTypes();
-    
+
     /**
      * Does the same as {@link #getFormDataConvertedToElementValueTypes()} but automatically sets any matching
      * bean property to the given object, by looking at the each property name and type class.
+     * 
      * @param bean Bean object to fill data
      * @return This form
      */
     Form getFormDataIntoBean(Object bean);
-    
+
     /**
      * Returns the same as {@link #getFormDataMultivalue() ()} but for a single element, by element id.
+     *
      * @param elementId Element id
      * @return List of String values or null
      */
     List<String> getElementMultivalue(String elementId);
-    
-      /**
+
+    /**
      * Returns the same as {@link #getFormData()} but for a single element, by element id.
+     *
      * @param elementId Element id
      * @return List of String values, a single String or null, dependin on the element value type
      */
@@ -307,177 +340,200 @@ public interface Form {
 
     /**
      * Returns the same as {@link #getFormDataConvertedToElementValueTypes()} but for a single element, by element id.
+     *
      * @param elementId Element id
      * @return Any value, converted depending on the element value type
      */
     Object getElementValueConvertedToValueType(String elementId);
-    
+
     /**
      * Sets the multi-string value of an element <b>by id</b>.
+     *
      * @param elementId Element id
      * @param value Value to set
      * @return This form
      */
     Form setElementValue(String elementId, List<String> value);
-    
+
     /**
      * Sets the single-string value of an element <b>by id</b>.
+     *
      * @param elementId Element id
      * @param value Value to set
      * @return This form
      */
     Form setElementValue(String elementId, String value);
-    
+
     /**
      * Sets the value of an element <b>by id</b> doing the same as {@link #populateSimple(java.util.Map)}, by converting the object to a list of Strings or a single String.
+     *
      * @param elementId Element id
      * @param value Value to set
      * @return This form
      */
     Form setElementValue(String elementId, Object value);
-    
+
     /**
      * Clears data and validation status (like {@link #reset()}) from all elements in the form
      * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data must be a list of Strings or null for every element with a value.
+     * 
      * @param formData Form data indexed by element name
      * @return This form
      */
     Form populate(Map<String, List<String>> formData);
-    
+
     /**
      * Clears data and validation status (like {@link #reset()}) from all elements in the form
      * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data can be any type for each element, or null.
      * 
      * If the object for an element is an array or collection, it is converted to a list of Strings, otherwise it is converted to a single String.
+     * 
      * @param formData Form data indexed by element name
      * @return This form
      */
     Form populateSimple(Map<String, ?> formData);
-    
+
     /**
      * Does the same as {@link #populateSimple(java.util.Map)}
      * but automatically extracting all accessible bean properties from the given object.
+     * 
      * @param bean Bean object
      * @return This form
      */
     Form populateBean(Object bean);
-    
+
     /**
      * Clears data and validation status (like {@link #reset()}) from all elements in the form only if {@code keepOtherValues} is false,
      * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data must be a list of Strings or null for every element with a value.
+     * 
      * @param formData Form data indexed by element name
      * @param keepOtherValues True to keep values of elements not specified in the {@code formData} parameter
      * @return This form
      */
     Form populate(Map<String, List<String>> formData, boolean keepOtherValues);
-    
+
     /**
      * Clears data and validation status (like {@link #reset()}) from all elements in the form only if {@code keepOtherValues} is false,
      * and populates them <b>by name</b> calling their {@code populate} method.
      * Input data can be any type for each element, or null.
      * 
      * If the object for an element is an array or collection, it is converted to a list of Strings, otherwise it is converted to a single String.
+     *
      * @param formData Form data indexed by element name
      * @param keepOtherValues True to keep values of elements not specified in the {@code formData} parameter
      * @return This form
      */
     Form populateSimple(Map<String, ?> formData, boolean keepOtherValues);
-    
+
     /**
      * Does the same as {@link #populateSimple(java.util.Map, boolean)}
      * but automatically extracting all accessible bean properties from the given object.
+     * 
      * @param bean Bean object
      * @param keepOtherValues True to keep values of elements not specified in the {@code bean} parameter
      * @return This form
      */
     Form populateBean(Object bean, boolean keepOtherValues);
-    
+
     /**
      * Returns all properties in this form.
+     *
      * @return Properties index
      */
     Map<String, String> getProperties();
-    
+
     /**
      * Returns a property in this form by key
+     *
      * @param key Property key
      * @return This form
      */
     String getProperty(String key);
-    
+
     /**
      * Indicates if the form has a value for the property (even null).
+     *
      * @param key Property key
      * @return True if a value is set, false otherwise
      */
     boolean hasProperty(String key);
-    
+
     /**
      * Sets the value of a property in this form.
+     *
      * @param key Property key
      * @param value Property value
      * @return This form
      */
     Form setProperty(String key, String value);
-    
+
     /**
      * Removes a property from this form, if existing.
+     *
      * @param key Property key
      * @return This form
      */
     Form removeProperty(String key);
-    
+
     /**
      * Returns the form validators in this form.
+     *
      * @return List of validators, never null
      */
     List<FormValidator> getValidators();
-    
+
     /**
      * Adds a form validator to the form.
+     *
      * @param validator Form validator to add
      * @return This form
      */
     Form addValidator(FormValidator validator);
-    
+
     /**
      * Removes a validator from this form.
+     *
      * @param validator Form validator to remove
      * @return This form
      */
     Form removeValidator(FormValidator validator);
-    
+
     /**
      * Removes all validators from this form.
+     *
      * @return This form.
      */
     Form clearValidators();
-    
+
     /**
      * Replaces the list of validators in this form.
+     *
      * @param validators List of form validators to put
      * @return This form
      */
     Form setValidators(List<FormValidator> validators);
-    
+
     /**
      * Resets the values and validation status of the form an all its elements.
      * Values of disabled elements won't be reset.
+     * 
      * @return This form
      */
     Form reset();
-    
+
     /**
      * Indicates if the validation has been peformed on this form by calling {@link #isValid()} or {@link #getValidationErrors()} methods.
+     *
      * @return True for validation performed status, false otherwise
      */
     boolean validationPerformed();
-    
+
     /**
      * Sets the validation performed status of this form and all its elements to false.
+     *
      * @return This form
      */
     Form clearValidation();
@@ -485,6 +541,7 @@ public interface Form {
     /**
      * Indicates it element translation will be enabled automatically when adding elements to the form.
      * By default, auto enable elements translation is false.
+     * 
      * @return True if elements translation will be auto enabled when adding elements
      */
     boolean isAutoEnableElementsTranslation();
@@ -492,6 +549,7 @@ public interface Form {
     /**
      * Sets or unsets the auto enabling of elements translation when adding them to the form.
      * By default, auto enable elements translation is false.
+     * 
      * @param autoEnableElementsTranslation True for auto enabling
      * @return This form
      */

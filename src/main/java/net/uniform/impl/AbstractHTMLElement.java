@@ -20,12 +20,13 @@ import net.uniform.html.filters.StringTrim;
 
 /**
  * Default HTML element implementation.
- * 
+ *
  * Extends the abstract implementation in order to:
  * <ul>
  * <li>Automatically set the id as the {@code id} and {@code name} HTML attributes</li>
  * <li>Add filters for trimming and removing control characters from any input value</li>
  * </ul>
+ *
  * @author Eduardo Ramos
  */
 public abstract class AbstractHTMLElement extends AbstractElement {
@@ -41,21 +42,22 @@ public abstract class AbstractHTMLElement extends AbstractElement {
         this.addFilter(new StringTrim());
         this.addFilter(new RemoveControlCharacters());
     }
-    
+
     /**
      * Adds the given class to the {@code class} property of this element.
+     *
      * @param clazz HTML class to add
      * @return This element
      */
-    public AbstractHTMLElement addClass(String clazz){
+    public AbstractHTMLElement addClass(String clazz) {
         String currentClass = this.getProperty("class");
-        if(currentClass != null){
+        if (currentClass != null) {
             currentClass += " " + clazz;
-        }else{
+        } else {
             currentClass = clazz;
         }
         this.setProperty("class", currentClass);
-        
+
         return this;
     }
 }

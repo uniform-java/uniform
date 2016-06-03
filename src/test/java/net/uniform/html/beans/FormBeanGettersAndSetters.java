@@ -101,7 +101,7 @@ public class FormBeanGettersAndSetters {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "FormBeanGettersAndSetters{" + "inputName=" + inputName + ", selectName=" + selectName + ", multi=" + multi + ", chk=" + chk + '}';

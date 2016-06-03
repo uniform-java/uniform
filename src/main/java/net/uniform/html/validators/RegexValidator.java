@@ -25,6 +25,7 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for any single-value element to conform any given regular expression.
+ *
  * @author Eduardo Ramos
  */
 public class RegexValidator implements Validator<Element> {
@@ -32,14 +33,14 @@ public class RegexValidator implements Validator<Element> {
     protected Pattern regexPattern;
 
     public RegexValidator(Pattern regexPattern) {
-        if(regexPattern == null){
+        if (regexPattern == null) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
         this.regexPattern = regexPattern;
     }
-    
+
     public RegexValidator(String regexPattern) {
-        if(regexPattern == null){
+        if (regexPattern == null) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
         this.regexPattern = Pattern.compile(regexPattern);
@@ -49,7 +50,7 @@ public class RegexValidator implements Validator<Element> {
     public List<String> getValidationErrors(Element element, List<String> value) {
         String firstValue = UniformUtils.firstValue(value);
         if (firstValue != null && !firstValue.isEmpty()) {
-            if(!regexPattern.matcher(firstValue).matches()){
+            if (!regexPattern.matcher(firstValue).matches()) {
                 return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.regex.invalid"));
             }
         }
@@ -67,14 +68,14 @@ public class RegexValidator implements Validator<Element> {
     }
 
     public void setRegexPattern(Pattern regexPattern) {
-        if(regexPattern == null){
+        if (regexPattern == null) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
         this.regexPattern = regexPattern;
     }
-    
+
     public void setRegexPattern(String regexPattern) {
-        if(regexPattern == null){
+        if (regexPattern == null) {
             throw new IllegalArgumentException("Regex pattern cannot be null");
         }
         this.regexPattern = Pattern.compile(regexPattern);

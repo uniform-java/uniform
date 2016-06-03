@@ -42,7 +42,7 @@ public class SimpleTranslationEngineTest {
     public void testTranslation() {
         Locale spanish = new Locale("es");
         eng.setLocale(SimpleTranslationEngine.DEFAULT_LOCALE);
-        
+
         assertEquals("Translation test 1 - 2", eng.translate("uniform.test.resource", 1, 2));
         assertEquals("Translation test", eng.translate("uniform.test.resource2"));
 
@@ -59,21 +59,20 @@ public class SimpleTranslationEngineTest {
 
         assertNull(eng.getTranslationString("uniform.test.missing"));
         assertEquals("Default", eng.getTranslationString("uniform.test.missing", "Default"));
-        
+
         //Change the locale context:
         eng.setLocale(spanish);
         assertEquals("Test traducción {0} - {1}", eng.getTranslationString("uniform.test.resource"));
         assertEquals("Translation test", eng.getTranslationString("uniform.test.resource2"));
     }
-    
+
     @Test
     public void testThreadLocal() throws InterruptedException, ExecutionException {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        
+
         assertEquals("Translation test 1 - 2", eng.translate("uniform.test.resource", 1, 2));
-        
-        
-        Future<Boolean> future = executor.submit(new Callable<Boolean>(){
+
+        Future<Boolean> future = executor.submit(new Callable<Boolean>() {
 
             @Override
             public Boolean call() throws Exception {
@@ -83,7 +82,7 @@ public class SimpleTranslationEngineTest {
             }
         });
         assertTrue(future.get());
-        
+
         assertEquals("Translation test 1 - 2", eng.translate("uniform.test.resource", 1, 2));
     }
 }

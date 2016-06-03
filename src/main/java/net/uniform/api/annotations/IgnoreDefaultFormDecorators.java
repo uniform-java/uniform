@@ -22,10 +22,11 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation to make elements ignore default decorators for a form
+ *
  * @author Eduardo Ramos
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface IgnoreDefaultFormDecorators {
-    
+
 }

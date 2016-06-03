@@ -27,19 +27,19 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class RequiredValidatorTest {
-    
+
     @Test
     public void test() {
         Element element = new EmptyElement("test");
         element.setRequired(true);
-        
+
         assertFalse(element.isValid());
         element.setValue((String) null);
         assertFalse(element.isValid());
-        
+
         element.setValue(Arrays.asList("1", "2", null));
         assertFalse(element.isValid());
-        
+
         element.setValue("1");
         assertTrue(element.isValid());
     }

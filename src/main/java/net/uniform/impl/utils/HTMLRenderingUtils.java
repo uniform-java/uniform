@@ -21,32 +21,35 @@ import net.uniform.api.html.SimpleHTMLTag;
 
 /**
  * Class with static methods that simplifies the use of <code>HTMLRenderer</code> class
+ *
  * @author Eduardo Ramos
  */
 public class HTMLRenderingUtils {
 
     /**
      * Renders a <code>SimpleHTMLTag</code> as HTML
+     *
      * @param tag Single tag
      * @return HTML
      */
     public static String render(SimpleHTMLTag tag) {
         List<SimpleHTMLTag> tags = new ArrayList<>();
         tags.add(tag);
-        
+
         HTMLRenderer renderer = new HTMLRenderer(tags);
-        
+
         return renderer.render();
     }
-    
+
     /**
      * Renders a list of <code>SimpleHTMLTag</code> as HTML
+     *
      * @param tags List of tags
      * @return HTML
      */
     public static String render(List<SimpleHTMLTag> tags) {
         HTMLRenderer renderer = new HTMLRenderer(tags);
-        
+
         return renderer.render();
     }
 }

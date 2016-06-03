@@ -22,9 +22,11 @@ import net.uniform.impl.MultioptionInputElement;
 
 /**
  * Element that represents a list of HTML radio elements in a group (same name).
+ *
  * @author Eduardo Ramos
  */
 public class Radio extends MultioptionInputElement {
+
     public Radio(String id) {
         super(id);
         this.addValidator(new SingleOptionValidator());

@@ -25,25 +25,26 @@ import net.uniform.impl.AbstractHTMLElement;
 
 /**
  * Element that represents an HTML Button.
+ *
  * @author Eduardo Ramos
  */
 @IgnoreDefaultFormDecorators
 public class Button extends AbstractHTMLElement {
-    
+
     public static final String BUTTON_TYPE_SUBMIT = "submit";
     public static final String BUTTON_TYPE_BUTTON = "button";
     public static final String BUTTON_TYPE_RESET = "reset";
-    
+
     public static final String DEFAULT_BUTTON_TYPE = BUTTON_TYPE_BUTTON;
-    
+
     public static final boolean DEFAULT_ESCAPE = true;
-    
+
     protected boolean escape = DEFAULT_ESCAPE;
 
     public Button(String id) {
         this(id, DEFAULT_BUTTON_TYPE);
     }
-    
+
     public Button(String id, String type) {
         super(id);
         this.setProperty("type", type);
@@ -55,7 +56,7 @@ public class Button extends AbstractHTMLElement {
     public Class<?> getValueType() {
         return null;
     }
-    
+
     @Override
     public void setValueType(Class<?> valueType) {
         throw new UniformException("Button does not support value type change");
@@ -65,7 +66,7 @@ public class Button extends AbstractHTMLElement {
     public Element populate(List<String> value) {
         return this;
     }
-    
+
     @Override
     public Element setValue(String value) {
         return this;
@@ -85,20 +86,22 @@ public class Button extends AbstractHTMLElement {
     public Renderer getDefaultRenderer() {
         return new ButtonRenderer();
     }
-    
+
     /**
      * Sets the escape HTML for this button's inner text (label).
+     *
      * @param escape True for enabling escaping of HTML, false for disabling it
      */
-    public final void setEscape(boolean escape){
+    public final void setEscape(boolean escape) {
         this.escape = escape;
     }
-    
+
     /**
      * Returns the escape HTML flag for this button's inner text.
+     *
      * @return True if escape is enabled, false otherwise
      */
-    public final boolean isEscape(){
+    public final boolean isEscape() {
         return escape;
     }
 }

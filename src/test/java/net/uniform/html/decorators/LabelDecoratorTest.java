@@ -37,32 +37,31 @@ public class LabelDecoratorTest {
     @Test
     public void test() {
         Locale spanish = new Locale("es");
-        
+
         LabelDecorator decorator = new LabelDecorator();
         assertTrue(decorator.isEscape());
         assertTrue(decorator.isPrepend());
-        
-        
+
         Element element = new Input("test");
         element.setLabel("uniform.test.resource2");
         element.addDecorator(decorator);
-        
+
         element.setTranslationEnabled(true);
-        
+
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">Translation test</label>\n", render(decorator, element));
         element.setTranslationEnabled(false);
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">uniform.test.resource2</label>\n", render(decorator, element));
-        
+
         element.setTranslationEnabled();
         TranslationEngineContext.getTranslationEngine().setLocale(spanish);
-        
+
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">Translation test</label>\n", render(decorator, element));
-        
+
         element.setLabel("uniform.test.resource3");
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">Prueba label</label>\n", render(decorator, element));
     }
-    
-    private String render(Decorator decorator, Element element){
+
+    private String render(Decorator decorator, Element element) {
         return HTMLRenderingUtils.render(decorator.render(null, Arrays.asList(element), new ArrayList<SimpleHTMLTag>()));
     }
 }

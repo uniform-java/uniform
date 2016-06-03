@@ -25,6 +25,7 @@ import net.uniform.html.elements.Button;
 
 /**
  * Default renderer for {@link Button} element.
+ *
  * @author Eduardo Ramos
  */
 public class ButtonRenderer implements Renderer<Button> {
@@ -33,17 +34,17 @@ public class ButtonRenderer implements Renderer<Button> {
     public List<SimpleHTMLTag> render(Button button) {
         Map<String, String> finalProps = new HashMap<>();
         finalProps.putAll(button.getProperties());
-        
+
         SimpleHTMLTag tag = new SimpleHTMLTag("button", finalProps);
         tag.setContent(button.getLabelTranslated());
-        
+
         boolean escape = button.isEscape();
         tag.setEscapeContent(escape);
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(tag);
-        
+
         return result;
     }
-    
+
 }

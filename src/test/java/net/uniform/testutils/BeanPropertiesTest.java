@@ -29,7 +29,9 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class BeanPropertiesTest {
+
     public class BeanType {
+
         public String a;
         public Integer b;
         private List<Long> c;
@@ -43,46 +45,51 @@ public class BeanPropertiesTest {
             this.c = c;
         }
     }
-    
+
     @Test
-    public void test(){
+    public void test() {
         BeanType bean = new BeanType();
         bean.a = "1";
         bean.b = 2;
         bean.setC(Arrays.asList(3L, 4L));
         bean.d = 5;
-        
+
         assertEquals(
-            new HashMap<String, Object>(){{
+                new HashMap<String, Object>() {
+            {
                 put("a", "1");
                 put("b", 2);
                 put("c", Arrays.asList(3L, 4L));
                 put("d", (short) 5);
-            }},
-            UniformUtils.getBeanProperties(bean)
+            }
+        },
+                UniformUtils.getBeanProperties(bean)
         );
-        
-        Map<String, Object> newProps = new HashMap<String, Object>(){{
-            put("a", 3.5);
-            put("b", 1);
-            put("c", Arrays.asList(2L));
-            put("d", null);//Ignored because of null and primitive
-        }};
+
+        Map<String, Object> newProps = new HashMap<String, Object>() {
+            {
+                put("a", 3.5);
+                put("b", 1);
+                put("c", Arrays.asList(2L));
+                put("d", null);//Ignored because of null and primitive
+            }
+        };
         UniformUtils.fillBeanProperties(bean, newProps);
-        
+
         newProps.put("a", "3.5");
         newProps.put("d", (short) 5);
         assertEquals(newProps, UniformUtils.getBeanProperties(bean));
-        
-        
-        Map<String, Object> newProps2 = new HashMap<String, Object>(){{
-            put("a", new Date());//Ignored because of wrong type
-            put("b", 1);
-            put("c", Arrays.asList(2L));
-            put("d", null);//Ignored because of null and primitive
-        }};
+
+        Map<String, Object> newProps2 = new HashMap<String, Object>() {
+            {
+                put("a", new Date());//Ignored because of wrong type
+                put("b", 1);
+                put("c", Arrays.asList(2L));
+                put("d", null);//Ignored because of null and primitive
+            }
+        };
         UniformUtils.fillBeanProperties(bean, newProps2);
-        
+
         newProps2.put("a", "3.5");
         newProps2.put("d", (short) 5);
         assertEquals(newProps2, UniformUtils.getBeanProperties(bean));

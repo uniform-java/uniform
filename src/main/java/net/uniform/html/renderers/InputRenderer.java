@@ -26,6 +26,7 @@ import net.uniform.html.elements.Input;
 
 /**
  * Default renderer for {@link Input} element.
+ *
  * @author Eduardo Ramos
  */
 public class InputRenderer implements Renderer<Element> {
@@ -34,20 +35,20 @@ public class InputRenderer implements Renderer<Element> {
     public List<SimpleHTMLTag> render(Element input) {
         Map<String, String> finalProps = new HashMap<>();
         finalProps.putAll(input.getProperties());
-        
+
         String value = input.getFirstValue();
         finalProps.put("value", value != null ? value : "");
-        
-        if(input.isRequired()){
+
+        if (input.isRequired()) {
             finalProps.put("required", "required");
         }
-        
+
         SimpleHTMLTag inputTag = new SimpleHTMLTag("input", finalProps);
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(inputTag);
-        
+
         return result;
     }
-    
+
 }

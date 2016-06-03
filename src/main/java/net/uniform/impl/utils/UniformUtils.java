@@ -24,10 +24,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import net.uniform.exceptions.UniformException;
 
 /**
@@ -50,29 +53,30 @@ public class UniformUtils {
         }
         return null;
     }
-    
+
     private final static double EPSILON = 1e-9;
-    public static boolean equalsEpsilon(double a, double b){
+
+    public static boolean equalsEpsilon(double a, double b) {
         return Math.abs(a - b) < EPSILON;
     }
-    
+
     /**
-     * Makes sure that a property name is not empty an is lower-case.
-     * Throws an {@code IllegalArgumentException} if the key is null or empty after trimming.
+     * Makes sure that a property name is not empty an is lower-case. Throws an {@code IllegalArgumentException} if the key is null or empty after trimming.
+     *
      * @param key Original key
      * @return Trimmed and lower-case key
      */
-    public static String checkPropertyNameAndLowerCase(String key){
-        if(key == null){
+    public static String checkPropertyNameAndLowerCase(String key) {
+        if (key == null) {
             throw new IllegalArgumentException("key cannot be null");
         }
-        
+
         key = key.trim().toLowerCase();
-        
-        if(key.isEmpty()){
+
+        if (key.isEmpty()) {
             throw new IllegalArgumentException("key cannot be empty");
         }
-        
+
         return key;
     }
 
@@ -115,7 +119,7 @@ public class UniformUtils {
             throw new UniformException("Error while getting bean object properties of class" + clazz.getName(), ex);
         }
     }
-    
+
     private static final Map<String, Class<?>> EMPTY_MAP = new HashMap<>();
 
     /**
@@ -127,7 +131,7 @@ public class UniformUtils {
     public static void fillBeanProperties(Object bean, Map<String, Object> props) {
         fillBeanProperties(bean, props, EMPTY_MAP);
     }
-    
+
     /**
      * Injects the values of the given properties into the given Java bean object. It makes sure that object class properties names match and their types are compatible.
      *
@@ -139,8 +143,8 @@ public class UniformUtils {
         if (bean == null || props == null) {
             return;
         }
-        
-        if(collectionsGenericTypes == null){
+
+        if (collectionsGenericTypes == null) {
             collectionsGenericTypes = EMPTY_MAP;
         }
 
@@ -155,35 +159,50 @@ public class UniformUtils {
                     if (props.containsKey(name)) {
                         Object value = props.get(name);
 
-                        Class<?> fieldClass = field.getType();
+                        Class fieldClass = field.getType();
                         if (value != null) {
-                            Class<?> valueClass = value.getClass();
+                            Class valueClass = value.getClass();
 
                             if (fieldClass.isAssignableFrom(valueClass)) {
-                                if(Collection.class.isAssignableFrom(fieldClass)){
+                                if (Collection.class.isAssignableFrom(fieldClass)) {
                                     //Double check for collections when we have the type info:
-                                    if(collectionsGenericTypes.containsKey(name)){
-                                        if(isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))){
+                                    if (collectionsGenericTypes.containsKey(name)) {
+                                        if (isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))) {
                                             field.set(bean, value);
                                         }
-                                    }else{
+                                    } else {
                                         //We have no info, assume the generic type is correct
                                         field.set(bean, value);
                                     }
-                                }else{
+                                } else {
                                     field.set(bean, value);
                                 }
                             } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
                                 field.set(bean, value);
-                            } else if(fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)){
+                            } else if (fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)) {
                                 //Try to convert to string for simple types only
                                 field.set(bean, value.toString());
+                            } else if (Collection.class.isAssignableFrom(fieldClass)) {
+                                //The bean field type is a collection of the data value type
+                                //We fill the collection with a single element if possible:
+
+                                Collection collection = reflectionCollectionInstance(fieldClass);
+                                if (collection != null) {
+                                    //Double check for collections when we have the type info:
+                                    if (collectionsGenericTypes.containsKey(name)) {
+                                        if (isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))) {
+                                            collection.add(value);
+                                            field.set(bean, collection);
+                                        }
+                                    } else {
+                                        //We have no info, assume the generic type is correct
+                                        collection.add(value);
+                                        field.set(bean, collection);
+                                    }
+                                }
                             }
-                        } else {
-                            //Cannot set null to primitive
-                            if (!fieldClass.isPrimitive()) {
-                                field.set(bean, value);
-                            }
+                        } else if (!fieldClass.isPrimitive()) {//Cannot set null to primitive
+                            field.set(bean, value);
                         }
                     }
                 }
@@ -203,43 +222,40 @@ public class UniformUtils {
                             Class<?> valueClass = value.getClass();
 
                             if (fieldClass.isAssignableFrom(valueClass)) {
-                                if(Collection.class.isAssignableFrom(fieldClass)){
+                                if (Collection.class.isAssignableFrom(fieldClass)) {
                                     //Double check for collections when we have the type info:
-                                    if(collectionsGenericTypes.containsKey(name)){
-                                        if(isGenericTypeCompatible(writeMethod.getGenericParameterTypes()[0], collectionsGenericTypes.get(name))){
+                                    if (collectionsGenericTypes.containsKey(name)) {
+                                        if (isGenericTypeCompatible(writeMethod.getGenericParameterTypes()[0], collectionsGenericTypes.get(name))) {
                                             writeMethod.invoke(bean, value);
                                         }
-                                    }else{
+                                    } else {
                                         //We have no info, assume the generic type is correct
                                         writeMethod.invoke(bean, value);
                                     }
-                                }else{
+                                } else {
                                     writeMethod.invoke(bean, value);
                                 }
-                                
+
                             } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
                                 writeMethod.invoke(bean, value);
-                            } else if(fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)){
+                            } else if (fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)) {
                                 //Try to convert to string for simple types only
                                 writeMethod.invoke(bean, value.toString());
                             }
-                        } else {
-                            //Cannot set null to primitive
-                            if (!fieldClass.isPrimitive()) {
-                                writeMethod.invoke(bean, value);
-                            }
+                        } else if (!fieldClass.isPrimitive()) {//Cannot set null to primitive
+                            writeMethod.invoke(bean, value);
                         }
                     }
                 }
             }
-        } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
             throw new UniformException("Error while setting bean object properties of class" + clazz.getName(), ex);
         }
     }
-    
-    private static boolean isGenericTypeCompatible(Type type, Class<?> genericClass){
+
+    private static boolean isGenericTypeCompatible(Type type, Class<?> genericClass) {
         if (type instanceof ParameterizedType) {
-            ParameterizedType pType = (ParameterizedType)type;
+            ParameterizedType pType = (ParameterizedType) type;
             return pType.getActualTypeArguments().length == 1 && ((Class<?>) pType.getActualTypeArguments()[0]).isAssignableFrom(genericClass);
         } else {
             return true;//No generic, raw collection, Object is compatible with any type
@@ -247,42 +263,57 @@ public class UniformUtils {
     }
 
     private static boolean isWrapperAndPrimitivePair(Class<?> c1, Class<?> c2) {
-        if(c1 == null || c2 == null){
+        if (c1 == null || c2 == null) {
             return false;
         }
-        
-        if(c1.isPrimitive()){
+
+        if (c1.isPrimitive()) {
             return PRIMITIVES_TO_WRAPPERS.get(c1).equals(c2);
-        }else if(c2.isPrimitive()){
+        } else if (c2.isPrimitive()) {
             return PRIMITIVES_TO_WRAPPERS.get(c2).equals(c1);
         }
-        
+
         return false;
     }
-    
-    private static boolean isPrimitive(Class<?> type){
+
+    private static boolean isPrimitive(Class<?> type) {
         return PRIMITIVES_TO_WRAPPERS.containsKey(type);
     }
-    
-    private static boolean isWrapper(Class<?> type){
+
+    private static boolean isWrapper(Class<?> type) {
         return PRIMITIVES_TO_WRAPPERS.containsValue(type);
     }
-    
-    private static boolean isPrimitiveOrWrapper(Class<?> type){
+
+    private static boolean isPrimitiveOrWrapper(Class<?> type) {
         return isPrimitive(type) || isWrapper(type);
     }
 
     private static final Map<Class<?>, Class<?>> PRIMITIVES_TO_WRAPPERS = new HashMap<>();
-            
-        static {
-            PRIMITIVES_TO_WRAPPERS.put(boolean.class, Boolean.class);
-            PRIMITIVES_TO_WRAPPERS.put(byte.class, Byte.class);
-            PRIMITIVES_TO_WRAPPERS.put(char.class, Character.class);
-            PRIMITIVES_TO_WRAPPERS.put(double.class, Double.class);
-            PRIMITIVES_TO_WRAPPERS.put(float.class, Float.class);
-            PRIMITIVES_TO_WRAPPERS.put(int.class, Integer.class);
-            PRIMITIVES_TO_WRAPPERS.put(long.class, Long.class);
-            PRIMITIVES_TO_WRAPPERS.put(short.class, Short.class);
-            PRIMITIVES_TO_WRAPPERS.put(void.class, Void.class);
+
+    static {
+        PRIMITIVES_TO_WRAPPERS.put(boolean.class, Boolean.class);
+        PRIMITIVES_TO_WRAPPERS.put(byte.class, Byte.class);
+        PRIMITIVES_TO_WRAPPERS.put(char.class, Character.class);
+        PRIMITIVES_TO_WRAPPERS.put(double.class, Double.class);
+        PRIMITIVES_TO_WRAPPERS.put(float.class, Float.class);
+        PRIMITIVES_TO_WRAPPERS.put(int.class, Integer.class);
+        PRIMITIVES_TO_WRAPPERS.put(long.class, Long.class);
+        PRIMITIVES_TO_WRAPPERS.put(short.class, Short.class);
+        PRIMITIVES_TO_WRAPPERS.put(void.class, Void.class);
+    }
+
+    private static Collection reflectionCollectionInstance(Class fieldClass) throws InstantiationException, IllegalAccessException {
+        if (fieldClass.isInterface()) {
+            //Cannot instantiate an interface, just try with some typical types:
+            if (fieldClass.equals(List.class)) {
+                return new ArrayList();
+            } else if (fieldClass.equals(Set.class)) {
+                return new HashSet();
+            } else {
+                return null;
+            }
+        } else {
+            return (Collection) fieldClass.newInstance();
         }
+    }
 }

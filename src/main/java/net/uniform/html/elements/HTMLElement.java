@@ -137,7 +137,7 @@ public class HTMLElement extends AbstractElement {
     public boolean isEscapeContent() {
         return elementTag.isEscapeContent();
     }
-    
+
     @Override
     public Renderer getDefaultRenderer() {
         return new Renderer<HTMLElement>() {

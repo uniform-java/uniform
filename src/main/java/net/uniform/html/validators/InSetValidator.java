@@ -26,6 +26,7 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for single or multi value elements that must be in a given set.
+ *
  * @author Eduardo Ramos
  */
 public class InSetValidator implements Validator<Element> {
@@ -34,9 +35,9 @@ public class InSetValidator implements Validator<Element> {
 
     public InSetValidator() {
     }
-    
+
     public InSetValidator(Set<String> validValues) {
-        if(validValues != null){
+        if (validValues != null) {
             this.valuesSet.addAll(validValues);
         }
     }
@@ -46,7 +47,7 @@ public class InSetValidator implements Validator<Element> {
         String firstValue = UniformUtils.firstValue(value);
         if (firstValue != null && !firstValue.isEmpty()) {
             for (String val : value) {
-                if(!valuesSet.contains(val)){
+                if (!valuesSet.contains(val)) {
                     return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.inset.invalid", val));
                 }
             }
@@ -62,20 +63,20 @@ public class InSetValidator implements Validator<Element> {
 
     public void setValidValues(Set<String> validValues) {
         this.valuesSet.clear();
-        if(validValues != null){
+        if (validValues != null) {
             this.valuesSet.addAll(validValues);
         }
     }
-    
-    public void addValidValue(String value){
+
+    public void addValidValue(String value) {
         this.valuesSet.add(value);
     }
-    
-    public void removeValidValue(String value){
+
+    public void removeValidValue(String value) {
         this.valuesSet.remove(value);
     }
-    
-    public void clearValidValues(){
+
+    public void clearValidValues() {
         this.valuesSet.clear();
     }
 

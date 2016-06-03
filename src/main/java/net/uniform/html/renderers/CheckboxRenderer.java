@@ -25,6 +25,7 @@ import net.uniform.html.elements.Checkbox;
 
 /**
  * Default renderer for {@link Checkbox} element.
+ *
  * @author Eduardo Ramos
  */
 public class CheckboxRenderer implements Renderer<Checkbox> {
@@ -35,25 +36,25 @@ public class CheckboxRenderer implements Renderer<Checkbox> {
         finalProps.putAll(checkbox.getProperties());
         finalProps.put("type", "checkbox");
         finalProps.remove("checked");
-        if(checkbox.isRequired()){
+        if (checkbox.isRequired()) {
             finalProps.put("required", "required");
         }
-        
+
         finalProps.put("value", checkbox.getEnabledValueString());
-        
+
         String valueEnabledString = checkbox.getEnabledValueString();
-        
+
         String value = checkbox.getFirstValue();
-        if(valueEnabledString.equals(value)){
+        if (valueEnabledString.equals(value)) {
             finalProps.put("checked", "checked");
         }
-        
+
         SimpleHTMLTag inputTag = new SimpleHTMLTag("input", finalProps);
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(inputTag);
-        
+
         return result;
     }
-    
+
 }

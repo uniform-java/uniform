@@ -33,25 +33,25 @@ public class HTMLRenderingUtilsTest {
         properties.put("id", "test");
         properties.put("name", "abc");
         properties.put("data-event", "event");
-        
+
         SimpleHTMLTag input = new SimpleHTMLTag("input", properties);
         assertHTMLEquals("<input data-event=\"event\" id=\"test\" name=\"abc\"/>", HTMLRenderingUtils.render(input));
-        
+
         SimpleHTMLTag textarea = new SimpleHTMLTag("textarea", properties, "TESTING");
         assertHTMLEquals("<textarea data-event=\"event\" id=\"test\" name=\"abc\">TESTING</textarea>", HTMLRenderingUtils.render(textarea));
-        
+
         SimpleHTMLTag arbitraryContent = new SimpleHTMLTag(null, "<div>arbitrary content</div>");
         arbitraryContent.setEscapeContent(false);
         assertHTMLEquals("<div>arbitrary content</div>", HTMLRenderingUtils.render(arbitraryContent));
-        
+
         SimpleHTMLTag arbitraryElementList = new SimpleHTMLTag();
         arbitraryElementList.addSubTag(input);
         arbitraryElementList.addSubTag(textarea);
         arbitraryElementList.addSubTag(arbitraryContent);
         assertHTMLEquals(
-                HTMLRenderingUtils.render(input)+HTMLRenderingUtils.render(textarea)+HTMLRenderingUtils.render(arbitraryContent), 
+                HTMLRenderingUtils.render(input) + HTMLRenderingUtils.render(textarea) + HTMLRenderingUtils.render(arbitraryContent),
                 HTMLRenderingUtils.render(arbitraryElementList)
         );
     }
-    
+
 }

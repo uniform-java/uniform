@@ -21,6 +21,7 @@ import net.uniform.api.Decorator;
 
 /**
  * Abstract decorator implementation that contains all generic logic that any decorator should have.
+ *
  * @author Eduardo Ramos
  */
 public abstract class AbstractDecorator implements Decorator {
@@ -56,7 +57,7 @@ public abstract class AbstractDecorator implements Decorator {
     @Override
     public Decorator setProperties(Map<String, Object> properties) {
         this.properties.clear();
-        if(properties != null){
+        if (properties != null) {
             this.properties.putAll(properties);
         }
 

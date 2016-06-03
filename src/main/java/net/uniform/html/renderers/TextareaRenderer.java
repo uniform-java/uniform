@@ -25,6 +25,7 @@ import net.uniform.html.elements.Textarea;
 
 /**
  * Default renderer for {@link Textarea} element.
+ *
  * @author Eduardo Ramos
  */
 public class TextareaRenderer implements Renderer<Textarea> {
@@ -33,24 +34,24 @@ public class TextareaRenderer implements Renderer<Textarea> {
     public List<SimpleHTMLTag> render(Textarea textarea) {
         Map<String, String> finalProps = new HashMap<>();
         finalProps.putAll(textarea.getProperties());
-        
-        if(textarea.isRequired()){
+
+        if (textarea.isRequired()) {
             finalProps.put("required", "required");
         }
-        
+
         SimpleHTMLTag tag = new SimpleHTMLTag("textarea", finalProps);
-        
+
         String value = textarea.getFirstValue();
-        if(value == null){
+        if (value == null) {
             value = "";//Important so textarea is never a self-closed element
         }
         tag.setContent(value);
         tag.setEscapeContent(false);
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(tag);
-        
+
         return result;
     }
-    
+
 }

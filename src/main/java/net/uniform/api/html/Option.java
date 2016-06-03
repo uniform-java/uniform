@@ -27,12 +27,13 @@ import net.uniform.html.elements.Select;
  * <li>A user friendly text, not null</li>
  * <li>Enabled state</li>
  * </ul>
+ *
  * @author Eduardo Ramos
  */
 public class Option {
-    
+
     private final String value;
-    
+
     private final String text;
 
     private final boolean enabled;
@@ -41,12 +42,12 @@ public class Option {
         this.value = value;
         this.text = text;
         this.enabled = enabled;
-        
-        if(value == null){
+
+        if (value == null) {
             throw new IllegalArgumentException("Value cannot be null");
         }
-        
-        if(text == null){
+
+        if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
     }

@@ -29,13 +29,13 @@ public class InputTest {
     public void test() {
         Input input = new Input("my-input");
         input.setValue("Some value");
-        
+
         assertHTMLEquals("<input id=\"my-input\" name=\"my-input\" type=\"text\" value=\"Some value\"/>", HTMLRenderingUtils.render(input.render()));
-        
+
         input.setRequired(true);
         input.setProperty("type", "password");
-        
+
         assertHTMLEquals("<input id=\"my-input\" name=\"my-input\" required=\"required\" type=\"password\" value=\"Some value\"/>", HTMLRenderingUtils.render(input.render()));
     }
-    
+
 }

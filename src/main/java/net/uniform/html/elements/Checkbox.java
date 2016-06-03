@@ -23,12 +23,13 @@ import net.uniform.impl.AbstractHTMLElement;
 
 /**
  * Element that represents an HTML checkbox.
+ *
  * @author Eduardo Ramos
  */
 public class Checkbox extends AbstractHTMLElement implements ElementWithValueConversion<Boolean> {
 
     public static final String DEFAULT_ENABLED_VALUE = "true";
-    
+
     public Checkbox(String id) {
         super(id);
         this.setProperty("type", "checkbox");
@@ -39,68 +40,71 @@ public class Checkbox extends AbstractHTMLElement implements ElementWithValueCon
     public Class<?> getValueType() {
         return Boolean.class;
     }
-    
-     @Override
+
+    @Override
     public void setValueType(Class<?> valueType) {
         throw new UniformException("Checkbox does not support value type change");
     }
-    
+
     /**
      * Checks or unchecks this checkbox element.
+     *
      * @param checked True for checked, false for not checked
      * @return This element
      */
-    public Checkbox setChecked(boolean checked){
-        if(checked){
+    public Checkbox setChecked(boolean checked) {
+        if (checked) {
             String valueEnabledString = this.getEnabledValueString();
             this.setValue(valueEnabledString);
-        }else{
+        } else {
             this.setValue("");
         }
-        
+
         return this;
     }
-    
+
     /**
      * Indicates if the element is considered checked,
      * that is, the value is the same as the one configured with {@link #setEnabledValueString(java.lang.String)}.
      * @return True if checked, false otherwise
      */
-    public boolean isChecked(){
-         String valueEnabledString = getEnabledValueString();
-        
+    public boolean isChecked() {
+        String valueEnabledString = getEnabledValueString();
+
         String currentValue = this.getFirstValue();
         return valueEnabledString.equals(currentValue);
     }
-    
+
     /**
      * Sets the value string considered as checked/enabled.
      * Maintains the checked status considering the current value enabled string.
      * @param value Checked value, {@code DEFAULT_ENABLED_VALUE} by default
      * @return This element
      */
-    public Checkbox setEnabledValueString(String value){
+    public Checkbox setEnabledValueString(String value) {
         boolean checked = this.isChecked();//Maintain checked status
         this.setProperty("value", value);
         this.setChecked(checked);
         return this;
     }
-    
+
     /**
      * Returns the value string considered as checked/enabled.
+     *
      * @return Checked value, {@code DEFAULT_ENABLED_VALUE} by default
      */
-    public String getEnabledValueString(){
+    public String getEnabledValueString() {
         String valueEnabledString = this.getProperty("value");
-        if(valueEnabledString == null){
+        if (valueEnabledString == null) {
             valueEnabledString = DEFAULT_ENABLED_VALUE;
         }
-        
+
         return valueEnabledString;
     }
 
     /**
      * Returns the value of this checkbox as a boolean, indicating if the element is checked or not.
+     *
      * @return True when checked, false otherwise
      */
     @Override

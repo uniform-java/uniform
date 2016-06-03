@@ -21,6 +21,7 @@ import net.uniform.impl.AbstractHTMLElement;
 
 /**
  * Element that represents a HTML textarea.
+ *
  * @author Eduardo Ramos
  */
 public class Textarea extends AbstractHTMLElement {
@@ -28,7 +29,7 @@ public class Textarea extends AbstractHTMLElement {
     public Textarea(String id) {
         super(id);
     }
-    
+
     @Override
     public Renderer getDefaultRenderer() {
         return new TextareaRenderer();

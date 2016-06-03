@@ -33,60 +33,68 @@ import net.uniform.html.decorators.ElementErrorsDecorator;
  * @author Eduardo Ramos
  */
 public interface Decorator {
-    
+
     /**
      * Decorate the previously generated HTML.
+     *
      * @param form Form of the element, might be null
      * @param elements List of elements being decorated. It will be a list of 1 element for an decorator applied to a single element.
      * @param rendered Rendered HTML so far
      * @return Decorated HTML
      */
     List<SimpleHTMLTag> render(Form form, List<Element> elements, List<SimpleHTMLTag> rendered);
-    
+
     /**
      * Obtains a property of the decorator by key.
+     *
      * @param key Property key
      * @return Propert value
      */
     Object getProperty(String key);
-    
+
     /**
      * Indicates if the decorator has a value for the property (even null).
+     *
      * @param key Property key
      * @return True if a value is set, false otherwise
      */
     boolean hasProperty(String key);
-    
+
     /**
      * Sets the value of a property of the decorator by key.
+     *
      * @param key Property key
      * @param value Property value
      * @return This decorator
      */
     Decorator setProperty(String key, Object value);
-    
+
     /**
      * Removes a property of the decorator by key.
+     *
      * @param key Property key
      * @return This decorator
      */
     Decorator removeProperty(String key);
-    
+
     /**
      * Sets the values of all properties of the decorator.
+     *
      * @param properties Property values indexed by key
      * @return This decorator
      */
     Decorator setProperties(Map<String, Object> properties);
-    
+
     /**
      * Returns all the properties of the decorator indexed by key.
+     *
      * @return All properties in a map, will never be null
      */
     Map<String, Object> getProperties();
-    
+
     /**
      * Removes all the properties of the decorator.
+     *
      * @return This decorator
      */
     Decorator clearProperties();

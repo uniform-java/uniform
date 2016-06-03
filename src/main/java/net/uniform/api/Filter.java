@@ -22,8 +22,10 @@ package net.uniform.api;
  * @see Element
  */
 public interface Filter {
+
     /**
      * Filter a single string value.
+     *
      * @param value Input value, may be null
      * @return Filtered value
      */

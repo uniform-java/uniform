@@ -31,9 +31,10 @@ import net.uniform.impl.AbstractHTMLElement;
  * It automatically adds a date validator to the element with the default HTML5 date format.
  * @author Eduardo Ramos
  */
-public class DatePicker extends AbstractHTMLElement implements ElementWithValueConversion<Date>{
+public class DatePicker extends AbstractHTMLElement implements ElementWithValueConversion<Date> {
+
     private SimpleDateFormat dateFormat;
-    
+
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
     public DatePicker(String id) {
@@ -43,19 +44,19 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
     public DatePicker(String id, SimpleDateFormat dateFormat) {
         super(id);
         this.setProperty("type", "date");
-        
+
         this.dateFormat = dateFormat;
         this.addValidator(new DateValidator(this.dateFormat));
     }
-    
+
     public DatePicker(String id, String dateFormat) {
         super(id);
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
-        
+
         this.setProperty("type", "date");
-        
+
         this.dateFormat = sdf;
         this.addValidator(new DateValidator(this.dateFormat));
     }
@@ -72,6 +73,7 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
 
     /**
      * Sets the value of the input element with a date and automatically converts it to the configured date format.
+     *
      * @param date Date value
      * @return This element
      */
@@ -88,8 +90,8 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
     @Override
     public Date getConvertedValue() {
         String dateStr = this.getFirstValue();
-        
-        if(dateStr != null && !dateStr.trim().isEmpty()){
+
+        if (dateStr != null && !dateStr.trim().isEmpty()) {
             dateStr = dateStr.trim();
             try {
                 return dateFormat.parse(dateStr);
@@ -97,7 +99,7 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
                 throw new UniformException(String.format("Could not parse date %s", dateStr), ex);
             }
         }
-        
+
         return null;
     }
 
@@ -110,13 +112,13 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
     public DatePicker setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
         for (Validator validator : this.getValidators()) {
-            if(validator instanceof DateValidator){
+            if (validator instanceof DateValidator) {
                 ((DateValidator) validator).setDateFormat(dateFormat);
             }
         }
         return this;
     }
-    
+
     /**
      * Sets the date format for this element.
      * It also changes the date format for the date validator, if present.
@@ -126,12 +128,13 @@ public class DatePicker extends AbstractHTMLElement implements ElementWithValueC
     public DatePicker setDateFormat(String dateFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
-        
+
         return setDateFormat(sdf);
     }
-    
+
     /**
      * Returns the date format for this element.
+     *
      * @return Date format
      */
     public SimpleDateFormat getDateFormat() {

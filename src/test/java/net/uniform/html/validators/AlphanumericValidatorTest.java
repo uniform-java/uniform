@@ -26,22 +26,22 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class AlphanumericValidatorTest {
-    
+
     @Test
     public void test() {
         Element element = new EmptyElement("test");
-        
+
         AlphanumericValidator validator = new AlphanumericValidator();
         element.addValidator(validator);
-        
+
         assertTrue(element.isValid());//No value, not required
-        
+
         element.setValue("466ad4bc13");
-        
+
         assertTrue(element.isValid());
-        
+
         element.setValue("Other val %&$");
-        
+
         assertFalse(element.isValid());
     }
 }

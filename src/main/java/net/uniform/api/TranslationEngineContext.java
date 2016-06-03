@@ -23,27 +23,30 @@ import net.uniform.impl.translation.SimpleTranslationEngine;
  * @author Eduardo Ramos
  */
 public class TranslationEngineContext {
+
     /**
      * Default translation engine
      */
     private static TranslationEngine engine = new SimpleTranslationEngine();
-    
-    private TranslationEngineContext(){
+
+    private TranslationEngineContext() {
     }
-    
+
     /**
      * Returns the current translation engine instance.
+     *
      * @return Translation engine
      */
-    public static TranslationEngine getTranslationEngine(){
+    public static TranslationEngine getTranslationEngine() {
         return engine;
     }
-    
+
     /**
      * Sets the translation engine to be used by Uniform.
+     *
      * @param engine New engine, not null
      */
-    public static void setTranslationEngine(TranslationEngine engine){
+    public static void setTranslationEngine(TranslationEngine engine) {
         TranslationEngineContext.engine = engine;
     }
 }

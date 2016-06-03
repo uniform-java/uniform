@@ -81,29 +81,29 @@ public class AbstractElementTest {
         Element elem = new EmptyElement("id");
         assertNotNull(elem.getProperties());
         assertTrue(elem.getProperties().isEmpty());
-        
+
         elem.setProperty("prop1", "val1");
         assertFalse(elem.getProperties().isEmpty());
         elem.getProperties().clear();//Test we cannot mess with class internals
         assertFalse(elem.getProperties().isEmpty());
     }
-    
+
     @Test
     public void testDecorators() {
         Element elem = new EmptyElement("id");
         assertNotNull(elem.getDecorators());
         assertTrue(elem.getDecorators().isEmpty());
-        
+
         LabelDecorator labelDecorator = new LabelDecorator();
         elem.addDecorator(labelDecorator);
         assertFalse(elem.getDecorators().isEmpty());
         elem.getDecorators().clear();//Test we cannot mess with class internals
         assertFalse(elem.getDecorators().isEmpty());
-        
+
         assertNotNull(elem.getDecorator(LabelDecorator.class));
         elem.removeDecorator(labelDecorator);
         assertNull(elem.getDecorator(LabelDecorator.class));
-        
+
         LabelDecorator labelDecorator2 = new LabelDecorator();
         elem.addDecorator(labelDecorator);
         elem.addDecorator(labelDecorator2);
@@ -111,25 +111,25 @@ public class AbstractElementTest {
         elem.setLastDecoratorProperty(LabelDecorator.class, "key", "value2");
         assertEquals(elem.getDecorator(LabelDecorator.class).getProperty("key"), "value");
         assertEquals(elem.getLastDecorator(LabelDecorator.class).getProperty("key"), "value2");
-        
+
         elem.clearDecorators();
         assertNotNull(elem.getDecorators());
         assertTrue(elem.getDecorators().isEmpty());
-        
+
         elem.setDecorators(Arrays.asList((Decorator) new LabelDecorator(), new HTMLTagDecorator("div")));
         assertEquals(elem.getDecorators().size(), 2);
-        
+
         elem.setDecorators(null);
         assertNotNull(elem.getDecorators());
         assertTrue(elem.getDecorators().isEmpty());
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testFirstDecoratorNotFound() {
         Element elem = new EmptyElement("id");
         elem.setDecoratorProperty(HTMLTagDecorator.class, "key", "value");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testLastDecoratorNotFound() {
         Element elem = new EmptyElement("id");
@@ -146,7 +146,7 @@ public class AbstractElementTest {
         Element elem = new EmptyElement("id");
         assertNotNull(elem.getFilters());
         assertTrue(elem.getFilters().isEmpty());
-        
+
         Filter filter = new StringTrim();
         elem.addFilter(filter);
         assertFalse(elem.getFilters().isEmpty());
@@ -154,19 +154,19 @@ public class AbstractElementTest {
         assertFalse(elem.getFilters().isEmpty());
         elem.removeFilter(filter);
         assertTrue(elem.getFilters().isEmpty());
-        
+
         elem.clearFilters();
         assertNotNull(elem.getFilters());
         assertTrue(elem.getFilters().isEmpty());
-        
+
         elem.setFilters(Arrays.asList((Filter) new StringTrim(), new StringTrim()));
         assertEquals(elem.getFilters().size(), 2);
-        
+
         elem.setFilters(null);
         assertNotNull(elem.getFilters());
         assertTrue(elem.getFilters().isEmpty());
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testRequiredValueType() {
         AbstractElement elem = new EmptyElement("elem");
@@ -209,81 +209,81 @@ public class AbstractElementTest {
 
         assertEquals(elem.getProperties().get("title"), "Test2");
     }
-    
+
     @Test
-    public void testValidation(){
+    public void testValidation() {
         Element elem = new EmptyElement("id");
         assertNotNull(elem.getValidators());
         assertTrue(elem.getValidators().isEmpty());
-        
+
         elem.addValidator(new StringLengthValidator(5, 10));
         assertFalse(elem.getValidators().isEmpty());
         elem.getValidators().clear();//Test we cannot mess with class internals
         assertFalse(elem.getValidators().isEmpty());
-        
+
         elem.setValue("1");
         assertFalse(elem.validationPerformed());
         assertFalse(elem.isValid());
         assertTrue(elem.validationPerformed());
-        
+
         elem.clearValidation();
         elem.setValue("12345");
         assertFalse(elem.validationPerformed());
         assertTrue(elem.isValid());
         assertTrue(elem.validationPerformed());
-        
+
         elem.clearValidators();
         assertNotNull(elem.getValidators());
         assertTrue(elem.getValidators().isEmpty());
-        
+
         elem.setValidators(Arrays.asList((Validator) new RequiredValidator(), new NumericValidator(false)));
         assertEquals(elem.getValidators().size(), 2);
-        
+
         elem.setValidators(null);
         assertNotNull(elem.getValidators());
         assertTrue(elem.getValidators().isEmpty());
     }
-    
+
     @Test
-    public void testLabelAndDescription(){
+    public void testLabelAndDescription() {
         Element elem = new EmptyElement("id");
         assertNull(elem.getLabel());
         assertNull(elem.getDescription());
-        
+
         elem.setLabel("label");
         elem.setDescription("desc");
-        
+
         assertEquals(elem.getLabel(), "label");
         assertEquals(elem.getDescription(), "desc");
     }
-    
+
     @Test(expected = IllegalStateException.class)
-    public void testNoRenderer(){
+    public void testNoRenderer() {
         Element elem = new EmptyElement("id");
         assertNotNull(elem.toString());
         elem.render();
     }
-    
+
     @Test
-    public void testRenderToString(){
+    public void testRenderToString() {
         Element elem = new EmptyElement("id");
         elem.setRenderer(new Renderer() {
 
             @Override
-            public List<SimpleHTMLTag>  render(Element element) {
+            public List<SimpleHTMLTag> render(Element element) {
                 return Arrays.asList(new SimpleHTMLTag().setContent("content"));
             }
         });
         assertEquals(elem.toString(), "content");
     }
-    
+
     @Test
-    public void testRendererProducingNullTags(){
+    public void testRendererProducingNullTags() {
         Element elem = new EmptyElement("id");
         elem.setRenderer(new Renderer() {
 
             @Override
-            public List<SimpleHTMLTag>  render(Element element) {
+            public List<SimpleHTMLTag> render(Element element) {
                 return null;
             }
         });

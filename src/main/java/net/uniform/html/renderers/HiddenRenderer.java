@@ -25,6 +25,7 @@ import net.uniform.html.elements.Hidden;
 
 /**
  * Default renderer for {@link Hidden} element.
+ *
  * @author Eduardo Ramos
  */
 public class HiddenRenderer implements Renderer<Hidden> {
@@ -35,13 +36,13 @@ public class HiddenRenderer implements Renderer<Hidden> {
         finalProps.putAll(hidden.getProperties());
         finalProps.put("value", hidden.getFirstValue());
         finalProps.put("type", "hidden");
-        
+
         SimpleHTMLTag tag = new SimpleHTMLTag("input", finalProps);
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(tag);
-        
+
         return result;
     }
-    
+
 }

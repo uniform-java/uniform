@@ -57,77 +57,87 @@ import net.uniform.impl.AbstractElement;
  * @author Eduardo Ramos
  */
 public interface Element {
-    
+
     /**
      * Returns the id of the element.
+     *
      * @return Id of the element
      */
     String getId();
-    
+
     /**
      * Sets the label of the element.
+     *
      * @param label New label value
      * @return This element
      */
     Element setLabel(String label);
-    
+
     /**
      * Sets the description of the element.
+     *
      * @param description New description
      * @return This element
      */
     Element setDescription(String description);
-    
+
     /**
      * Returns the label of the element (never translated).
+     *
      * @return Label of the element
      */
     String getLabel();
-    
+
     /**
      * Returns the description of the element (never translated).
+     *
      * @return Description of the element
      */
     String getDescription();
-    
+
     /**
      * Returns the label of the element but, if translation is enabled ({@link #isTranslationEnabled()}), tries to find its translation in the current {@link TranslationEngineContext}.
      * If no translation is found, it returns the label value.
      * This should be used by any class that needs the label of the element for the final HTML.
+     * 
      * @return Translated or original label depending on element configuration
      */
     String getLabelTranslated();
-    
+
     /**
      * Returns the description of the element but, if translation is enabled ({@link #isTranslationEnabled()}), tries to find its translation in the current {@link TranslationEngineContext}.
      * If no translation is found, it returns the description value.
      * This should be used by any class that needs the description of the element for the final HTML.
+     * 
      * @return Translated or original description depending on element configuration
      */
     String getDescriptionTranslated();
-    
+
     /**
      * Indicates if the translation of label and description is enabled for this element.
      * By default translation is disabled.
      * This is changed with the {@link #setTranslationEnabled()} method
+     * 
      * @return True if translation is enabled, false otherwise
      */
     boolean isTranslationEnabled();
-    
+
     /**
      * Enables or disables the element label and description translation.
      * By default translation is disabled.
+     * 
      * @param enable Boolean indicating if the translation has to be enabled
      * @return This element
      */
     Element setTranslationEnabled(boolean enable);
-    
+
     /**
      * Enables the element label and description translation.
+     *
      * @return This element
      */
     Element setTranslationEnabled();
-    
+
     /**
      * <p>
      * Returns the type of the values of this element, to be used when converting values in the form (for example in {@code getFormDataConvertedToElementValueTypes} method).
@@ -142,7 +152,7 @@ public interface Element {
      * @return Value type class or null
      */
     Class<?> getValueType();
-    
+
     /**
      * <p>Changes the value type returned by {@link #getValueType()} method.</p>
      * <p>This type is used in a form to do automatic value conversion in methods such as {@code getFormDataConvertedToElementValueTypes}.</p>
@@ -150,49 +160,55 @@ public interface Element {
      * <p>This type should only be set to a type which any value set to the element (after validation and filtering) can be converted to.</p>
      * <p>Conversion of simple types such as numbers is supported by a form. For any other complex type such as {@code Date}, the element can implement the {@link ElementWithValueConversion} interface to completely override the conversion of values.</p>
      * <p>Not every element supports change of this type. For example, a {@link Checkbox} is always {@code Boolean} and {@link DatePicker} is always {@code Date}</p>
+     * 
      * @param valueType New class for values of the element.
      */
     void setValueType(Class<?> valueType);
-    
+
     /**
      * Indicates if this element is multi-value (for example, a {@link Multiselect} or {@link Multicheckbox}) or not.
      * This is used by a form to determine how to extract data of its elements in methods such as {@code getFormData}
+     * 
      * @return True if the element is multi-value, false otherwise
      */
     boolean isMultiValue();
-    
+
     /**
      * Returns current the list of values hold by the element.
      * The return value can be null. Only multi-value elements will return a list of more than one value.
+     * 
      * @return List of values or null
      */
     List<String> getValue();
-    
+
     /**
      * Returns the first value hold by the element or null.
+     *
      * @return First value or null
      */
     String getFirstValue();
-    
+
     /**
      * Sets the list of values to be hold by the element.
      * A single-value element will ignore all values but the first.
      * <b>This will never be called by a form on its own during data population, {@link #populate(java.util.List)} method will be called instead</b>
+     * 
      * @param value List of values or null
      * @return This element
      */
     Element setValue(List<String> value);
-    
+
     /**
      * Sets a single value to be hold by the element.
      * It's converted to a list of one value by the element.
      * <b>This will never be called by a form on its own during data population, {@link #populate(java.util.List)} method will be called instead</b>
+     * 
      * @param value Single value or null
      * @return This element
      */
     Element setValue(String value);
-    
-     /**
+
+    /**
      * <p>
      * Sets the list of values to be hold by the element.
      * This should only be used by a form during data population.
@@ -206,146 +222,167 @@ public interface Element {
      * <p>
      * A single-value element will ignore all values but the first.
      * </p>
+     *
      * @param value List of values or null
      * @return This element
      */
     Element populate(List<String> value);
-    
-     /**
+
+    /**
      * Returns all the properties of the element indexed by key.
+     *
      * @return All properties in a map, will never be null
      */
     Map<String, String> getProperties();
-    
+
     /**
      * Obtains a property of the element by key.
+     *
      * @param key Property key
      * @return Propert value
      */
     String getProperty(String key);
-    
+
     /**
      * Indicates if the element has a value for the property (even null).
+     *
      * @param key Property key
      * @return True if a value is set, false otherwise
      */
     boolean hasProperty(String key);
-    
+
     /**
      * Sets the value of a property of the element by key.
      * Normally, an element renderer will put all the properties in the main HTML tag as attributes, but this depends on the element and the renderer.
+     * 
      * @param key Property key
      * @param value Property value
      * @return This element
      */
     Element setProperty(String key, String value);
-    
+
     /**
      * Removes a property of the element by key.
+     *
      * @param key Property key
      * @return This element
      */
     Element removeProperty(String key);
-    
+
     /**
      * Returns the list of validators to be used in the validation of this element.
+     *
      * @return List of validators, never null
      */
     List<Validator> getValidators();
-    
+
     /**
      * Adds a validator to the element, to be used in the {@link #getValidationErrors()} method.
+     *
      * @param validator New validator
      * @return This element
      */
     Element addValidator(Validator validator);
-    
+
     /**
      * Removes a validator from the element, if existing.
+     *
      * @param validator Validator to remove
      * @return This element
      */
     Element removeValidator(Validator validator);
-    
+
     /**
      * Removes all validators from the element.
+     *
      * @return This element
      */
     Element clearValidators();
-    
+
     /**
      * Replaces all validators of the element with a new list of validators.
+     *
      * @param validators New list of validators
      * @return This element
      */
     Element setValidators(List<Validator> validators);
-    
+
     /**
      * Returns the renderer to be used by this element in the {@link #render()} method,
      * or null to use the default renderer returned by {@link #getDefaultRenderer()}.
+     * 
      * @return Renderer or null
      */
     Renderer getRenderer();
-    
+
     /**
      * Sets the renderer to be used by this element in the {@link #render()} method.
+     *
      * @param renderer New renderer or null to use default renderer
      * @return This element
      */
     Element setRenderer(Renderer renderer);
-    
+
     /**
      * Returns the default renderer of this element, 
      * to be used by this element in the {@link #render()} method when no specific renderer has been set.
+     * 
      * @return Default renderer or null
      */
     Renderer getDefaultRenderer();
-    
+
     /**
      * Returns the list of decorators to be used in the rendering of this element.
+     *
      * @return List of decorators, never null
      */
     List<Decorator> getDecorators();
-    
+
     /**
      * Adds a decorator to the element, to be used in the {@link #render()} method.
      * Decorators are called in list order, after the base element is renderer with its {@code Renderer}
+     * 
      * @param decorator New decorator
      * @return This element
      */
     Element addDecorator(Decorator decorator);
-    
+
     /**
      * Replaces the list of decorators of this element.
+     *
      * @param decorators New list of decorators
      * @return This element
      */
     Element setDecorators(List<Decorator> decorators);
-    
+
     /**
      * Returns the first decorator in this element with the given class, or null if not found.
+     *
      * @param clazz Decorator class
      * @return Decorator or null
      */
     Decorator getDecorator(Class<?> clazz);
-    
+
     /**
      * Returns the last decorator in this element with the given class, or null if not found.
+     *
      * @param clazz Decorator class
      * @return Decorator or null
      */
     Decorator getLastDecorator(Class<?> clazz);
-    
+
     /**
      * Removes a decorator of this element, if present.
+     *
      * @param decorator Decorator to remove
      * @return This element
      */
     Element removeDecorator(Decorator decorator);
-    
+
     /**
      * Finds the first decorator of this element with the given class and sets the given property value.
      * Throws an exception if no decorator with that class is found.
+     * 
      * @param clazz Decorator class
      * @param key Property key
      * @param value Property value
@@ -355,64 +392,73 @@ public interface Element {
     /**
      * Finds the last decorator of this element with the given class and sets the given property value.
      * Throws an exception if no decorator with that class is found.
+     * 
      * @param clazz Decorator class
      * @param key Property key
      * @param value Property value
      */
     void setLastDecoratorProperty(Class<?> clazz, String key, Object value);
-    
+
     /**
      * Removes all decorators from this element.
+     *
      * @return This element
      */
     Element clearDecorators();
-    
+
     /**
      * Returns the list of filters to be used when setting or populating a value to this element.
+     *
      * @return List of filters, never null
      */
     List<Filter> getFilters();
-    
+
     /**
      * Adds a filter to be used when setting or populating a value to this element.
+     *
      * @param filter New filter
      * @return This element
      */
     Element addFilter(Filter filter);
-    
+
     /**
      * Removes a filter from this element.
+     *
      * @param filter Filter to remove
      * @return This element
      */
     Element removeFilter(Filter filter);
-    
+
     /**
      * Removes all filters from this element.
+     *
      * @return This element
      */
     Element clearFilters();
-    
+
     /**
      * Replaces the list of filters of this element.
+     *
      * @param filters New list of filters
      * @return This element
      */
     Element setFilters(List<Filter> filters);
-    
+
     /**
      * Sets the required flag of this element to the given value.
      * If an element is required, a {@link RequiredValidator} will be used in its validation even if it's not in the list of validators.
      * <b>By default, elements are not required.</b>
+     *
      * @param required Required flag
      * @return This element
      */
     Element setRequired(boolean required);
-    
+
     /**
      * Sets the required flag of this element to true.
      * If an element is required, a {@link RequiredValidator} will be used in its validation even if it's not in the list of validators.
      * <b>By default, elements are not required.</b>
+     * 
      * @return This element
      */
     Element setRequired();
@@ -420,56 +466,64 @@ public interface Element {
     /**
      * Indicates if this element is required.
      * If an element is required, a {@link RequiredValidator} will be used in its validation even if it's not in the list of validators.
+     * 
      * @return True if the element is required, false otherwise
      */
     boolean isRequired();
-    
+
     /**
      * Validates the value(s) of this element with the list of validators and required flag.
+     *
      * @return List of errors (may be empty) or null
      */
     List<String> getValidationErrors();
-    
+
     /**
      * Returns true if {@link #getValidationErrors()} returns no errors
+     *
      * @return True if element valid, false otherwise
      */
     boolean isValid();
-    
+
     /**
      * Indicates if the validation has been performed with this element ({@link #getValidationErrors()} method has been called).
+     *
      * @return True if validation has been performed, false otherwise
      */
     boolean validationPerformed();
-    
+
     /**
      * Sets the validation performed status of this element to false.
+     *
      * @return This element
      */
     Element clearValidation();
-    
+
     /**
      * Renders the list of HTML tags of this element, using the set render or the default renderer if the set renderer is null.
      * It also applies any decorators in the element, in list order.
      * 
      * Renders the element without the context of a form, like calling {@link #render(net.uniform.api.Form)} with a null form.
+     *
      * @return List of HTML tags for the element, after decoration
      */
     List<SimpleHTMLTag> render();
-    
+
     /**
      * Renders the list of HTML tags of this element, using the set render or the default renderer if the set renderer is null.
      * It also applies any decorators in the element, in list order.
      * 
      * The form is passed to the decorators of the element.
+     *
      * @param form Form context for this element or null for no form context
      * @return List of HTML tags for the element, after decoration
      */
     List<SimpleHTMLTag> render(Form form);
-    
+
     /**
      * Resets the values and validation state of the element.
      * The value of a disabled element won't be reset.
+     * 
      * @return This element
      */
     Element reset();

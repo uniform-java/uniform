@@ -26,10 +26,11 @@ import net.uniform.impl.AbstractDecorator;
 
 /**
  * Decorator for enclosing any form content into an HTML tag with custom properties as attributes.
+ *
  * @author Eduardo Ramos
  */
 public class HTMLTagDecorator extends AbstractDecorator {
-    
+
     public static final String PROPERTY_TAG_NAME = "tagName";
 
     public HTMLTagDecorator() {
@@ -38,7 +39,7 @@ public class HTMLTagDecorator extends AbstractDecorator {
     public HTMLTagDecorator(String tagName) {
         this.setProperty(PROPERTY_TAG_NAME, tagName);
     }
-    
+
     public HTMLTagDecorator(String tagName, Map<String, Object> properties) {
         this.setProperties(properties);
         this.setProperty(PROPERTY_TAG_NAME, tagName);
@@ -47,35 +48,35 @@ public class HTMLTagDecorator extends AbstractDecorator {
     @Override
     public List<SimpleHTMLTag> render(Form form, List<Element> elements, List<SimpleHTMLTag> rendered) {
         String tagName = this.properties.get(PROPERTY_TAG_NAME) != null ? this.properties.get(PROPERTY_TAG_NAME).toString() : null;
-        if(tagName == null){
+        if (tagName == null) {
             throw new IllegalArgumentException(PROPERTY_TAG_NAME + " cannot be null");
         }
-        
+
         Map<String, Object> finalProps = new HashMap<>(properties);
         finalProps.remove(PROPERTY_TAG_NAME);
-        
+
         SimpleHTMLTag enclosingTag = new SimpleHTMLTag(tagName);
         for (Map.Entry<String, Object> prop : finalProps.entrySet()) {
             String name = prop.getKey();
             String value = prop.getValue() != null ? prop.getValue().toString() : null;
-            
+
             enclosingTag.setProperty(name, value);
         }
-        
+
         for (SimpleHTMLTag tag : rendered) {
             enclosingTag.addSubTag(tag);
         }
-        
+
         List<SimpleHTMLTag> result = new ArrayList<>();
         result.add(enclosingTag);
         return result;
     }
-    
-    public  final void setTagName(String tagName){
+
+    public final void setTagName(String tagName) {
         this.setProperty(PROPERTY_TAG_NAME, tagName);
     }
-    
-    public String getTagName(){
+
+    public String getTagName() {
         return this.getStringProperty(PROPERTY_TAG_NAME);
     }
 }

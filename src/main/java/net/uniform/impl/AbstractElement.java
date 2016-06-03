@@ -35,10 +35,11 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Abstract element implementation that contains all generic logic that any element should have.
+ *
  * @author Eduardo Ramos
  */
 public abstract class AbstractElement implements Element {
-    
+
     protected final Map<String, String> properties;
     protected final List<Validator> validators;
     protected final List<Filter> filters;
@@ -50,7 +51,7 @@ public abstract class AbstractElement implements Element {
 
     protected List<String> value;
     protected Renderer renderer;
-    
+
     private boolean required = false;
     private boolean validationPerformed = false;
     private Class<?> valueType = String.class;
@@ -61,19 +62,19 @@ public abstract class AbstractElement implements Element {
         this.filters = new ArrayList<>();
         this.decorators = new ArrayList<>();
         this.id = id;
-        
-        if(id == null){
+
+        if (id == null) {
             throw new IllegalArgumentException("id cannot be null");
         }
-        
+
         init();
     }
-    
+
     private void init() {
         setupDefaultFilters();
     }
-    
-    protected void setupDefaultFilters(){
+
+    protected void setupDefaultFilters() {
     }
 
     @Override
@@ -93,22 +94,22 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public String getLabelTranslated() {
-        if(isTranslationEnabled()){
+        if (isTranslationEnabled()) {
             return label != null ? TranslationEngineContext.getTranslationEngine().translateWithDefault(label, label) : null;
-        }else{
+        } else {
             return label;
         }
     }
 
     @Override
     public String getDescriptionTranslated() {
-        if(isTranslationEnabled()){
+        if (isTranslationEnabled()) {
             return description != null ? TranslationEngineContext.getTranslationEngine().translateWithDefault(description, description) : null;
-        }else{
+        } else {
             return description;
         }
     }
-    
+
     @Override
     public Element setLabel(String label) {
         this.label = label;
@@ -127,28 +128,28 @@ public abstract class AbstractElement implements Element {
     public List<String> getValue() {
         return value;
     }
-    
+
     @Override
-    public String getFirstValue(){
+    public String getFirstValue() {
         return UniformUtils.firstValue(value);
     }
 
     @Override
     public Element setValue(List<String> value) {
-        if(value == null || value.isEmpty()){
+        if (value == null || value.isEmpty()) {
             this.value = null;
             return this;
         }
-        
-        if(!isMultiValue() && value.size() > 1){
+
+        if (!isMultiValue() && value.size() > 1) {
             value = value.subList(0, 1);
         }
-        
+
         List<String> filteredValues = new ArrayList<>();
 
         for (String current : value) {
             for (Filter filter : filters) {
-                if(filter != null){
+                if (filter != null) {
                     current = filter.filter(current);
                 }
             }
@@ -170,23 +171,23 @@ public abstract class AbstractElement implements Element {
     public boolean isMultiValue() {
         return false;
     }
-    
+
     @Override
     public Element populate(List<String> value) {
-        if(!hasProperty("disabled")){
+        if (!hasProperty("disabled")) {
             setValue(value);
         }
-        
+
         return this;
     }
 
     @Override
     public boolean hasProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         return properties.containsKey(key);
     }
-    
+
     @Override
     public Map<String, String> getProperties() {
         return new HashMap<>(properties);
@@ -195,14 +196,14 @@ public abstract class AbstractElement implements Element {
     @Override
     public String getProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         return properties.get(key);
     }
 
     @Override
     public Element setProperty(String key, String value) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         properties.put(key, value);
         return this;
     }
@@ -210,7 +211,7 @@ public abstract class AbstractElement implements Element {
     @Override
     public Element removeProperty(String key) {
         key = UniformUtils.checkPropertyNameAndLowerCase(key);
-        
+
         properties.remove(key);
         return this;
     }
@@ -241,7 +242,7 @@ public abstract class AbstractElement implements Element {
     @Override
     public Element setValidators(List<Validator> validators) {
         this.validators.clear();
-        if(validators != null){
+        if (validators != null) {
             this.validators.addAll(validators);
         }
         return this;
@@ -304,7 +305,7 @@ public abstract class AbstractElement implements Element {
     @Override
     public Decorator getLastDecorator(Class<?> clazz) {
         Decorator last = null;
-        
+
         for (Decorator decorator : decorators) {
             if (decorator != null && decorator.getClass().equals(clazz)) {
                 last = decorator;
@@ -323,7 +324,7 @@ public abstract class AbstractElement implements Element {
             throw new IllegalArgumentException("Could not find decorator with class " + clazz.getName() + " for the element " + this.getId());
         }
     }
-    
+
     @Override
     public void setLastDecoratorProperty(Class<?> clazz, String key, Object value) {
         Decorator decorator = this.getLastDecorator(clazz);
@@ -344,7 +345,7 @@ public abstract class AbstractElement implements Element {
     public Element setRequired() {
         return setRequired(true);
     }
-    
+
     @Override
     public boolean isRequired() {
         return required;
@@ -409,7 +410,7 @@ public abstract class AbstractElement implements Element {
     @Override
     public Element setFilters(List<Filter> filters) {
         this.filters.clear();
-        if(filters != null){
+        if (filters != null) {
             this.filters.addAll(filters);
         }
         return this;
@@ -425,11 +426,11 @@ public abstract class AbstractElement implements Element {
         validationPerformed = false;
         return this;
     }
-    
-    protected Renderer getRendererToApply(){
-        if(renderer != null){
+
+    protected Renderer getRendererToApply() {
+        if (renderer != null) {
             return renderer;
-        }else{
+        } else {
             return getDefaultRenderer();
         }
     }
@@ -451,7 +452,7 @@ public abstract class AbstractElement implements Element {
 
         if (decorators != null) {
             List<Element> elementList = Arrays.asList(new Element[]{this});
-            
+
             for (Decorator decorator : decorators) {
                 elementTags = decorator.render(form, elementList, Collections.unmodifiableList(elementTags));
             }
@@ -471,14 +472,14 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public Element reset() {
-        if(!hasProperty("disabled")){
+        if (!hasProperty("disabled")) {
             this.setValue((List<String>) null);
         }
         this.validationPerformed = false;
 
         return this;
     }
-    
+
     @Override
     public Class<?> getValueType() {
         return valueType;
@@ -486,7 +487,7 @@ public abstract class AbstractElement implements Element {
 
     @Override
     public void setValueType(Class<?> valueType) {
-        if(valueType == null){
+        if (valueType == null) {
             throw new IllegalArgumentException("valueType cannot be null");
         }
         this.valueType = valueType;
@@ -511,9 +512,9 @@ public abstract class AbstractElement implements Element {
     @Override
     public String toString() {
         Renderer rendererToApply = getRendererToApply();
-        if(rendererToApply != null){
+        if (rendererToApply != null) {
             return HTMLRenderingUtils.render(this.render());
-        }else{
+        } else {
             return getClass().getName() + ":" + properties.toString();
         }
     }

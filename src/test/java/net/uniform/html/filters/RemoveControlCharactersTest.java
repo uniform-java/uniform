@@ -28,9 +28,9 @@ public class RemoveControlCharactersTest {
     @Test
     public void test() {
         RemoveControlCharacters filter = new RemoveControlCharacters();
-        
+
         assertNull(filter.filter(null));
-        
+
         assertEquals("abc", filter.filter("abc"));
         assertEquals("abc", filter.filter("\u0000abc"));
         assertEquals("\r\nabc", filter.filter("\u0000\r\nabc"));
@@ -50,8 +50,8 @@ public class RemoveControlCharactersTest {
         assertEquals("test\r", filter.filter("test\r"));
         assertEquals("test", filter.filter("test\u000e"));
         assertEquals("test", filter.filter("test\u007f"));
-        
+
         assertEquals("testfg", filter.filter("test\u0066\u0067"));
     }
-    
+
 }

@@ -23,17 +23,19 @@ import net.uniform.html.elements.Radio;
  * Implementation of an abstract element with multiple options based on HTML {@code <input>} tags such as {@link Multicheckbox} and {@link Radio}.
  * It allows to define how and where each option label is rendered (position and escaping).
  * </p>
- * 
+ *
  * <p>
  * It also allows to define the separator to put between each option input
  * </p>
+ *
  * @author Eduardo Ramos
  */
 public abstract class MultioptionInputElement extends ElementWithOptions {
+
     public static final String DEFAULT_SEPARATOR = " ";
     public static final boolean DEFAULT_PREPEND_OPTION_LABELS = false;
     public static final boolean DEFAULT_ESCAPE_OPTION_LABELS = true;
-    
+
     protected boolean escapeOptionLabels = DEFAULT_ESCAPE_OPTION_LABELS;
     protected boolean prependOptionLabels = DEFAULT_PREPEND_OPTION_LABELS;
     protected String separator = DEFAULT_SEPARATOR;

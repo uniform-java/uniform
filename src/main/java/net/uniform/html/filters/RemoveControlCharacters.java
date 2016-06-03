@@ -23,9 +23,9 @@ import net.uniform.api.Filter;
  * @author Eduardo Ramos
  */
 public class RemoveControlCharacters implements Filter {
-    
+
     private static final String DEFAULT_REPLACEMENT = "";
-    
+
     private final String replacement;
 
     public RemoveControlCharacters() {

@@ -33,24 +33,24 @@ import org.junit.Test;
  * @author Eduardo Ramos
  */
 public class CheckboxTest {
-    
+
     @Test
     public void test() {
         Checkbox chk = new Checkbox("chk");
         chk.setProperty("name", "checkbox");
         chk.setChecked(true);
-        
+
         assertTrue(chk.getConvertedValue());
-        
+
         assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"true\"/>", HTMLRenderingUtils.render(chk.render()));
         chk.setProperty("value", "on");
         assertEquals(chk.getEnabledValueString(), "on");
-        
+
         assertHTMLEquals("<input id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"on\"/>", HTMLRenderingUtils.render(chk.render()));
-        
+
         chk.setValue("on");
         assertHTMLEquals("<input checked=\"checked\" id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"on\"/>", HTMLRenderingUtils.render(chk.render()));
-        
+
         chk.setEnabledValueString(null);
         assertNull(chk.getProperty("value"));
         assertEquals(chk.getEnabledValueString(), Checkbox.DEFAULT_ENABLED_VALUE);
@@ -58,57 +58,66 @@ public class CheckboxTest {
         assertTrue(chk.isChecked());
         chk.setChecked(false);
         assertHTMLEquals("<input id=\"chk\" name=\"checkbox\" type=\"checkbox\" value=\"true\"/>", HTMLRenderingUtils.render(chk.render()));
-        
-        
+
         //Test data:
         chk.setEnabledValueString("on");
         chk.setValue("off");
         assertNotNull(chk.getConvertedValue());
         assertFalse(chk.getConvertedValue());
-        
+
         Form form = new HTMLForm();
         form.addElement(chk);
-        
+
         assertEquals(
-                new HashMap<String, Object>(){{
-                    put("checkbox", "off");
-                }},
+                new HashMap<String, Object>() {
+            {
+                put("checkbox", "off");
+            }
+        },
                 form.getFormData()
         );
-        
+
         assertEquals(
-                new HashMap<String, Object>(){{
-                    put("checkbox", false);
-                }},
+                new HashMap<String, Object>() {
+            {
+                put("checkbox", false);
+            }
+        },
                 form.getFormDataConvertedToElementValueTypes()
         );
-        
+
         chk.setValue((String) null);
-        
+
         assertEquals(
-                new HashMap<String, Object>(){{
-                    put("checkbox", null);
-                }},
+                new HashMap<String, Object>() {
+            {
+                put("checkbox", null);
+            }
+        },
                 form.getFormData()
         );
-        
+
         assertEquals(
-                new HashMap<String, Object>(){{
-                    put("checkbox", false);
-                }},
+                new HashMap<String, Object>() {
+            {
+                put("checkbox", false);
+            }
+        },
                 form.getFormDataConvertedToElementValueTypes()
         );
-        
+
         chk.setValue("on");
-        
+
         assertEquals(
-                new HashMap<String, Object>(){{
-                    put("checkbox", true);
-                }},
+                new HashMap<String, Object>() {
+            {
+                put("checkbox", true);
+            }
+        },
                 form.getFormDataConvertedToElementValueTypes()
         );
     }
-    
+
     @Test(expected = UniformException.class)
     public void testUnsupportedTypeChange() {
         Checkbox chk = new Checkbox("chk");

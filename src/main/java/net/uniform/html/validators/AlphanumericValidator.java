@@ -24,6 +24,7 @@ import net.uniform.impl.utils.UniformUtils;
 
 /**
  * Validator for alphanumeric only single-value inputs.
+ *
  * @author Eduardo Ramos
  */
 public class AlphanumericValidator implements Validator<Element> {
@@ -32,26 +33,27 @@ public class AlphanumericValidator implements Validator<Element> {
     public List<String> getValidationErrors(Element element, List<String> value) {
         String firstValue = UniformUtils.firstValue(value);
         if (firstValue != null && !firstValue.isEmpty()) {
-            if(!isAlphanumeric(firstValue)){
+            if (!isAlphanumeric(firstValue)) {
                 return Arrays.asList(TranslationEngineContext.getTranslationEngine().translate("uniform.validators.alnum.invalid"));
             }
         }
-        
+
         return null;
     }
 
     public boolean isAlphanumeric(String str) {
-        for (int i=0; i<str.length(); i++) {
+        for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a)
+            if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c <= 0x60) || c > 0x7a) {
                 return false;
+            }
         }
         return true;
     }
-    
+
     @Override
     public boolean breakChainOnError() {
         return false;
     }
-    
+
 }
