@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -191,12 +191,21 @@ public class UniformUtils {
                                     //Double check for collections when we have the type info:
                                     if (collectionsGenericTypes.containsKey(name)) {
                                         if (isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))) {
-                                            collection.add(value);
+                                            if (value instanceof Collection) {
+                                                collection.addAll((Collection) value);
+                                            } else {
+                                                collection.add(value);
+                                            }
+
                                             field.set(bean, collection);
                                         }
                                     } else {
                                         //We have no info, assume the generic type is correct
-                                        collection.add(value);
+                                        if (value instanceof Collection) {
+                                            collection.addAll((Collection) value);
+                                        } else {
+                                            collection.add(value);
+                                        }
                                         field.set(bean, collection);
                                     }
                                 }
@@ -308,7 +317,7 @@ public class UniformUtils {
             if (fieldClass.equals(List.class)) {
                 return new ArrayList();
             } else if (fieldClass.equals(Set.class)) {
-                return new HashSet();
+                return new LinkedHashSet();
             } else {
                 return null;
             }

@@ -17,7 +17,9 @@ package net.uniform.html;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.uniform.html.elements.Input;
 import net.uniform.html.elements.Multiselect;
 import net.uniform.html.elements.Select;
@@ -35,6 +37,7 @@ public class MultipleElementsWithSameNameTest {
         final HTMLForm form = new HTMLForm();
         final TestBeanSingle beanSingle = new TestBeanSingle();
         final TestBeanList beanList = new TestBeanList();
+        final TestBeanSet beanSet = new TestBeanSet();
         final String repeatedName = "testName";
 
         Input input1 = new Input("i1");
@@ -83,8 +86,10 @@ public class MultipleElementsWithSameNameTest {
 
         form.getFormDataIntoBean(beanSingle);
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(1l, (long) beanSingle.testName);
         Assert.assertEquals(Arrays.asList(1l), beanList.testName);
+        Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         //Then add more:
         form.addElements(input2, input3);
@@ -121,7 +126,10 @@ public class MultipleElementsWithSameNameTest {
         );
 
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(null, 2l, 3l), beanList.testName);
+        System.out.println(beanSet.testName);
+        Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         form.populate(new HashMap<String, List<String>>() {
             {
@@ -155,7 +163,9 @@ public class MultipleElementsWithSameNameTest {
         );
 
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(1l, null, null), beanList.testName);
+        Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         form.populate(new HashMap<String, List<String>>() {
             {
@@ -165,7 +175,9 @@ public class MultipleElementsWithSameNameTest {
 
         form.removeElement(input2);
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(1l, 3l), beanList.testName);
+        Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
     }
 
     public class TestBeanSingle {
@@ -185,6 +197,16 @@ public class MultipleElementsWithSameNameTest {
         @Override
         public String toString() {
             return "TestBeanList{" + "testName=" + testName + '}';
+        }
+    }
+
+    public class TestBeanSet {
+
+        public Set<Long> testName;
+
+        @Override
+        public String toString() {
+            return "TestBeanSet{" + "testName=" + testName + '}';
         }
     }
 
