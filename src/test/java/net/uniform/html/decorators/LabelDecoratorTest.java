@@ -60,6 +60,18 @@ public class LabelDecoratorTest {
         element.setLabel("uniform.test.resource3");
         HTMLTest.assertHTMLEquals("<label class=\"element-label\" for=\"test\">Prueba label</label>\n", render(decorator, element));
     }
+    
+    @Test
+    public void testElementsWithoutIdNoFor() {
+        LabelDecorator decorator = new LabelDecorator();
+        
+        Element element = new Input("test");
+        element.removeProperty("id");
+        element.setLabel("Element without id");
+        element.addDecorator(decorator);
+        
+        HTMLTest.assertHTMLEquals("<label class=\"element-label\">Element without id</label>\n", render(decorator, element));
+    }
 
     private String render(Decorator decorator, Element element) {
         return HTMLRenderingUtils.render(decorator.render(null, Arrays.asList(element), new ArrayList<SimpleHTMLTag>()));

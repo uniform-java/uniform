@@ -148,118 +148,121 @@ public class UniformUtils {
             collectionsGenericTypes = EMPTY_MAP;
         }
 
-        Class<?> clazz = bean.getClass();
+        Class<?> beanClass = bean.getClass();
         try {
             //Public fields:
-            Field[] fields = clazz.getFields();
+            Field[] fields = beanClass.getFields();
             for (Field field : fields) {
                 String name = field.getName();
 
                 if (!name.equals("class")) {
                     if (props.containsKey(name)) {
                         Object value = props.get(name);
-
                         Class fieldClass = field.getType();
-                        if (value != null) {
-                            Class valueClass = value.getClass();
-
-                            if (fieldClass.isAssignableFrom(valueClass)) {
-                                if (Collection.class.isAssignableFrom(fieldClass)) {
-                                    //Double check for collections when we have the type info:
-                                    if (collectionsGenericTypes.containsKey(name)) {
-                                        if (isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))) {
-                                            field.set(bean, value);
-                                        }
-                                    } else {
-                                        //We have no info, assume the generic type is correct
-                                        field.set(bean, value);
-                                    }
-                                } else {
-                                    field.set(bean, value);
-                                }
-                            } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
-                                field.set(bean, value);
-                            } else if (fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)) {
-                                //Try to convert to string for simple types only
-                                field.set(bean, value.toString());
-                            } else if (Collection.class.isAssignableFrom(fieldClass)) {
-                                //The bean field type is a collection of the data value type
-                                //We fill the collection with a single element if possible:
-
-                                Collection collection = reflectionCollectionInstance(fieldClass);
-                                if (collection != null) {
-                                    //Double check for collections when we have the type info:
-                                    if (collectionsGenericTypes.containsKey(name)) {
-                                        if (isGenericTypeCompatible(field.getGenericType(), collectionsGenericTypes.get(name))) {
-                                            if (value instanceof Collection) {
-                                                collection.addAll((Collection) value);
-                                            } else {
-                                                collection.add(value);
-                                            }
-
-                                            field.set(bean, collection);
-                                        }
-                                    } else {
-                                        //We have no info, assume the generic type is correct
-                                        if (value instanceof Collection) {
-                                            collection.addAll((Collection) value);
-                                        } else {
-                                            collection.add(value);
-                                        }
-                                        field.set(bean, collection);
-                                    }
-                                }
-                            }
-                        } else if (!fieldClass.isPrimitive()) {//Cannot set null to primitive
-                            field.set(bean, value);
+                        
+                        Type fieldGenericType = null;
+                        try {
+                            fieldGenericType = field.getGenericType();
+                        } catch (Exception e) {
+                            //Not a generic
+                        }
+                        Object preparedValue = prepareValueForField(name, value, fieldClass, collectionsGenericTypes, fieldGenericType);
+                        
+                        if(preparedValue != CANNOT_FILL_VALUE){
+                            field.set(bean, preparedValue);
                         }
                     }
                 }
             }
 
             //Setters:
-            BeanInfo info = Introspector.getBeanInfo(clazz);
+            BeanInfo info = Introspector.getBeanInfo(beanClass);
             for (PropertyDescriptor desc : info.getPropertyDescriptors()) {
                 Method writeMethod = desc.getWriteMethod();
                 String name = desc.getName();
                 if (writeMethod != null && !name.equals("class")) {
                     if (props.containsKey(name)) {
                         Object value = props.get(name);
-
-                        Class<?> fieldClass = desc.getPropertyType();
-                        if (value != null) {
-                            Class<?> valueClass = value.getClass();
-
-                            if (fieldClass.isAssignableFrom(valueClass)) {
-                                if (Collection.class.isAssignableFrom(fieldClass)) {
-                                    //Double check for collections when we have the type info:
-                                    if (collectionsGenericTypes.containsKey(name)) {
-                                        if (isGenericTypeCompatible(writeMethod.getGenericParameterTypes()[0], collectionsGenericTypes.get(name))) {
-                                            writeMethod.invoke(bean, value);
-                                        }
-                                    } else {
-                                        //We have no info, assume the generic type is correct
-                                        writeMethod.invoke(bean, value);
-                                    }
-                                } else {
-                                    writeMethod.invoke(bean, value);
-                                }
-
-                            } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
-                                writeMethod.invoke(bean, value);
-                            } else if (fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)) {
-                                //Try to convert to string for simple types only
-                                writeMethod.invoke(bean, value.toString());
-                            }
-                        } else if (!fieldClass.isPrimitive()) {//Cannot set null to primitive
-                            writeMethod.invoke(bean, value);
+                        Class fieldClass = desc.getPropertyType();
+                        
+                        Type fieldGenericType = null;
+                        try {
+                            fieldGenericType = writeMethod.getGenericParameterTypes()[0];
+                        } catch (Exception e) {
+                            //Not a generic
+                        }
+                        Object preparedValue = prepareValueForField(name, value, fieldClass, collectionsGenericTypes, fieldGenericType);
+                        
+                        if(preparedValue != CANNOT_FILL_VALUE){
+                            writeMethod.invoke(bean, preparedValue);
                         }
                     }
                 }
             }
         } catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | InstantiationException ex) {
-            throw new UniformException("Error while setting bean object properties of class" + clazz.getName(), ex);
+            throw new UniformException("Error while setting bean object properties of class" + beanClass.getName(), ex);
         }
+    }
+    
+    private static final Object CANNOT_FILL_VALUE = new Object();
+    
+    private static Object prepareValueForField(String name, Object value, Class fieldClass, Map<String, Class<?>> collectionsGenericTypes, Type fieldGenericType) throws InstantiationException, IllegalAccessException{
+        if (value != null) {
+            Class valueClass = value.getClass();
+
+            if (fieldClass.isAssignableFrom(valueClass)) {
+                if (Collection.class.isAssignableFrom(fieldClass)) {
+                    //Double check for collections when we have the type info:
+                    if (collectionsGenericTypes.containsKey(name)) {
+                        if (isGenericTypeCompatible(fieldGenericType, collectionsGenericTypes.get(name))) {
+                            return value;
+                        }
+                    } else {
+                        //We have no info, assume the generic type is correct
+                        return value;
+                    }
+                } else {
+                    return value;
+                }
+            } else if (isWrapperAndPrimitivePair(fieldClass, valueClass)) {
+                return value;
+            } else if (fieldClass.equals(String.class) && isPrimitiveOrWrapper(valueClass)) {
+                //Try to convert to string for simple types only
+                return value.toString();
+            } else if (Collection.class.isAssignableFrom(fieldClass)) {
+                //The bean field type is a collection of the data value type
+                //We fill the collection with a single element if possible:
+
+                Collection collection = reflectionCollectionInstance(fieldClass);
+                if (collection != null) {
+                    //Double check for collections when we have the type info:
+                    if (collectionsGenericTypes.containsKey(name)) {
+                        if (isGenericTypeCompatible(fieldGenericType, collectionsGenericTypes.get(name))) {
+                            if (value instanceof Collection) {
+                                collection.addAll((Collection) value);
+                            } else {
+                                collection.add(value);
+                            }
+
+                            return collection;
+                        }
+                    } else {
+                        //We have no info, assume the generic type is correct
+                        if (value instanceof Collection) {
+                            collection.addAll((Collection) value);
+                        } else {
+                            collection.add(value);
+                        }
+                        
+                        return collection;
+                    }
+                }
+            }
+        } else if (!fieldClass.isPrimitive()) {//Cannot set null to primitive
+            return value;
+        }
+        
+        return CANNOT_FILL_VALUE;
     }
 
     private static boolean isGenericTypeCompatible(Type type, Class<?> genericClass) {

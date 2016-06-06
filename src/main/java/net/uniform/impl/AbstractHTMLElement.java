@@ -15,6 +15,7 @@
  */
 package net.uniform.impl;
 
+import net.uniform.api.Element;
 import net.uniform.html.filters.RemoveControlCharacters;
 import net.uniform.html.filters.StringTrim;
 
@@ -58,6 +59,16 @@ public abstract class AbstractHTMLElement extends AbstractElement {
         }
         this.setProperty("class", currentClass);
 
+        return this;
+    }
+    
+    /**
+     * Sets the {@code name} property of this element. Equivalent to {@code setProperty("name", name)}
+     * @param name New value for name
+     * @return This element
+     */
+    public AbstractHTMLElement setName(String name){
+        this.setProperty("name", name);
         return this;
     }
 }

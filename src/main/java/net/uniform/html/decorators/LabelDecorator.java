@@ -48,11 +48,13 @@ public class LabelDecorator extends AbstractSingleElementDecorator {
     public List<SimpleHTMLTag> render(Element element, List<SimpleHTMLTag> rendered) {
         SimpleHTMLTag labelTag = new SimpleHTMLTag("label");
 
-        String id = element.getProperty("id") == null ? element.getId() : element.getProperty("id");
+        String id = element.getProperty("id");
 
         String label = element.getLabelTranslated();
 
-        labelTag.setProperty("for", id);
+        if(id != null){
+            labelTag.setProperty("for", id);
+        }
         labelTag.setProperty("class", this.getStringProperty("class"));
         labelTag.setContent(label);
 

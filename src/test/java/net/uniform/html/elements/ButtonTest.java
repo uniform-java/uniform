@@ -65,7 +65,6 @@ public class ButtonTest {
 
         //No default decorators should be added here for this type of element:        
         form.addElement(button);
-        System.out.println(form.renderHTML());
         assertHTMLEquals("<form method='POST'><button id='sbmt' type='submit'>Submit me</button></form>", form.renderHTML());
 
         //Actually add a decorator

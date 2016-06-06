@@ -17,7 +17,6 @@ package net.uniform.html;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.uniform.html.elements.Input;
@@ -37,6 +36,7 @@ public class MultipleElementsWithSameNameTest {
         final HTMLForm form = new HTMLForm();
         final TestBeanSingle beanSingle = new TestBeanSingle();
         final TestBeanList beanList = new TestBeanList();
+        final TestBeanListSetter beanListSetter = new TestBeanListSetter();
         final TestBeanSet beanSet = new TestBeanSet();
         final String repeatedName = "testName";
 
@@ -86,9 +86,12 @@ public class MultipleElementsWithSameNameTest {
 
         form.getFormDataIntoBean(beanSingle);
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanListSetter);
         form.getFormDataIntoBean(beanSet);
+        Assert.assertTrue(beanSet.isSetterCalled());
         Assert.assertEquals(1l, (long) beanSingle.testName);
         Assert.assertEquals(Arrays.asList(1l), beanList.testName);
+        Assert.assertEquals(Arrays.asList(1l), beanListSetter.getTestName());
         Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         //Then add more:
@@ -126,9 +129,10 @@ public class MultipleElementsWithSameNameTest {
         );
 
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanListSetter);
         form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(null, 2l, 3l), beanList.testName);
-        System.out.println(beanSet.testName);
+        Assert.assertEquals(Arrays.asList(null, 2l, 3l), beanListSetter.testName);
         Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         form.populate(new HashMap<String, List<String>>() {
@@ -163,8 +167,10 @@ public class MultipleElementsWithSameNameTest {
         );
 
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanListSetter);
         form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(1l, null, null), beanList.testName);
+        Assert.assertEquals(Arrays.asList(1l, null, null), beanListSetter.testName);
         Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
 
         form.populate(new HashMap<String, List<String>>() {
@@ -175,8 +181,10 @@ public class MultipleElementsWithSameNameTest {
 
         form.removeElement(input2);
         form.getFormDataIntoBean(beanList);
+        form.getFormDataIntoBean(beanListSetter);
         form.getFormDataIntoBean(beanSet);
         Assert.assertEquals(Arrays.asList(1l, 3l), beanList.testName);
+        Assert.assertEquals(Arrays.asList(1l, 3l), beanListSetter.testName);
         Assert.assertTrue(beanSet.testName.containsAll(beanList.testName));
     }
 
@@ -199,10 +207,42 @@ public class MultipleElementsWithSameNameTest {
             return "TestBeanList{" + "testName=" + testName + '}';
         }
     }
+    
+    public class TestBeanListSetter {
+
+        private List<Long> testName;
+
+        public List<Long> getTestName() {
+            return testName;
+        }
+
+        public void setTestName(List<Long> testName) {
+            this.testName = testName;
+        }
+
+        @Override
+        public String toString() {
+            return "TestBeanList{" + "testName=" + testName + '}';
+        }
+    }
 
     public class TestBeanSet {
 
-        public Set<Long> testName;
+        private Set<Long> testName;
+        private boolean setterCalled = false;
+
+        public Set<Long> getTestName() {
+            return testName;
+        }
+
+        public void setTestName(Set<Long> testName) {
+            this.testName = testName;
+            setterCalled = true;
+        }
+
+        public boolean isSetterCalled() {
+            return setterCalled;
+        }
 
         @Override
         public String toString() {
